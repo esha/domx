@@ -153,6 +153,9 @@
 
     _.node(D);
     _.define(D, '_', _);
+    _.define(D, 'ify', function(o, force) {
+        return !o || 'length' in o ? _.list(o||[], force) : _.node(o, force);
+    });
     // ensure element.matches(selector) availability
     var Ep = Element.prototype,
         aS = 'atchesSelector';
@@ -173,6 +176,9 @@
         window[D.html.getAttribute('data-domx-reference')||'D'] = D;
     }
     // eventual consistency
-    D.addEventListener("DOMContentLoaded", function(){ _.node(D, true); });
+    D.addEventListener("DOMContentLoaded", function() {
+        _.node(D, true);
+        _.node(D.html, true);
+    });
 
 })(window, document, window.MutationObserver);

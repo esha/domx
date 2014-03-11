@@ -43,8 +43,8 @@ Test assertions:
 		el.remove();
 	});
 
-	test("D is the root", function() {
-		strictEqual(D, document.documentElement, "D is the root document element");
+	test("D is for document", function() {
+		strictEqual(D, document, "D is the document node");
 	});
 
 	module("traversal");
