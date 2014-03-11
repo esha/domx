@@ -1,0 +1,29 @@
+{
+  "name": "domx",
+  "repo": "nbubna/domx",
+  "description": "An intuitive, extensible way to work directly with the DOM.",
+  "version": "0.1.0",
+  "keywords": [
+    "HTML",
+    "voyeur",
+    "DOM",
+    "traverse",
+    "manipulate",
+    "extend",
+    "better",
+    "befriend",
+    "query",
+    "element",
+    "emmet",
+    "native"
+  ],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "main": "src/component.js",
+  "scripts": [
+    "src/component.js",
+    "dist/domx.event.js",
+    "dist/domx.js"
+  ]
+}

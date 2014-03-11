@@ -1,0 +1,49 @@
+{
+    "name": "domx",
+    "version": "0.1.0",
+    "main": "dist/domx.min.js",
+    "description": "An intuitive, extensible way to work directly with the DOM.",
+    "keywords": [
+        "HTML",
+        "DOM",
+        "traverse",
+        "append",
+        "emmet",
+        "befriend",
+        "manipulate",
+        "extend",
+        "native",
+        "voyeur",
+        "element"
+    ],
+    "author": {
+        "name": "ESHA Research",
+        "email": "nathan@esha.com",
+        "url": "http://www.esha.com/"
+    },
+    "homepage": "http://nbubna.github.io/domx/",
+    "bugs": "https://github.com/nbubna/nbubna/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com:nbubna/domx.git"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://raw.github.com/nbubna/domx/master/LICENCE"
+        },
+        {
+            "type": "GPL",
+            "url": "http://www.gnu.org/licenses/gpl.html"
+        }
+    ],
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "components",
+        "libs",
+        "test",
+        "src",
+        "Gruntfile.js"
+    ]
+}
