@@ -4,14 +4,19 @@
 (function(D) {
     "use strict";
 
-    function List() {
-        this.length = 0;
-        this.add(arguments);
+    function List(limit) {
+        if (typeof limit === "number") {
+            this.limit = limit;
+            this.add(_.slice(arguments, 1));
+        } else {
+            this.add(arguments);
+        }
     }
 
     var _ = {
         version: "0.1.0",
         slice: Array.prototype.slice,
+        noop: function(){},
         List: List,
         singles: [Element],
         lists: [NodeList, HTMLCollection, List],
@@ -39,7 +44,7 @@
         },
         define: function(o, key, val) {
             if (!(key in o)) { try {// never redefine, never fail
-                var opts = val.get || val.set ? val : { value: val };
+                var opts = val.get || val.set ? val : {value:val, writable:true};
                 opts.configurable = true;
                 Object.defineProperty(o, key, opts);
             } catch (e) {} }
@@ -112,25 +117,32 @@
     };
 
     // define List functions
-    _.define(List.prototype, 'add', function(list) {
-        list = arguments.length < 2 && _.isList(list) ? list : arguments;
-        for (var i=0,m=list.length; i<m; i++) {
-            var item = list[i];
-            if (_.isList(item)) {
-                this.add(item);
-            } else if (this.indexOf(item) < 0) {
-                this[this.length++] = item;
+    _.fn({
+        length: 0,
+        limit: -1,
+        add: function(list) {
+            list = arguments.length < 2 && _.isList(list) ? list : arguments;
+            for (var i=0,m=list.length; i<m; i++) {
+                var item = list[i];
+                if (_.isList(item)) {
+                    this.add(item);
+                } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
+                    this[this.length++] = item;
+                    if (this.length === this.limit) {
+                        return _.define(this, 'add', _.noop);
+                    }
+                }
             }
-        }
-    });
-    _.define(List.prototype, 'indexOf', function(item) {
-        for (var i=0; i<this.length; i++) {
-            if (item === this[i]) {
-                return i;
+        },
+        indexOf: function(item) {
+            for (var i=0; i<this.length; i++) {
+                if (item === this[i]) {
+                    return i;
+                }
             }
+            return -1;
         }
-        return -1;
-    });
+    }, [List]);
 
     // extend the DOM!
     _.define(D, '_', _);
@@ -143,24 +155,18 @@
 
     var _ = D._;
     _.traverse = {
-        find: function(selector, count) {
+        queryAll: function(selector, count) {
             var self = _.isList(this) ? this : [this],
-                list = new _.List();
-            for (var i=0, m=self.length; i<m && (!count || list.length < count); i++) {
-                if (count === list.length + 1) {
-                    var node = self[i].querySelector(selector);
-                    if (node){ list.add(node); }
-                } else {
-                    var nodes = self[i].querySelectorAll(selector);
-                    for (var j=0, l=nodes.length; j<l && (!count || list.length < count); j++) {
-                        list.add(nodes[j]);
-                    }
-                }
+                list = new _.List(count);
+            for (var i=0, m=self.length; i<m && (!count || count > list.length); i++) {
+                list.add(self[i][
+                    count === list.length+1 ? 'querySelector' : 'querySelectorAll'
+                ](selector));
             }
             return list;
         },
-        findOne: function(selector) {
-            return this.find(selector, 1)[0];
+        query: function(selector) {
+            return this.queryAll(selector, 1)[0];
         },
         only: function(b, e) {
             var arr = this.toArray();
@@ -173,10 +179,10 @@
         }
     };
 
-    _.define(D, 'find', _.traverse.find);
-    _.define(D, 'findOne', _.traverse.findOne);
-    _.fn('find', _.traverse.find);
-    _.fn('findOne', _.traverse.findOne);
+    _.define(D, 'queryAll', _.traverse.queryAll);
+    _.define(D, 'query', _.traverse.query);
+    _.fn('queryAll', _.traverse.queryAll);
+    _.fn('query', _.traverse.query);
     _.fn('only', _.traverse.only, _.lists);
 
     // ensure element.matches(selector) availability
