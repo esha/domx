@@ -21,10 +21,10 @@ Test assertions:
 */
     module("D");
 
-    test("D.find", function() {
-        equal(typeof D.find, "function", "D.find");
-        equal(D.find('body')[0], document.body, "D.find('body')");
-        equal(D.findOne('body'), document.body, "D.findOne('body')");
+    test("D.queryAll", function() {
+        equal(typeof D.queryAll, "function", "D.queryAll");
+        equal(D.queryAll('body')[0], document.body, "D.queryAll('body')");
+        equal(D.query('body'), document.body, "D.query('body')");
     });
 
     var _ = D._;
@@ -44,72 +44,72 @@ Test assertions:
         });
     });
 
-    test("find()", function() {
+    test("queryAll()", function() {
         var set = _.lists.concat(_.singles);
         expect(set.length);
         set.forEach(function(_class) {
-            equal(_class.prototype.find, _.traverse.find);
+            equal(_class.prototype.queryAll, _.traverse.queryAll);
         });
     });
 
-    test("findOne()", function() {
+    test("query()", function() {
         var set = _.lists.concat(_.singles);
         expect(set.length);
         set.forEach(function(_class) {
-            equal(_class.prototype.findOne, _.traverse.findOne);
+            equal(_class.prototype.query, _.traverse.query);
         });
     });
 
-    module("find");
+    module("queryAll");
 
-    test("find multiple, get array", function() {
-        ok(_.isList(D.find("div")), "should be a list");
+    test("queryAll multiple, get array", function() {
+        ok(_.isList(D.queryAll("div")), "should be a list");
     });
 
-    test("find one, get HTMLElement", function() {
-        ok(D.findOne("#identity") instanceof HTMLElement, "should be an element");
+    test("queryAll one, get HTMLElement", function() {
+        ok(D.query("#identity") instanceof HTMLElement, "should be an element");
     });
 
-    test("find until count", function() {
-        ok(D.findOne('section div[id]') instanceof HTMLElement, "should be a single element");
+    test("queryAll until count", function() {
+        ok(D.query('section div[id]') instanceof HTMLElement, "should be a single element");
 
-        var lessThanAvailable = D.find('section div[id]', 2);
+        var lessThanAvailable = D.queryAll('section div[id]', 2);
         ok(_.isList(lessThanAvailable), 'should be a list');
         equal(lessThanAvailable.length, 2, 'should have only two');
 
-        var moreThanAvailable = D.find('section div[id]', 5);
+        var moreThanAvailable = D.queryAll('section div[id]', 5);
         ok(_.isList(moreThanAvailable), 'should be a list');
-        equal(moreThanAvailable.length, 3, 'should only find three');
+        equal(moreThanAvailable.length, 3, 'should only queryAll three');
     });
 
-    test("find nonexistent, get empty array", function() {
-        ok(!D.find("#idontexist").length, "empty array");
+    test("queryAll nonexistent, get empty array", function() {
+        ok(!D.queryAll("#idontexist").length, "empty array");
     });
 
-    test("element find", function() {
-        strictEqual(D.find('section').find("div").length, 5, "should be five divs, not seven");
+    test("element queryAll", function() {
+        strictEqual(D.queryAll('section').queryAll("div").length, 5, "should be five divs, not seven");
     });
 
-    test("list find", function() {
-        strictEqual(D.find('section div').find('span').length, 1, "should get one span");
+    test("list queryAll", function() {
+        strictEqual(D.queryAll('section div').queryAll('span').length, 1, "should get one span");
     });
 
     module("only()");
 
     test("by slice, on multiple", function() {
-        var divs = D.find('section > div');
+        var divs = D.queryAll('section > div');
         strictEqual(divs.only(-1)[0], divs[divs.length-1], 'get last one');
         strictEqual(divs.only(1,4).length, 3, "got sublist of proper length");
     });
 
     test("by selector, on multiple", function() {
-        var divs = D.find('section > div');
-        strictEqual(divs.only('#first')[0], D.find('#first')[0], 'got #first');
+        var divs = D.queryAll('section > div');
+        strictEqual(divs.only('#first')[0], D.queryAll('#first')[0], 'got #first');
     });
 
     test("by function, on multiple", function() {
         var odds = function(n,i){ return i%2; };
-        strictEqual(D.find('section > div').only(odds).length, 2, "got two odd divs");
+        strictEqual(D.queryAll('section > div').only(odds).length, 2, "got two odd divs");
     });
 
 }(document));

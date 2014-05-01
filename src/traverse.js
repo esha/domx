@@ -3,7 +3,7 @@
 
     var _ = D._;
     _.traverse = {
-        find: function(selector, count) {
+        queryAll: function(selector, count) {
             var self = _.isList(this) ? this : [this],
                 list = new _.List();
             for (var i=0, m=self.length; i<m && (!count || list.length < count); i++) {
@@ -19,8 +19,8 @@
             }
             return list;
         },
-        findOne: function(selector) {
-            return this.find(selector, 1)[0];
+        query: function(selector) {
+            return this.queryAll(selector, 1)[0];
         },
         only: function(b, e) {
             var arr = this.toArray();
@@ -33,10 +33,10 @@
         }
     };
 
-    _.define(D, 'find', _.traverse.find);
-    _.define(D, 'findOne', _.traverse.findOne);
-    _.fn('find', _.traverse.find);
-    _.fn('findOne', _.traverse.findOne);
+    _.define(D, 'queryAll', _.traverse.queryAll);
+    _.define(D, 'query', _.traverse.query);
+    _.fn('queryAll', _.traverse.queryAll);
+    _.fn('query', _.traverse.query);
     _.fn('only', _.traverse.only, _.lists);
 
     // ensure element.matches(selector) availability
