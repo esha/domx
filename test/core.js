@@ -74,6 +74,10 @@ Test assertions:
         list.add([[3,4],5]);
         equal(list.length, 5);
 
+        list.add(null);
+        list.add(undefined);
+        equal(list.length, 5);
+
         equal(list.indexOf(1), 0);
         equal(list.indexOf(0), -1);
     });

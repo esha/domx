@@ -115,7 +115,7 @@
             var item = list[i];
             if (_.isList(item)) {
                 this.add(item);
-            } else if (this.indexOf(item) < 0) {
+            } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
                 this[this.length++] = item;
             }
         }

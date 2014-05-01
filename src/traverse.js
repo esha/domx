@@ -8,8 +8,7 @@
                 list = new _.List();
             for (var i=0, m=self.length; i<m && (!count || list.length < count); i++) {
                 if (count === list.length + 1) {
-                    var node = self[i].querySelector(selector);
-                    if (node){ list.add(node); }
+                    list.add(self[i].querySelector(selector));
                 } else {
                     var nodes = self[i].querySelectorAll(selector);
                     for (var j=0, l=nodes.length; j<l && (!count || list.length < count); j++) {
