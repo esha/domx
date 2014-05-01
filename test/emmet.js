@@ -20,12 +20,13 @@
       throws(block, [expected], [message])
   */
 
+    var _ = D._;
 	module("D element creation");
 
 	test("nested", function() {
 		var nested = D.body.add('div>div');
 		equal(nested.tagName, "DIV", "Tags created.");
-		ok(D.body.div.only(-1).div, 'Tags found.');
+		ok(D.queryAll('body > div').only(-1).query('div'), 'Tags found.');
 		nested.parentNode.remove();
 	});
 
@@ -40,7 +41,7 @@
 
 	test("element id", function() {
 		ok(D.body.add('span#foo'), 'have element');
-		equal(D.body.span.id, 'foo', 'has right id');
+		equal(D.query('body > span').id, 'foo', 'has right id');
 		D.query('#foo').remove();
 	});
 
@@ -61,17 +62,17 @@
 
 	test("climb up context", 4, function() {
 		equal(D.body.add('p>div>div>span^h2^^h1').tagName, 'H1', 'right element');
-		ok(D.body.p.div.div.span, 'have initial tree');
-		ok(D.body.p.div.h2, 'h2 went in right place');
-		ok(D.body.h1, 'h1 went in right place');
-		D.body.p.remove();
-		D.body.h1.remove();
+		ok(D.query('p > div > div > span'), 'have initial tree');
+		ok(D.query('p > div > h2'), 'h2 went in right place');
+		ok(D.query('body > h1'), 'h1 went in right place');
+		D.query('body > p').remove();
+		D.query('body > h1').remove();
 	});
 
 	test("multiplier", 4, function() {
 		var spans = D.body.add('span*5');
 
-		ok(spans instanceof Array, "Multiple elements created and is array");
+		ok(_.isList(spans), "Multiple elements created and is list");
 		ok(spans.length === 5, "Exact amount of elements preset");
 		equal(spans[0].tagName, "SPAN", "Element specified created");
 		equal(spans[0].parentNode.tagName, "BODY", "Appended!");
@@ -85,7 +86,7 @@
 		text.remove();
 		var mixed = D.body.add('p#mixed{a}>span+{ b}');
 		equal(mixed.textContent, 'a b', 'both text parts');
-		ok(mixed.span, 'and child node');
+		ok(mixed.query('span'), 'and child node');
 		mixed.remove();
 	});
 
