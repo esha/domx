@@ -1,14 +1,19 @@
 (function(D) {
     "use strict";
 
-    function List() {
-        this.length = 0;
-        this.add(arguments);
+    function List(limit) {
+        if (typeof limit === "number") {
+            this.limit = limit;
+            this.add(_.slice(arguments, 1));
+        } else {
+            this.add(arguments);
+        }
     }
 
     var _ = {
         version: "<%= pkg.version %>",
         slice: Array.prototype.slice,
+        noop: function(){},
         List: List,
         singles: [Element],
         lists: [NodeList, HTMLCollection, List],
@@ -36,7 +41,7 @@
         },
         define: function(o, key, val) {
             if (!(key in o)) { try {// never redefine, never fail
-                var opts = val.get || val.set ? val : { value: val };
+                var opts = val.get || val.set ? val : {value:val, writable:true};
                 opts.configurable = true;
                 Object.defineProperty(o, key, opts);
             } catch (e) {} }
@@ -109,25 +114,32 @@
     };
 
     // define List functions
-    _.define(List.prototype, 'add', function(list) {
-        list = arguments.length < 2 && _.isList(list) ? list : arguments;
-        for (var i=0,m=list.length; i<m; i++) {
-            var item = list[i];
-            if (_.isList(item)) {
-                this.add(item);
-            } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
-                this[this.length++] = item;
+    _.fn({
+        length: 0,
+        limit: -1,
+        add: function(list) {
+            list = arguments.length < 2 && _.isList(list) ? list : arguments;
+            for (var i=0,m=list.length; i<m; i++) {
+                var item = list[i];
+                if (_.isList(item)) {
+                    this.add(item);
+                } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
+                    this[this.length++] = item;
+                    if (this.length === this.limit) {
+                        return _.define(this, 'add', _.noop);
+                    }
+                }
             }
-        }
-    });
-    _.define(List.prototype, 'indexOf', function(item) {
-        for (var i=0; i<this.length; i++) {
-            if (item === this[i]) {
-                return i;
+        },
+        indexOf: function(item) {
+            for (var i=0; i<this.length; i++) {
+                if (item === this[i]) {
+                    return i;
+                }
             }
+            return -1;
         }
-        return -1;
-    });
+    }, [List]);
 
     // extend the DOM!
     _.define(D, '_', _);

@@ -66,7 +66,7 @@ Test assertions:
         equal(list.length, 0);
         ok(list instanceof _.List);
 
-        list = new _.List(1,2);
+        list = new _.List([1,2]);
         equal(list.length, 2);
         equal(list[0], 1);
         equal(list[1], 2);
@@ -80,6 +80,12 @@ Test assertions:
 
         equal(list.indexOf(1), 0);
         equal(list.indexOf(0), -1);
+
+        list = new _.List();
+        list.limit = 1;
+        list.add(1,2);
+        equal(list.length, 1);
+        equal(list[1], undefined);
     });
 
     test("_.define", function() {
