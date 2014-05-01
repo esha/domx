@@ -11,5 +11,12 @@
   "boss": true,
   "eqnull": true,
   "browser": true,
-  "predef": ["module","D","define","require"]
+  "predef": [
+    "module",
+    "D",
+    "define",
+    "require",
+    "NodeList",
+    "HTMLCollection"
+  ]
 }

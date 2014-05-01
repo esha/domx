@@ -21,33 +21,12 @@ module.exports = function(grunt) {
         process: true,
         stripBanners: true
       },
-      core: {
-        src: ['src/core.js'],
-        dest: 'dist/<%= pkg.name %>.core.js'
-      },
-      alter: {
-        src: ['src/alter.js'],
-        dest: 'dist/<%= pkg.name %>.alter.js'
-      },
-      emmet: {
-        src: 'src/emmet.js',
-        dest: 'dist/<%= pkg.name %>.emmet.js'
-      },
-      base: {
-        src: ['src/core.js',
-              'src/alter.js',
-              'src/event.js'],
-        dest: 'dist/<%= pkg.name %>.base.js'
-      },
       dist: {
         src: ['src/core.js',
+              'src/traverse.js',
               'src/alter.js',
               'src/emmet.js'],
         dest: 'dist/<%= pkg.name %>.js'
-      },
-      event: {
-        src: ['src/event.js'],
-        dest: 'dist/<%= pkg.name %>.event.js'
       },
       stringify: {
         src: ['src/stringify.js'],
@@ -59,43 +38,19 @@ module.exports = function(grunt) {
         banner: '<%= banner %>',
         report: 'gzip'
       },
-      core: {
-        src: ['dist/<%= pkg.name %>.core.js'],
-        dest: 'dist/<%= pkg.name %>.core.min.js'
-      },
-      base: {
-        src: 'dist/<%= pkg.name %>.base.js',
-        dest: 'dist/<%= pkg.name %>.base.min.js'
-      },
       dist: {
         src: ['dist/<%= pkg.name %>.js'],
         dest: 'dist/<%= pkg.name %>.min.js'
       },
-      event: {
-        src: ['dist/<%= pkg.name %>.event.js'],
-        dest: 'dist/<%= pkg.name %>.event.min.js'
-      }
     },
     compress: {
       options: {
         mode: 'gzip'
       },
-      core: {
-        src: ['dist/<%= pkg.name %>.core.min.js'],
-        dest: ['dist/<%= pkg.name %>.core.min.js']
-      },
-      base: {
-        src: ['dist/<%= pkg.name %>.base.min.js'],
-        dest: 'dist/<%= pkg.name %>.base.min.js'
-      },
       dist: {
         src: ['dist/<%= pkg.name %>.min.js'],
         dest: 'dist/<%= pkg.name %>.min.js'
       },
-      event: {
-        src: ['dist/<%= pkg.name %>.event.min.js'],
-        dest: 'dist/<%= pkg.name %>.event.min.js'
-      }
     },
     qunit: {
       files: ['test/**/*.html']

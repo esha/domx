@@ -1,61 +1,58 @@
-(function(document, _) {
+(function(D) {
     "use strict";
 
-    var add = _.fn.add = function(arg, ref) {
-        return this.each(function(node) {
-            return add.all(node, arg, ref);
-        });
-    };
-    add.all = function(node, arg, ref) {
-        if (typeof arg === "string") {// turn arg into an appendable
-            return add.create(node, arg, ref);
-        }
-        if ('length' in arg) {// array of append-ables
-            var ret = [];
-            for (var i=0,m=arg.length; i<m; i++) {
-                ret.push(add.all(node, arg[i], ref));
+    var _ = D._;
+    var A = _.add = {
+        fn: function(arg, ref) {
+            if (_.isList(this)) {
+                return this.each(function(el){ return A.all(el, arg, ref); });
             }
-            return ret;
+            return A.all(this, arg, ref);
+        },
+        all: function(node, arg, ref) {
+            if (typeof arg === "string") {// turn arg into an appendable
+                return A.create(node, arg, ref);
+            }
+            if (_.isList(arg)) {// list of append-ables
+                var list = new _.List();
+                for (var i=0,m=arg.length; i<m; i++) {
+                    list.add(A.all(node, arg[i], ref));
+                }
+                return list;
+            }
+            A.insert(node, arg, ref);// arg is an append-able
+            return arg;
+        },
+        create: function(node, tag, ref) {
+            return A.insert(node, D.createElement(tag), ref);
+        },
+        insert: function(node, child, ref) {
+            var sibling = A.find(node, ref);
+            if (sibling) {
+                node.insertBefore(child, sibling);
+            } else {
+                node.appendChild(child);
+            }
+            return child;
+        },
+        find: function(node, ref) {
+            switch (typeof ref) {
+                case "string": return node[ref+'Child'];
+                case "number": return node.children[ref];
+                case "object": return ref;
+                case "function": return ref.call(node, node);
+            }
         }
-        add.insert(node, arg, ref);// arg is an append-able
-        return arg;
     };
-    add.create = function(node, tag, ref) {
-        return add.insert(node, document.createElement(tag), ref);
-    };
-    add.insert = function(node, child, ref) {
-        var sibling = add.find(node, ref);
-        if (sibling) {
-            node.insertBefore(child, sibling);
-        } else {
-            node.appendChild(child);
-        }
-        _.updated(node);
-        return child;
-    };
-    add.find = function(node, ref) {
-        switch (typeof ref) {
-            case "string": return node[ref+'Child'];
-            case "number": return node.children[ref];
-            case "object": return ref;
-            case "function": return ref.call(node, node);
-        }
-    };
-
-    _.updated = function(node) {
-        node._internal = true;
-        _.children(node);
-    };
-
-    _.fn.remove = function(chain) {
+    _.fn('add', A.fn);
+    _.fn('remove', function(chain) {
         return this.each(function(node) {
             var parent = node.parentNode;
             if (parent) {
                 parent.removeChild(node);
-                _.updated(parent);
                 if (chain){ return parent; }
             }
         });
-    };
+    });
 
-})(document, document._);
+})(document);

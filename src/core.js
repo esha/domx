@@ -1,118 +1,45 @@
-(function(window, D, Observer) {
+(function(D) {
     "use strict";
+
+    function List() {
+        this.length = 0;
+        this.add(arguments);
+    }
 
     var _ = {
         version: "<%= pkg.version %>",
         slice: Array.prototype.slice,
-        list: function(list, force) {
-            if (list.length === 1){ return _.node(list[0], force); }
-            if (force || !list.each) {
-                if (!list.slice){ list = _.slice.call(list); }
-                _.methods(list);
-                if (list.length){ _.children(list[0], list); }// proxy dot-traversal into first element
+        List: List,
+        singles: [Element],
+        lists: [NodeList, HTMLCollection, List],
+        isList: function(o) {
+            return (o && typeof o === "object" && 'length' in o) ||
+                   o instanceof NodeList ||// phantomjs foolishly calls these functions
+                   o instanceof HTMLCollection;
+        },
+        fn: function(name, value, set) {
+            if (typeof name !== "string") {
+                var o = name;
+                for (name in o) {
+                    _.fn(name, o[name], value||set);
+                }
+                return o;
             }
-            return list;
-        },
-        node: function(node, force) {
-            if (force || !node.each) {
-                _.methods(node);
-                _.children(node);
-            }
-            return node;
-        },
-        methods: function(o) {
-            for (var method in _.fn) {
-                _.define(o, method, _.fn[method]);
+            if (!set) {
+                _.fn(name, value, _.singles);
+                _.fn(name, value, _.lists);
+            } else {
+                for (var i=0,m=set.length; i<m; i++) {
+                    _.define(set[i].prototype || set[i], name, value);
+                }
             }
         },
-        children: function(node, list) {
-            var children = node._children = {};
-            for (var i=0, m=node.childNodes.length; i<m; i++) {
-                var child = node.childNodes[i],
-                    key = _.key(child);
-                (children[key]||(children[key]=[])).push(child);
-                _.define(node, key);
-                if (list){ _.define(list, key, undefined, node); }
-            }
-            return children;
-        },
-        key: function(node) {
-            return node.tagName ? node.tagName.toLowerCase() : '_other';
-        },
-        define: function(o, key, val, node) {
+        define: function(o, key, val) {
             if (!(key in o)) { try {// never redefine, never fail
-                node = node || o;// children needn't belong to define's target
-                Object.defineProperty(o, key,
-                    val !== undefined ? { value: val } :
-                    {
-                        get: function() {
-                            if (!node._children){ _.children(node); }
-                            return _.list(node._children[key]||[]);
-                        }
-                    }
-                );
+                var opts = val.get || val.set ? val : { value: val };
+                opts.configurable = true;
+                Object.defineProperty(o, key, opts);
             } catch (e) {} }
-        },
-        mutation: function(e) {
-            var node = e.target;// only wipe cache for 3rd party changes
-            delete node[node._internal ? '_internal' : '_children'];
-        },
-        unique: function(node, i, arr){ return arr.indexOf(node) === i; },
-        fn: {
-            each: function(fn) {
-                var self = this.forEach ? this : [this],
-                    results = [],
-                    prop, args;
-                if (typeof fn === "string") {
-                    prop = _.resolve[fn] || fn;// e.g. _.resolve['+class'] = 'classList.add';
-                    args = _.slice.call(arguments, 1);
-                    fn = function(el, i){ return _.resolve(prop, el, args, i); };
-                }
-                for (var i=0,m=self.length, result; i<m; i++) {
-                    result = fn.call(self, _.node(self[i]), i, self);
-                    if (result || (prop && result !== undefined)) {
-                        if (result.forEach) {
-                            results.push.apply(results, result);
-                        } else {
-                            results.push(result);
-                        }
-                    }
-                }
-                return !results[0] && results[0] !== false ? this :
-                    results[0].matches ? _.list(results.filter(_.unique)) :
-                    //self.length === 1 ? results[0] :
-                    results;
-            },
-            find: function() {
-                try{ window.console.warn('find() is deprecated. Please use query().'); }
-                finally{ return this.query.apply(this, arguments); }
-            },
-            query: function(selector, count) {
-                var self = this.forEach ? this : [this];
-                for (var list=[], i=0, m=self.length; i<m && (!count || list.length < count); i++) {
-                    if (count === list.length + 1) {
-                        var node = self[i].querySelector(selector);
-                        if (node){ list.push(node); }
-                    } else {
-                        var nodes = self[i].querySelectorAll(selector);
-                        for (var j=0, l=nodes.length; j<l && (!count || list.length < count); j++) {
-                            list.push(nodes[j]);
-                        }
-                    }
-                }
-                return _.list(list);
-            },
-            only: function(b, e) {
-                var self = this.forEach ? this : [this];
-                return _.list(
-                    b >= 0 || b < 0 ?
-                        self.slice(b, e || (b + 1) || undefined) :
-                        self.filter(
-                            typeof b === "function" ? b :
-                            function(el){ return el.matches(b); }
-                        )
-                );
-            }
         },
         resolve: function(_key, _el, args, i) {
             var key = _key, el = _el;// copy prefixed originals so we can recover them if need be
@@ -147,35 +74,63 @@
             return ret;
         }
     };
+    _.core = {
+        each: function(fn) {
+            var self = _.isList(this) ? this : [this],
+                results = [],
+                prop, args;
+            if (typeof fn === "string") {
+                prop = _.resolve[fn] || fn;// e.g. _.resolve['+class'] = 'classList.add';
+                args = _.slice.call(arguments, 1);
+                fn = function(el, i){ return _.resolve(prop, el, args, i); };
+            }
+            for (var i=0,m=self.length, result; i<m; i++) {
+                result = fn.call(self, self[i], i, self);
+                if (result || (prop && result !== undefined)) {
+                    results.push(result);
+                }
+            }
+            return !results.length ? this :
+                !_.isList(this) ? results[0] :
+                results[0] instanceof Node ? new _.List(results) :
+                results;
+        },
+        toArray: function(arr) {
+            arr = arr || [];
+            if (_.isList(this)) {
+                for (var i=0,m=this.length; i<m; i++) {
+                    arr.push(this[i]);
+                }
+            } else {
+                arr.push(this);
+            }
+            return arr;
+        }
+    };
 
-    _.node(D);
+    // define List functions
+    _.define(List.prototype, 'add', function(list) {
+        list = arguments.length < 2 && _.isList(list) ? list : arguments;
+        for (var i=0,m=list.length; i<m; i++) {
+            var item = list[i];
+            if (_.isList(item)) {
+                this.add(item);
+            } else if (this.indexOf(item) < 0) {
+                this[this.length++] = item;
+            }
+        }
+    });
+    _.define(List.prototype, 'indexOf', function(item) {
+        for (var i=0; i<this.length; i++) {
+            if (item === this[i]) {
+                return i;
+            }
+        }
+        return -1;
+    });
+
+    // extend the DOM!
     _.define(D, '_', _);
-    _.define(D, 'ify', function(o, force) {
-        return !o || 'length' in o ? _.list(o||[], force) : _.node(o, force);
-    });
-    // ensure element.matches(selector) availability
-    var Ep = Element.prototype,
-        aS = 'atchesSelector';
-    _.define(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
-    // watch for changes in children
-    if (Observer) {
-        new Observer(function(list){ list.forEach(_.mutation); })
-            .observe(D, { childList: true, subtree: true });
-    } else {
-        D.addEventListener("DOMSubtreeModified", _.mutation);
-    }
-    // export 
-    if (typeof define === 'function' && define.amd) {
-        define(function(){ return D; });
-    } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = D;
-    } else {
-        window[D.html.getAttribute('data-domx-reference')||'D'] = D;
-    }
-    // eventual consistency
-    D.addEventListener("DOMContentLoaded", function() {
-        _.node(D, true);
-        _.node(D.html, true);
-    });
+    _.fn(_.core);
 
-})(window, document, window.MutationObserver);
+})(document);

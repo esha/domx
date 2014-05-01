@@ -20,26 +20,27 @@
       throws(block, [expected], [message])
   */
 
+  var _ = D._;
 	module("D element creation");
 
 	test("basic", function() {
-		ok(!D.html.body.a, "no A to begin with");
-		equal(D.html.body.add('a').tagName, "A", "Tag created.");
-		ok(D.html.body.a, 'Tag found.');
-		D.html.body.a.remove();
+		ok(!D.findOne('body > a'), "no A to begin with");
+		equal(D.body.add('a').tagName, "A", "Tag created.");
+		ok(D.findOne('body > a'), 'Tag found.');
+		D.findOne('body > a').remove();
 	});
 
 	test("add node", function() {
 		var node = document.createElement('article');
-		equal(D.html.body.add(node), node, "added node and got it back");
-		ok(D.html.body.article && 'each' in node, 'added node has been assimilated');
+		equal(D.body.add(node), node, "added node and got it back");
+		ok(D.body.findOne('article') && 'each' in node, 'added node has been assimilated');
 		node.remove();
 	});
 
 	test("add list", function() {
 		var list = ['nav', document.createElement('nav'), ['nav']];
-		equal(D.html.body.add(list).length, 3, 'added three nav elements');
-		D.query('nav').remove();
+		equal(D.body.add(list).length, 3, 'added three nav elements');
+		D.find('nav').remove();
 	});
 
   //TODO: test add(el, ref);
@@ -47,21 +48,21 @@
   module("D element removal");
 
   test("single", 3, function() {
-    var el = D.html.body.add('doomed');
+    var el = D.body.add('doomed');
     ok(el, 'have element');
     el.remove();
     ok(!el.parentNode, 'no parent after removal');
-    ok(!D.html.body.doomed.length, 'child property is empty array');
+    ok(!D.body.find('doomed').length, 'find() returns empty array');
   });
 
   test("list", 8, function() {
-    var list = D.html.body.add('doa*5');
-    ok(list && list.forEach, 'have array');
+    var list = D.body.add('doa*5');
+    ok(_.isList(list), 'have list');
     strictEqual(list.remove(), list, 'remove returns self');
     list.each(function(doa) {
       ok(!doa.parentNode, 'no parents after removal');
     });
-    ok(!D.html.body.doa.length, 'child property is empty array');
+    ok(!D.body.find('doa').length, 'find() returns empty array');
   });
 
-}(D));
+}(document));

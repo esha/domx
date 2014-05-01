@@ -1,24 +1,25 @@
-(function(D, _) {
+(function(D) {
     "use strict";
 
-    var add = _.fn.add;
-    add.create = function(node, code, ref) {
-        var parts = code.split(add.emmetRE()),
+    var _ = D._,
+        A = _.add;
+    A.create = function(node, code, ref) {
+        var parts = code.split(A.emmetRE()),
             root = D.createDocumentFragment(),
             el = D.createElement(parts[0]);
         root.appendChild(el);
         for (var i=1,m=parts.length; i<m; i++) {
             var part = parts[i];
-            el = add.emmet[part.charAt(0)].call(el, part.substr(1), root) || el;
+            el = A.emmet[part.charAt(0)].call(el, part.substr(1), root) || el;
         }
-        add.insert(node, root, ref);
+        A.insert(node, root, ref);
         return el;
     };
-    add.emmetRE = function() {
-        var chars = '\\'+Object.keys(add.emmet).join('|\\');
+    A.emmetRE = function() {
+        var chars = '\\'+Object.keys(A.emmet).join('|\\');
         return new RegExp('(?='+chars+')','g');
     };
-    add.emmet = {
+    A.emmet = {
         '#': function(id) {
             this.id = id;
         },
@@ -43,24 +44,24 @@
             return this;
         },
         '+': function(tag, root) {
-            return add.emmet['>'].call(this.parentNode || root, tag);
+            return A.emmet['>'].call(this.parentNode || root, tag);
         },
         '*': function(count) {
             var parent = this.parentNode,
-                els = [this];
+                els = new _.List(this);
             for (var i=1; i<count; i++) {
-                els.push(this.cloneNode(true));
+                els.add(this.cloneNode(true));
                 parent.appendChild(els[i]);
             }
             //TODO: numbering for els
             return els;
         },
         '^': function(tag, root) {
-            return add.emmet['+'].call(this.parentNode || root, tag, root);
+            return A.emmet['+'].call(this.parentNode || root, tag, root);
         },
         '{': function(text) {
             this.appendChild(D.createTextNode(text.substr(0, text.length-1)));
         }
     };
 
-})(document, document._);
+})(document);

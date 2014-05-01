@@ -10,7 +10,7 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq].
 
 #### Full Version:
 
-Download: [domx.min.js][full-min] or [domx.js][full]  
+Download: [domx.min.js][full-min] or [domx.js][full] [![Build Status](https://travis-ci.org/esha/domx.png?branch=master)](https://travis-ci.org/esha/domx)  
 [Bower][bower]: `bower install domx`  
 [NPM][npm]: `npm install domx`   
 [Component][component]: `component install nbubna/domx`  
