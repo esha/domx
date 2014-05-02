@@ -18,7 +18,7 @@
         singles: [Element],
         lists: [NodeList, HTMLCollection, List],
         isList: function(o) {
-            return (o && typeof o === "object" && 'length' in o) ||
+            return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                    o instanceof NodeList ||// phantomjs foolishly calls these functions
                    o instanceof HTMLCollection;
         },
@@ -95,9 +95,9 @@
                     results.push(result);
                 }
             }
-            return !results.length ? this :
-                !_.isList(this) ? results[0] :
-                results[0] instanceof Node ? new _.List(results) :
+            return !results.length ? this : // no results, be fluent
+                !_.isList(this) ? results[0] : // single source, single result
+                results[0].toArray ? new _.List(results) : // convert array to DOMx (and combine sub-lists)
                 results;
         },
         toArray: function(arr) {

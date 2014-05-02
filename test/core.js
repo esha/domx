@@ -59,6 +59,7 @@ Test assertions:
         ok(!_.isList(null), "null is not list");
         ok(!_.isList(1), "number is not list");
         ok(!_.isList('foo'), "string is not list");
+        ok(!_.isList(D.createTextNode('foo')), "text node is not list");
     });
 
     test('_.List', function() {
