@@ -21,7 +21,9 @@
             return new _.List(b >= 0 || b < 0 ?
                 arr.slice(b, e || (b + 1) || undefined) :
                 arr.filter(
-                    typeof b === "function" ? b : function(el){ return el.matches(b); }
+                    typeof b === "function" ? b : 
+                        e === undefined ? function(el){ return el.matches(b); } :
+                            function(el){ return el.each(b) === e; }
                 )
             );
         }

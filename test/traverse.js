@@ -96,20 +96,26 @@ Test assertions:
 
     module("only()");
 
-    test("by slice, on multiple", function() {
+    test("by slice", function() {
         var divs = D.queryAll('section > div');
         strictEqual(divs.only(-1)[0], divs[divs.length-1], 'get last one');
         strictEqual(divs.only(1,4).length, 3, "got sublist of proper length");
     });
 
-    test("by selector, on multiple", function() {
+    test("by selector", function() {
         var divs = D.queryAll('section > div');
         strictEqual(divs.only('#first')[0], D.queryAll('#first')[0], 'got #first');
     });
 
-    test("by function, on multiple", function() {
-        var odds = function(n,i){ return i%2; };
-        strictEqual(D.queryAll('section > div').only(odds).length, 2, "got two odd divs");
+    test("by each=value", function() {
+        var divs = D.queryAll('section > div');
+        strictEqual(divs.only('id','last')[0], D.getElementById('last'), 'got #last');
+    });
+
+    test("by function", function() {
+        var divs = D.queryAll('section > div'),
+            odds = function(n,i){ return i%2; };
+        deepEqual(divs.only(odds).each('tagName'), ['DIV','DIV'], "got two odd divs");
     });
 
 }(document));
