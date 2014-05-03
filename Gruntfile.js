@@ -25,7 +25,8 @@ module.exports = function(grunt) {
         src: ['src/core.js',
               'src/traverse.js',
               'src/alter.js',
-              'src/emmet.js'],
+              'src/emmet.js',
+              'src/elements.js'],
         dest: 'dist/<%= pkg.name %>.js'
       },
       stringify: {
