@@ -90,7 +90,7 @@
                 fn = function(el, i){ return _.resolve(prop, el, args, i); };
             }
             for (var i=0,m=self.length, result; i<m; i++) {
-                result = fn.call(self, self[i], i, self);
+                result = fn.call(self[i], self[i], i, self);
                 if (result || (prop && result !== undefined)) {
                     results.push(result);
                 }
@@ -143,6 +143,15 @@
 
     // extend the DOM!
     _.define(D, '_', _);
+    _.define(D, 'extend', function(name, fn) {
+        _.fn(name, fn, _.singles);
+        _.fn(name, function extendFn() {
+            var args = arguments;
+            return this.each(function eachFn() {
+                return fn.apply(this, args);
+            });
+        }, _.lists);
+    });
     _.fn(_.core);
 
 })(document);
