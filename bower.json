@@ -21,16 +21,16 @@
         "email": "nathan@esha.com",
         "url": "http://www.esha.com/"
     },
-    "homepage": "http://nbubna.github.io/domx/",
-    "bugs": "https://github.com/nbubna/nbubna/issues",
+    "homepage": "http://esha.github.io/domx/",
+    "bugs": "https://github.com/esha/domx/issues",
     "repository": {
         "type": "git",
-        "url": "https://github.com:nbubna/domx.git"
+        "url": "https://github.com:esha/domx.git"
     },
     "licenses": [
         {
             "type": "MIT",
-            "url": "https://raw.github.com/nbubna/domx/master/LICENCE"
+            "url": "https://raw.githubusercontent.com/esha/domx/master/LICENSE-MIT"
         },
         {
             "type": "GPL",

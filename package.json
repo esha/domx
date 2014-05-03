@@ -1,9 +1,9 @@
 {
-  "name": "html.js",
-  "title": "domx",
+  "name": "domx",
+  "title": "DOMx",
   "description": "An intuitive, extensible way to work directly with the DOM.",
   "version": "0.1.0",
-  "homepage": "http://nbubna.github.io/domx/",
+  "homepage": "http://esha.github.io/domx/",
   "author": {
     "name": "ESHA Research",
     "email": "nathan@esha.com",
@@ -12,15 +12,15 @@
   "main": "dist/domx.min.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/nbubna/domx.git"
+    "url": "git://github.com/esha/domx.git"
   },
   "bugs": {
-    "url": "https://github.com/nbubna/domx/issues"
+    "url": "https://github.com/esha/domx/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/nbubna/domx/blob/master/LICENSE-MIT"
+      "url": "https://github.com/esha/domx/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
