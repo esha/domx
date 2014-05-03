@@ -1,4 +1,4 @@
-/*! domx - v0.1.0 - 2014-05-01
+/*! domx - v0.1.0 - 2014-05-02
 * http://nbubna.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 (function(D) {
@@ -21,7 +21,7 @@
         singles: [Element],
         lists: [NodeList, HTMLCollection, List],
         isList: function(o) {
-            return (o && typeof o === "object" && 'length' in o) ||
+            return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                    o instanceof NodeList ||// phantomjs foolishly calls these functions
                    o instanceof HTMLCollection;
         },
@@ -93,14 +93,14 @@
                 fn = function(el, i){ return _.resolve(prop, el, args, i); };
             }
             for (var i=0,m=self.length, result; i<m; i++) {
-                result = fn.call(self, self[i], i, self);
+                result = fn.call(self[i], self[i], i, self);
                 if (result || (prop && result !== undefined)) {
                     results.push(result);
                 }
             }
-            return !results.length ? this :
-                !_.isList(this) ? results[0] :
-                results[0] instanceof Node ? new _.List(results) :
+            return !results.length ? this : // no results, be fluent
+                !_.isList(this) ? results[0] : // single source, single result
+                results[0].toArray ? new _.List(results) : // convert array to DOMx (and combine sub-lists)
                 results;
         },
         toArray: function(arr) {
@@ -146,6 +146,15 @@
 
     // extend the DOM!
     _.define(D, '_', _);
+    _.define(D, 'extend', function(name, fn) {
+        _.fn(name, fn, _.singles);
+        _.fn(name, function extendFn() {
+            var args = arguments;
+            return this.each(function eachFn() {
+                return fn.apply(this, args);
+            });
+        }, _.lists);
+    });
     _.fn(_.core);
 
 })(document);
@@ -173,7 +182,9 @@
             return new _.List(b >= 0 || b < 0 ?
                 arr.slice(b, e || (b + 1) || undefined) :
                 arr.filter(
-                    typeof b === "function" ? b : function(el){ return el.matches(b); }
+                    typeof b === "function" ? b : 
+                        e === undefined ? function(el){ return el.matches(b); } :
+                            function(el){ return el.each(b) === e; }
                 )
             );
         }
@@ -194,28 +205,8 @@
 (function(D) {
     "use strict";
 
-    var _ = D._;
-    var A = _.add = {
-        fn: function(arg, ref) {
-            if (_.isList(this)) {
-                return this.each(function(el){ return A.all(el, arg, ref); });
-            }
-            return A.all(this, arg, ref);
-        },
-        all: function(node, arg, ref) {
-            if (typeof arg === "string") {// turn arg into an appendable
-                return A.create(node, arg, ref);
-            }
-            if (_.isList(arg)) {// list of append-ables
-                var list = new _.List();
-                for (var i=0,m=arg.length; i<m; i++) {
-                    list.add(A.all(node, arg[i], ref));
-                }
-                return list;
-            }
-            A.insert(node, arg, ref);// arg is an append-able
-            return arg;
-        },
+    var _ = D._,
+    A = _.add = {
         create: function(node, tag, ref) {
             return A.insert(node, D.createElement(tag), ref);
         },
@@ -237,15 +228,27 @@
             }
         }
     };
-    _.fn('add', A.fn);
-    _.fn('remove', function(chain) {
-        return this.each(function(node) {
-            var parent = node.parentNode;
-            if (parent) {
-                parent.removeChild(node);
-                if (chain){ return parent; }
+
+    D.extend('add', function(arg, ref) {
+        if (typeof arg === "string") {// turn arg into an appendable
+            return A.create(this, arg, ref);
+        }
+        if (_.isList(arg)) {// list of append-ables
+            var list = new _.List();
+            for (var i=0,m=arg.length; i<m; i++) {
+                list.add(this.add(arg[i], ref));
             }
-        });
+            return list;
+        }
+        A.insert(this, arg, ref);// arg is an append-able
+        return arg;
+    });
+
+    D.extend('remove', function() {
+        var parent = this.parentNode;
+        if (parent) {
+            parent.removeChild(this);
+        }
     });
 
 })(document);
@@ -253,8 +256,7 @@
 (function(D) {
     "use strict";
 
-    var _ = D._,
-        A = _.add;
+    var A = D._.add;
     A.create = function(node, code, ref) {
         var parts = code.split(A.emmetRE()),
             root = D.createDocumentFragment(),
@@ -300,7 +302,7 @@
         },
         '*': function(count) {
             var parent = this.parentNode,
-                els = new _.List(this);
+                els = new D._.List(this);
             for (var i=1; i<count; i++) {
                 els.add(this.cloneNode(true));
                 parent.appendChild(els[i]);
@@ -315,5 +317,48 @@
             this.appendChild(D.createTextNode(text.substr(0, text.length-1)));
         }
     };
+
+})(document);
+
+(function(D) {
+    "use strict";
+
+    var E = D._.elements = {
+        read: function(el) {
+            for (var i=0; el && i < el.children.length; i++) {
+                var child = el.children[i],
+                    name = child.tagName.toLowerCase();
+                if (!(name in D.head)) {
+                    E.fn(name, 'children', 'tagName', child.tagName);
+                }
+                E.read(child);// recurse down the tree
+            }
+        },
+        fn: function(name, set, prop, value) {
+            D._.fn(name, {
+                get: function nodes() {
+                    return this.each(set).only(prop, value);
+                }
+            });
+        }
+    };
+    E.fn('$text', 'childNodes', 'nodeType', 3);
+    E.fn('$comment', 'childNodes', 'nodeType', 3);
+
+    // early availability
+    D._.define(D, 'html', D.documentElement);
+    E.read(D.head);
+    E.read(D.body);
+    // eventual consistency
+    D.addEventListener('DOMContentLoaded', function() {
+        E.read(D.body);
+        if (window.MutationObserver) {
+            new MutationObserver(function(mutations) {
+                for (var i=0,m=mutations.length; i<m; i++) {
+                    E.read(mutations[i].target);
+                }
+            }).observe(D.body, { childList: true, subtree: true });
+        }
+    });
 
 })(document);

@@ -1,4 +1,4 @@
-/*! domx - v0.1.0 - 2014-05-01
+/*! domx - v0.1.0 - 2014-05-02
 * http://nbubna.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 (function(window, D) {
