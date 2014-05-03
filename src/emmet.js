@@ -1,8 +1,7 @@
 (function(D) {
     "use strict";
 
-    var _ = D._,
-        A = _.add;
+    var A = D._.add;
     A.create = function(node, code, ref) {
         var parts = code.split(A.emmetRE()),
             root = D.createDocumentFragment(),
@@ -48,7 +47,7 @@
         },
         '*': function(count) {
             var parent = this.parentNode,
-                els = new _.List(this);
+                els = new D._.List(this);
             for (var i=1; i<count; i++) {
                 els.add(this.cloneNode(true));
                 parent.appendChild(els[i]);
