@@ -117,17 +117,16 @@
     _.fn({
         length: 0,
         limit: -1,
-        add: function(list) {
-            list = arguments.length < 2 && _.isList(list) ? list : arguments;
-            for (var i=0,m=list.length; i<m; i++) {
-                var item = list[i];
-                if (_.isList(item)) {
-                    this.add(item);
-                } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
-                    this[this.length++] = item;
-                    if (this.length === this.limit) {
-                        return _.define(this, 'add', _.noop);
-                    }
+        add: function(item) {
+            if (arguments.length > 1 || _.isList(item)) {
+                var list = arguments.length > 1 ? arguments : item;
+                for (var i=0,m=list.length; i<m; i++) {
+                    this.add(list[i]);
+                }
+            } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
+                this[this.length++] = item;
+                if (this.length === this.limit) {
+                    this.add = _.noop;
                 }
             }
         },
