@@ -36,7 +36,7 @@
 		equal(h1.tagName, "H1", "Tag created");
 		equal(h1.parentNode.tagName, "SECTION", "Tag within parent");
 		ok(D.query('section h1').nodeType, "only the last section got an h1 kid");
-		D.query('section.bro').remove();
+		D.queryAll('section.bro').remove();
 	});
 
 	test("element id", function() {
