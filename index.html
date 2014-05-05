@@ -1,87 +1,293 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Domx by esha</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>DOMx - Extending the DOM for power and profit!</title>
+  <meta name="description" content="An intuitive, extensible JavaScript library to work directly with the DOM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  </head>
-  <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/esha/domx">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/esha/domx/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/esha/domx/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
+  <script src="script/modernizr-2.6.2.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style/reset.css"/>
+  <link rel="stylesheet" type="text/css" href="style/style.css"/>
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+</head>
+<body>
+<!--[if lt IE 10]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+    <header>
     <div class="wrapper">
-
-      <section>
-        <div id="title">
-          <h1>Domx</h1>
-          <p>DOM extending successor to HTML.js</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/esha">esha</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
-        <p><a href="http://esha.github.io/domx">domx</a> is a small, <a href="http://esha.github.io/domx#extend()">extensible</a> library to help you enjoy the DOM in a simple, direct, and very powerful way.</p>
-
-<p>Please check out the <a href="http://esha.github.io/domx#Demo">demo</a>, the <a href="http://esha.github.io/domx#API">API</a> and the <a href="http://esha.github.io/domx#FAQ">F.A.Q.</a>.</p>
-
-<h4>
-<a name="standard-version" class="anchor" href="#standard-version"><span class="octicon octicon-link"></span></a>Standard Version:</h4>
-
-<p>Download: <a href="https://raw.github.com/esha/domx/master/dist/domx.min.js">domx.min.js</a> or <a href="https://raw.github.com/esha/domx/master/dist/domx.js">domx.js</a> <a href="https://travis-ci.org/esha/domx"><img src="https://travis-ci.org/esha/domx.png?branch=master" alt="Build Status"></a><br><a href="http://bower.io/">Bower</a>: <code>bower install domx</code><br><a href="https://npmjs.org/package/domx">NPM</a>: <code>npm install domx</code><br><a href="http://component.io/">Component</a>: <code>component install esha/domx</code>  </p>
-
-<p>Includes <a href="http://esha.github.io/domx#each()"><code>each()</code></a>, <a href="http://esha.github.io/domx#extend()"><code>document.extend()</code></a>, <a href="http://esha.github.io/domx#query()"><code>query()</code></a>, <a href="http://esha.github.io/domx#queryAll()"><code>queryAll()</code></a>, <a href="http://esha.github.io/domx#only()"><code>only()</code></a>, <a href="http://esha.github.io/domx#add()"><code>add()</code></a>, <a href="http://esha.github.io/domx#remove()"><code>remove()</code></a>, <a href="http://esha.github.io/domx#toArray()"><code>toArray()</code></a>, <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> in <a href="http://esha.github.io/domx#add(emmet)"><code>add()</code></a>, and <a href="http://esha.github.io/domx#dot-traversal">dot-traversal</a>:  </p>
-
-<ul>
-<li><a href="http://raw.github.com/esha/domx/master/dist/domx.base.js">domx.base.js</a></li>
-<li><a href="http://raw.github.com/esha/domx/master/dist/domx.emmet.js">domx.emmet.js</a></li>
-<li><a href="http://raw.github.com/esha/domx/master/dist/domx.elements.js">domx.elements.js</a></li>
-</ul><h4>
-<a name="base-version" class="anchor" href="#base-version"><span class="octicon octicon-link"></span></a>Base Version:</h4>
-
-<p>Download: <a href="http://raw.github.com/esha/domx/master/dist/domx.base.min.js">domx.min.js</a>  or  <a href="http://raw.github.com/esha/domx/master/dist/domx.base.js">domx.js</a>  </p>
-
-<p>Includes <a href="http://esha.github.io/domx#each()"><code>each()</code></a>, <a href="http://esha.github.io/domx#extend()"><code>document.extend()</code></a>, <a href="http://esha.github.io/domx#query()"><code>query()</code></a>, <a href="http://esha.github.io/domx#queryAll()"><code>queryAll()</code></a>, <a href="http://esha.github.io/domx#only()"><code>only()</code></a>, <a href="http://esha.github.io/domx#add()"><code>add()</code></a>, <a href="http://esha.github.io/domx#remove()"><code>remove()</code></a>, and <a href="http://esha.github.io/domx#toArray()"><code>toArray()</code></a>:  </p>
-
-<ul>
-<li><a href="http://raw.github.com/esha/domx/master/dist/domx.base.js">domx.base.js</a></li>
-</ul><h3>
-<a name="release-history" class="anchor" href="#release-history"><span class="octicon octicon-link"></span></a>Release History</h3>
-
-<ul>
-<li>2014-05-04 <a href="https://github.com/esha/domx/tree/0.7.0">v0.7.0</a> (first public release)</li>
-</ul>
-      </section>
+      <h5><a href="https://twitter.com/share" class="twitter-share-button" data-via="nadabu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a id="github-ribbon" target="_blank" href="https://github.com/esha/domx"><img alt="View me on GitHub" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+      <h1 class="logo">
+        <span id="DOMx">DOMx</span>
+      </h1>
+      <h3 class="motto">Extend the DOM!</h3>
 
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-42479338-4");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+  </header>
+  <div class="content">
+    <div class="wrapper">
+      <div class="info">
+        <p>DOMx is a lightweight, powerful way for you to enjoy working directly with the DOM. &nbsp; <a class="download" href="https://rawgit.com/esha/domx/master/dist/domx.min.js.gz">domx.min.js (~2.5kb, gzip)</a></p>
 
-  </body>
+      </div>
+      <div class="banner columns">
+        <div class="half">
+          <a name="Demo"><h3>Input</h3></a>
+          <textarea id="input" wrap="off" title="Type 'restart' to reset the demo."></textarea>
+        </div><div class="half">
+          <h3>Output</h3>
+          <div id="output"><iframe src="iframe.html"></iframe></div>
+        </div>
+      </div>
+      <div class="features columns">
+        <div class="third">
+          <h3>Powerful</h3>
+          <p>DOMx empowers use of <em>all</em> native DOM features with brevity, clarity, and more power than ever.</p>
+        </div><div class="third">
+          <h3>Intuitive</h3>
+          <p>DOMx builds on the native DOM so you can navigate, manipulate, and <em>use</em> the DOM with readable, consistent code.</p>
+        </div><div class="third">
+          <h3>Extensible</h3>
+          <p>DOMx provides the means for you to easily and <em>correctly</em> extend the DOM.</p>
+        </div>
+      </div>
+      <div class="info">
+        <p>See our <a href="#FAQ">F.A.Q.</a>!</p>
+      </div>
+      <hr>
+      <a name="API"><h2>API</h2></a>
+      <div class="api">
+        <article>
+          <h4><a name="document">document</a> <span class="returns">document</span></h4>
+          <p>Yeah, nothing is exported. No global variable. We're <em>extending</em> the DOM, not replacing it. If you want a shorter global variable, do this:</p>
+          <pre class="example">
+window.$ = document.queryAll.bind(document);
+</pre>
+          <p>or, you can do what i do and alias <code>document</code> to <code>D</code> in the <a href="http://en.wikipedia.org/wiki/Immediately-invoked_function_expression">IIFE</a> wrapping your code:</p>
+          <pre class="example">
+(function(D) {
+  D.body.classList.add('hooray');
+  ...
+}(document));
+</pre>
+        </article>
+        <article>
+          <h4><a name="queryAll()">queryAll</a>(<span class="variable">selector</span>) <span class="since">0.7.0</span></h4>
+          <p>
+            <code>document.queryAll</code> polyfills the upcoming <a href="http://dom.spec.whatwg.org/#dom-parentnode-queryall"><code>queryAll</code></a> and returns a list of the selected element(s). DOMx enables it not merely for <a href="http://dom.spec.whatwg.org/#parentnode">elements</a> but for lists of elements.
+          </p>
+          <pre class="example">
+document.queryAll(".example"); // list of nodes returned
+
+var parents = document.queryAll(".parents");
+...
+var allkids = parents.queryAll(".children");
+</pre>
+        </article>
+        <article>
+          <h4><a name="query()">query</a>(<span class="variable">selector</span>) <span class="since">0.7.0</span></h4>
+          <p>
+            <code>document.query</code> acts like <code>querySelector</code> and returns only the first selected element.
+            It is exists not merely because it is shorter, but because it is <a href="http://dom.spec.whatwg.org/#dom-parentnode-query">the future</a> and
+            DOMx enables it not merely for <a href="http://dom.spec.whatwg.org/#parentnode">elements</a> but for lists of elements.
+          </p>
+          <pre class="example">
+var parent = document.query(".parent"); // single matching element returned
+
+var allkids = parent.queryAll(".kid"); // queryAll returns list
+...
+var firstGrandkid = kids.query(".grandkid"); // query works across list, returns single element
+</pre>
+        </article>
+<!--
+        <article>
+          <h4><a name="queryAll()">queryAll</a>(<span class="variable">selector</span>, <span class="variable optional">limit</span>) <span class="since">0.7.0</span></h4>
+          <p><code>document.query</code> acts as a proxy for <code>querySelector</code> or <code>querySelectorAll</code> (as appropriate) and returns no more than the specified number of selected element(s).</p>
+          <pre class="example">
+document.queryAll("#example", 1); // single node or empty Array returned
+
+document.body.queryAll(".example", 5); // returns a single node if only one, otherwise an Array of 0-5 nodes
+</pre>
+        </article>
+-->
+        <article>
+          <h4><a name="each()">each</a>(<span class="variable">callback(<em>element</em>,<em>index</em>,<em>array</em>)</span>) <span class="since">0.7.0</span></h4>
+          <p>Use a the selected element(s) within a closure. Returns the element(s) it was called on.</p>
+          <pre class="example">
+document.queryAll('li').each(function(el, i, all) {
+  el.textContent = "Item " + (i+1) + " of " + all.length;
+}); // returns li elements
+</pre>
+        </article>
+        <article>
+          <h4><a name="each(property)">each</a>(<span class="variable">property</span> <span class="variable optional">, arguments...</span>) <span class="since">0.7.0</span></h4>
+          <p>Get, set, or invoke the specified property of the selected element(s). Returns either an array of retrieved/returned values or the element(s) it was called on.</p>
+          <pre class="example">
+var items = document.queryAll('.item');
+var texts = items.each('textContent'); // returns array of strings
+
+items.each('id', 'item${i}');// sets the id of each element (replaces ${i} with index)
+
+items.each('click');// calls 'click()' on each element, returns original items
+
+items.each('classList.add', 'foo');// adds 'foo' class to each item's classList, returns original items
+
+document.body.each('classList.toggle', 'ready');// each works on both single elements and lists
+</pre>
+        </article>
+        <article>
+          <h4><a name="only()">only</a>(<span class="variable">selector|index|filter|slice</span> <span class="variable optional">, endSlice</span>) <span class="since">0.7.0</span></h4>
+          <p>When you want to narrow down a selection, <code>only</code> allows you to easily filter
+          that list by selector, index, slice, or filtering function.</p>
+          <pre class="example">
+var items = document.queryAll('.items'); // all li elements
+
+items.only('.highlighted'); // subset that matches selector
+
+items.only(3).textContent = "Fourth li element!"; // index (special case, returns single element)
+
+items.only(-1).id = 'last'; // negative index works too
+
+items.only(function(o,i){ return !(i%2); }); // filter function returns even elements
+
+items.only(3, 9).each('add', 'button');// specific slice of elements
+</pre>
+        </article>
+        <article>
+          <h4><a name="toArray()">toArray</a>(<span class="variable optional">array</span>) <span class="since">0.7.0</span></h4>
+          <p>Returns an actual <code>Array</code> of elements instead of a list object (e.g. <code>NodeList</code>).
+          Optionally, you can provide an array into which the elements should be pushed.</p>
+          <pre class="example">
+var items = document.queryAll('.items');
+fnThatTakesItemsAsArgs.apply(this, items.toArray());
+
+var output = items.toArray().map(fnThatConvertsElements);
+
+var elArr = [document.body, document.head];
+items.toArray(elArr);// will append all .item elements to the existing array
+</pre>
+        </article>
+        <article>
+          <h4><a name="dot-traversal">element.<span class="variable">tagName...</span></a> <span class="since">0.7.0</span></h4>
+          <p>DOMx allows you to access child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it searches only immediate children
+          and not all descendant elements. The dot-traversal properties always return a list of matching elements.</p>
+          <pre class="example">
+document.body.header; // returns a list containing only header element that are children of document.body
+document.body.header.each("textContent", "A Better Header!");
+</pre>
+        </article>
+        <article>
+          <h4><a name="add()">add</a>(<span class="variable">name|Node|list</span>) <span class="since">0.7.0</span></h4>
+          <p>This automatically adds the specified tag or node (or list thereof) to the element(s) on which it was called.</p>
+          <pre class="example">
+document.body.add('div'); // returns a newly added div element
+
+document.body.add('div').add('h1'); // returns the new h1 element (with div parent)
+
+var script = document.createElement('script');
+script.src = '/mylib.js';
+document.head.add(script);
+
+document.body.add([node1, node2, [ul1, ul2]]); // yummy recursive adding
+</pre>
+        </article>
+        <article>
+          <h4><a name="add(emmet)">add</a>('<span class="variable">emmet-abbr</span>') <span class="since">0.7.0</span></h4>
+          <p>The standard document.js artifact comes with the "emmet" extension, which lets you use
+          <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> to add elements to the DOM.
+          This extension supports most emmet features, except grouping and numbering. Those may be added later.</p>
+          <pre class="example">
+document.body.add('ul>li{list item text}*10');
+
+//Use in conjuction with only
+document.body.add('ul>li{item}*10')
+  .only(function(li,i){ return i%2; })
+  .each('classList.add','odd');
+</pre>
+        </article>
+        <article>
+          <h4><a name="remove()">remove</a>()</h4>
+          <p>Removes the specified node (or list thereof). Some browsers provide this natively for elements, for the few who don't this polyfills the gap and enables use of it on arrays of elements. When called on a list, it returns the list of deleted items.</p>
+          <pre class="example">
+document.queryAll('.foo').remove();
+</pre>
+        </article>
+        <article>
+          <h4>document.<a name="extend">extend</a>(<span class="variable">name</span>, <span class="variable">function</span>); <span class="since">0.7.0</span></h4>
+          <p>Use this to extend the DOM. It automatically, correctly applies your function to both single elements and lists. Just don't get crazy with shortcuts.
+          DOMx is about exposing, learning, and using the DOM, not obscuring it beneath non-native interfaces.</p>
+          <pre class="example">
+document.extend('hide', function() {
+  this.style.display = 'none';  
+});
+document.queryAll('.foo').hide();
+</pre>
+        </article>
+        <article>
+          <h4>document.<a name="_.resolve">_.resolve</a>[<span class="variable">alias</span>] = <span class="variable">property</span>; <span class="since">0.7.0</span></h4>
+          <p>Nonetheless, the verbosity of the DOM can, like any friend, become tiresome. You may create property aliases for <code>each</code>.</p>
+          <pre class="example">
+document._.resolve['-class'] = 'classList.remove';
+document._.resolve['+class'] = 'classList.add';
+document.queryAll('.foo').each('-class', 'foo').each('+class', 'bar');
+
+document._.resolve.insert = 'insertAdjacentHTML';
+document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;Hello.&amp;lt;/span&amp;gt;');
+</pre>
+        </article>
+      </div>
+      <hr>
+      <h2><a name="FAQ">FAQ</a></h2>
+      <div class="faq">
+        <p class="question">Another jQuery wannabe, eh?</p>
+        <p>Definitely not. jQuery and <a href="zeptojs.com">friends</a> always hide the DOM from you. This used to be partly to protect you from it, but now it's just out of habit. DOMx's intent is to directly expose and enhance the DOM. The DOM of the present is not the anemic mess it was even a few short years ago; protection from it is more pointless with every passing month. In fact, more than being unnecessary, that "protection" is often stunting your education. DOMx is here to lubricate the process of learning what is really happening, and maybe throw in a few original features to sweeten the deal.</p>
+        <p class="question">Why not just use jQuery?</p>
+        <p>Asking this question is kinda like saying that a very large swiss-army knife is the only tool you'll ever want. Some people prefer to <a href="http://component.io">collect specialized tools</a>. Some people don't like jQuery's wrapper obscuring the <a href="https://developer.mozilla.org/en-US/docs/Web/API">riches of</a> <a href="http://docs.webplatform.org/wiki/dom#Index_of_all_DOM_topics">the native DOM</a>. Some <a href="http:/github.com/nbubna">people</a> prefer empowering tools to universal ones. There's <a href="http://youmightnotneedjquery.com">other reasons</a> out there too, but hopefully that's enough to move on to more useful questions.</p>
+        <p class="question">I thought we were supposed to extend the DOM with <a href="http://webcomponents.org/">web components</a>!</p>
+        <p>You are! But let's not pretend that web components will ever mean you don't need to manipulate and traverse the DOM directly. And when you want to do that within some fancy-pants web component, you might find yourself wanting a bit more power than the vanilla DOM gives. Then, instead of importing a big library like jQuery, you'll be glad to have the power of DOMx in just a few meager kilobytes.
+        </p>
+        <p class="question">Which browsers does DOMx support?</p>
+        <p>Modern ones: Firefox, Chrome, Safari, Opera, IE9+ and the like.</p>
+        <p class="question">Isn't extending the DOM <a href="http://perfectionkills.com/whats-wrong-with-extending-the-dom/">a bad idea</a>?</p>
+        <p>Not at all. Unless you care to prop up the diminishing market share of IE6/7/8, <a href="https://github.com/nbubna/mind-hacking/blob/gh-pages/extending-the-dom.md">DOM extension</a> is no longer to be feared.</p>
+        <p class="question">How does the dot-traversal work?</p>
+        <p>By dynamically defining getter functions for the elements you use in the page.</p>
+        <p class="question">Aren't those long dot-traversal chains a bad idea when pages are so dynamic?</p>
+        <p>Yes, of course. Don't do that. Use <code>query()</code> and <code>queryAll()</code> when doing "whole page" work. Dot-traversal is best for small, well-defined node structures, like getting the <code>&lt;li&gt;</code> elements in a <code>&lt;ul&gt;</code>.</p>
+        <p class="question">Functions that return either elements or arrays are bad. I saw it get ugly once!</p>
+        <p class="question">Hey, this is just like <a href="http://nbubna.github.io/HTML">HTML.js</a>...</p>
+        <p>Yep, same author, similar concepts, better implementation.</p>
+        <p class="question">I have a suggestion, where do I put it?</p>
+        <p>I do a happy dance when you <a href="http://github.com/esha/domx">create an issue on Github.</a></p>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <div class="wrapper">
+      <p>An open-source project from <a href="http://esha.com">ESHA Research</a></p>
+    </div>
+  </footer>
+</body>
+<script src="script/ie8.min.js" type="text/javascript"></script>
+<script src="script/es5-shim.min.js" type="text/javascript"></script>
+<script src="script/es5-sham.min.js" type="text/javascript"></script>
+<script src="script/domx.js" type="text/javascript"></script>
+<script src="script/Sintax.js" type="text/javascript"></script>
+<script src="script/demo.js" type="text/javascript"></script>
+<script src="script/index.js" type="text/javascript"></script>
+<script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+    e.src='//www.google-analytics.com/analytics.js';
+    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-42479338-4');ga('send','pageview');
+</script>
 </html>

@@ -1,0 +1,360 @@
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,800,700,300);
+@font-face {
+  font-family: 'Eagle Lake';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Eagle Lake'), local('EagleLake-Regular'), url(http://themes.googleusercontent.com/static/fonts/eaglelake/v1/7iuL6oiKGY2Q5j9N_W6Qtb3hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');
+}
+body {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  background: #3d2828;
+  color: #ffffff;
+}
+.wrapper {
+  width: 85%;
+  margin: 0 auto;
+}
+.columns div {
+  display: inline-block;
+  vertical-align: top;
+  zoom: 1;
+  *display: inline;
+}
+.half {
+  width: 50%;
+}
+.third {
+  width: 33%;
+}
+.fifth {
+  width: 20%;
+}
+.fourfifths {
+  width: 80%;
+}
+h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  text-transform: uppercase;
+  margin: 9px 18px;
+}
+h3 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin: 9px 18px;
+}
+hr {
+  border: none;
+  border-bottom: 2px solid #342222;
+  height: 3px;
+  margin: 18px;
+}
+hr.blank {
+  opacity: 0;
+}
+a {
+  color: #f6ece3;
+}
+p {
+  margin: 9px 18px;
+  line-height: 140%;
+  color: #c8c0a6;
+}
+code {
+  background: #312020;
+  border: 1px solid #4f3434;
+  padding: 1px 6px;
+  font-family: Monaco, sans-serif;
+  font-size: 80%;
+  border-radius: 4px;
+  color: #996565;
+}
+header {
+  background: #584221;
+  border-bottom: 4px solid #765139;
+}
+header .logo {
+  font-family: 'Eagle Lake', fantasy, serif;
+  font-size: 3.6em;
+  display: inline-block;
+}
+header .logo #DOMx {
+  color: #ffffff;
+  display: inline-block;
+  left: -2%;
+  letter-spacing: 3px;
+  padding-bottom: 2%;
+  position: relative;
+}
+header .logo #js {
+  font-size: 0.6em;
+  opacity: 0.14;
+  position: relative;
+  left: -3%;
+  top: -2px;
+}
+header .motto {
+  font-family: Georgia, fantasy, serif;
+  font-size: 1.1em;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  margin: 1% 2%;
+  text-transform: none;
+  color: #E7875E;
+  display: inline-block;
+}
+header h5 {
+  float: right;
+  margin: 18px;
+}
+header h5 a {
+  color: #fff;
+  text-decoration: none;
+}
+header h5 a:hover {
+  text-decoration: underline;
+}
+header #github-ribbon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 200;
+}
+header .twitter-share-button {
+  right: 10%;
+  position: absolute;
+  top: 5%;
+}
+header img {
+  border: 0 none;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.download {
+  text-decoration: underline;
+}
+@media (max-width: 320px) {
+  header .logo {
+    font-size: 3.2em;
+  }
+}
+.info {
+  text-align: center;
+}
+.info p {
+  margin: 18px 0;
+}
+.banner {
+  margin: 18px 0;
+}
+.banner textarea {
+  width: 90%;
+  margin: 0 18px;
+  padding: 12px;
+  background: #847851;
+  border: 1px solid #645b3e;
+  outline: none;
+  height: 180px;
+  border-radius: 8px;
+  color: #fff;
+  font-family: Monaco, monospace;
+  font-size: 0.8em;
+}
+.banner #output {
+  background: #312020;
+  width: 96%;
+  height: 208px;
+  margin: 0 18px;
+  border-radius: 8px;
+  padding: 0 6px;
+}
+.banner #output iframe {
+  width: 100%;
+  height: inherit;
+}
+.features h3 {
+  font-size: 1.2em;
+  font-family: "Open Sans", Helvetica, Arial;
+  text-transform: none;
+  margin-bottom: 9px;
+}
+.features p {
+  margin: 9px 18px;
+  margin-right: 9px;
+  line-height: 140%;
+  color: #d6c1c1;
+}
+.api article {
+  padding-bottom: 0.8em;
+}
+.api article h4 {
+  font-family: Monaco, monospace;
+  margin: 18px;
+  font-size: 1.2em;
+  color: #cfd59c;
+}
+.api article h4 .returns {
+  font-style: italic;
+  font-size: 90%;
+  color: #b06646;
+}
+.api article h4 .variable {
+  color: #829a1c;
+  font-weight: bold;
+}
+.api article h4 .variable em {
+  font-style: italic;
+}
+.api article h4 .variable:before {
+  content: '<';
+}
+.api article h4 .variable:after {
+  content: '>';
+}
+.api article h4 .optional:before {
+  content: '[';
+}
+.api article h4 .optional:after {
+  content: ']';
+}
+.api article h4 .since {
+  font-size: 50%;
+  background-color: #cfd59c;
+  color: #3d2828;
+  padding: 0px 2px;
+}
+.api article h4 .since:before {
+  content: 'v';
+}
+.api article h4 .since:after {
+  content: '+';
+}
+.api article p em {
+  font-style: italic;
+}
+.api article .example {
+  background: #312020;
+  font-family: Monaco, monospace;
+  font-size: 14px;
+  margin: 18px 36px;
+  padding: 12px;
+  color: #e8ae3b;
+  line-height: 130%;
+  border-radius: 8px;
+}
+.api article .example .comment {
+  color: #feecc9;
+}
+.api article .example .comment * {
+  color: #feecc9 !important;
+}
+.api article .example .quote {
+  color: #8c9d34;
+}
+.api article .example .keyword {
+  color: #e0e4c0;
+}
+.api article .example .tab {
+  color: #493030;
+}
+.faq p {
+  margin-top: 4px;
+  margin-bottom: 28px;
+}
+.faq .question {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 110%;
+}
+footer {
+  background: #584221;
+  border-top: 4px solid #765139;
+}
+footer p {
+  text-align: center;
+  color: #847851;
+  padding: 18px;
+  margin: 0;
+}
+footer p a {
+  color: #dcb996;
+}
+/* ==========================================================================
+   Browse Happy prompt
+   ========================================================================== */
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+@media print {
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    /* Black prints faster: h5bp.com/s */
+  
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  /*
+       * Don't show links for images, or javascript/internal links
+       */
+  .ir a:after,
+  a[href^="javascript:"]:after,
+  a[href^="#"]:after {
+    content: "";
+  }
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+    /* h5bp.com/t */
+  
+  }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  img {
+    max-width: 100% !important;
+  }
+  @page  {
+    margin: 0.5cm;
+  }
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
