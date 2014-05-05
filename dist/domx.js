@@ -1,4 +1,4 @@
-/*! domx - v0.7.0 - 2014-05-05
+/*! domx - v0.7.1 - 2014-05-05
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -17,7 +17,7 @@ function XList(limit) {
 
 // expose utilities
 _ = {
-    version: "0.7.0",
+    version: "0.7.1",
     slice: Array.prototype.slice,
     noop: function(){},
     List: XList,

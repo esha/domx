@@ -62,5 +62,7 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 
 ### Release History
 * 2014-05-04 [v0.7.0][] (first public release)
+* 2014-05-05 [v0.7.1][] (only(index), _.fn requires targets)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
+[v0.7.1]: https://github.com/esha/domx/tree/0.7.1
