@@ -15,7 +15,7 @@
         // modify iframe's DOMx list to handle the demo content
         var add = D._.List.prototype.add;
         Object.defineProperty(D._.List.prototype, 'add', { value: function(item) {
-            if (D.isList(item)) {
+            if (D._.isList(item)) {
                 selected(item);
             }
             return add.apply(this, arguments);
