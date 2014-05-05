@@ -15,7 +15,7 @@
         slice: Array.prototype.slice,
         noop: function(){},
         List: List,
-        singles: [Element],
+        singles: [Element, Text, Comment],
         lists: [NodeList, HTMLCollection, List],
         isList: function(o) {
             return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
