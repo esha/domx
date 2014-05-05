@@ -1,5 +1,6 @@
 // elements.js
 var E = _.elements = {
+    protos: [Element, DocumentFragment].concat(_.lists),
     read: function(el) {
         for (var i=0; el && i < el.children.length; i++) {
             var child = el.children[i],
@@ -11,7 +12,7 @@ var E = _.elements = {
         }
     },
     fn: function(name, set, prop, value) {
-        _.fn(name, {
+        _.fn(E.protos, name, {
             get: function nodes() {
                 return this.each(set).only(prop, value);
             }

@@ -28,35 +28,37 @@ Test assertions:
     });
 
     var _ = D._;
-    module("D._");
-
-    test("API", function() {
-        equal(typeof Element.prototype.matches, "function", "Element.prototype.matches");
-        equal(typeof _.traverse, "object", "_.traverse");
-    });
 
     module('traverse DOM extensions');
+
+    test("_.parents", function() {
+        equal(Array.isArray(_.parents), true, "_.parents");
+    });
+
+    test("matches", function() {
+        equal(typeof Element.prototype.matches, "function", "Element.prototype.matches");
+    });
 
     test("only()", function() {
         expect(_.lists.length);
         _.lists.forEach(function(_class) {
-            equal(_class.prototype.only, _.traverse.only);
+            ok(_class.prototype.only, _class.name+'.prototype.only');
         });
     });
 
     test("queryAll()", function() {
-        var set = _.lists.concat(_.singles);
+        var set = _.lists.concat(_.parents);
         expect(set.length);
         set.forEach(function(_class) {
-            equal(_class.prototype.queryAll, _.traverse.queryAll);
+            ok((_class.prototype||_class).queryAll, _class.name+'.prototype.queryAll');
         });
     });
 
     test("query()", function() {
-        var set = _.lists.concat(_.singles);
+        var set = _.lists.concat(_.parents);
         expect(set.length);
         set.forEach(function(_class) {
-            equal(_class.prototype.query, _.traverse.query);
+            ok((_class.prototype||_class).query, _class.name+'.prototype.query');
         });
     });
 
@@ -96,9 +98,14 @@ Test assertions:
 
     module("only()");
 
+    test("by index", function() {
+        var divs = D.queryAll('section > div');
+        strictEqual(divs.only(2), divs[2], 'get 3rd one');
+        strictEqual(divs.only(-1), divs[divs.length-1], 'get last one');
+    });
+
     test("by slice", function() {
         var divs = D.queryAll('section > div');
-        strictEqual(divs.only(-1)[0], divs[divs.length-1], 'get last one');
         strictEqual(divs.only(1,4).length, 3, "got sublist of proper length");
     });
 

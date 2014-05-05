@@ -1,4 +1,4 @@
-/*! domx - v0.7.0 - 2014-05-04
+/*! domx - v0.7.0 - 2014-05-05
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -94,7 +94,7 @@ var S = _.stringify = {
         return s !== undefined && s !== null && s !== '';
     }
 };
-_.fn('stringify', function(markup, indent) {
+D.extend('stringify', function(markup, indent) {
     var s = '';
     this.each(function(el) {
         s += S.print(el, markup||false, indent||'');

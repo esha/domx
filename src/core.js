@@ -8,32 +8,27 @@ function XList(limit) {
     }
 }
 
+// expose utilities
 _ = {
     version: "<%= pkg.version %>",
     slice: Array.prototype.slice,
     noop: function(){},
     List: XList,
-    singles: [Element, Text, Comment],
+    nodes: [Element, Text, Comment],
     lists: [NodeList, HTMLCollection, XList],
     isList: function(o) {
         return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                o instanceof NodeList ||// phantomjs foolishly calls these functions
                o instanceof HTMLCollection;
     },
-    fn: function(name, value, set) {
-        if (typeof name !== "string") {
-            var o = name;
-            for (name in o) {
-                _.fn(name, o[name], value||set);
+    fn: function(targets, name, value) {
+        if (typeof name === "string") {
+            for (var i=0,m=targets.length; i<m; i++) {
+                _.define(targets[i].prototype || targets[i], name, value);
             }
-            return o;
-        }
-        if (!set) {
-            _.fn(name, value, _.singles);
-            _.fn(name, value, _.lists);
         } else {
-            for (var i=0,m=set.length; i<m; i++) {
-                _.define(set[i].prototype || set[i], name, value);
+            for (var key in name) {// name must be a key/val object
+                _.fn(targets, key, name[key]);
             }
         }
     },
@@ -79,7 +74,10 @@ _ = {
         return ret;
     }
 };
-_.core = {
+_.define(D, '_', _);
+
+// define foundation on nodes and lists
+_.fn(_.nodes.concat(_.lists), {
     each: function(fn) {
         var self = _.isList(this) ? this : [this],
             results = [],
@@ -111,10 +109,10 @@ _.core = {
         }
         return arr;
     }
-};
+});
 
-// define List functions
-_.fn({
+// define XList functions
+_.fn([XList], {
     length: 0,
     limit: -1,
     add: function(item) {
@@ -138,18 +136,15 @@ _.fn({
         }
         return -1;
     }
-}, [XList]);
+});
 
-// extend the DOM!
-_.define(D, '_', _);
-_.define(D, 'extend', function(name, fn) {
-    _.fn(name, fn, _.singles);
-    _.fn(name, function extendFn() {
+_.define(D, 'extend', function(name, fn, singles) {
+    _.fn(singles || [Element], name, fn);
+    _.fn(_.lists, name, function listFn() {
         var args = arguments;
         return this.each(function eachFn() {
             return fn.apply(this, args);
         });
-    }, _.lists);
+    });
 });
-_.fn(_.core);
 // /core.js

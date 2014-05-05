@@ -87,7 +87,7 @@ var S = _.stringify = {
         return s !== undefined && s !== null && s !== '';
     }
 };
-_.fn('stringify', function(markup, indent) {
+D.extend('stringify', function(markup, indent) {
     var s = '';
     this.each(function(el) {
         s += S.print(el, markup||false, indent||'');

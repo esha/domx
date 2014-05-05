@@ -35,12 +35,12 @@ D.extend('add', function(arg, ref) {
     }
     A.insert(this, arg, ref);// arg is an append-able
     return arg;
-});
+}, _.parents);
 
 D.extend('remove', function() {
     var parent = this.parentNode;
     if (parent) {
         parent.removeChild(this);
     }
-});
+}, _.nodes);
 // /alter.js

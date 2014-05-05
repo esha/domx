@@ -1,4 +1,4 @@
-/*! domx - v0.7.0 - 2014-05-04
+/*! domx - v0.7.0 - 2014-05-05
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -15,32 +15,27 @@ function XList(limit) {
     }
 }
 
+// expose utilities
 _ = {
     version: "0.7.0",
     slice: Array.prototype.slice,
     noop: function(){},
     List: XList,
-    singles: [Element, Text, Comment],
+    nodes: [Element, Text, Comment],
     lists: [NodeList, HTMLCollection, XList],
     isList: function(o) {
         return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                o instanceof NodeList ||// phantomjs foolishly calls these functions
                o instanceof HTMLCollection;
     },
-    fn: function(name, value, set) {
-        if (typeof name !== "string") {
-            var o = name;
-            for (name in o) {
-                _.fn(name, o[name], value||set);
+    fn: function(targets, name, value) {
+        if (typeof name === "string") {
+            for (var i=0,m=targets.length; i<m; i++) {
+                _.define(targets[i].prototype || targets[i], name, value);
             }
-            return o;
-        }
-        if (!set) {
-            _.fn(name, value, _.singles);
-            _.fn(name, value, _.lists);
         } else {
-            for (var i=0,m=set.length; i<m; i++) {
-                _.define(set[i].prototype || set[i], name, value);
+            for (var key in name) {// name must be a key/val object
+                _.fn(targets, key, name[key]);
             }
         }
     },
@@ -86,7 +81,10 @@ _ = {
         return ret;
     }
 };
-_.core = {
+_.define(D, '_', _);
+
+// define foundation on nodes and lists
+_.fn(_.nodes.concat(_.lists), {
     each: function(fn) {
         var self = _.isList(this) ? this : [this],
             results = [],
@@ -118,10 +116,10 @@ _.core = {
         }
         return arr;
     }
-};
+});
 
-// define List functions
-_.fn({
+// define XList functions
+_.fn([XList], {
     length: 0,
     limit: -1,
     add: function(item) {
@@ -145,24 +143,22 @@ _.fn({
         }
         return -1;
     }
-}, [XList]);
+});
 
-// extend the DOM!
-_.define(D, '_', _);
-_.define(D, 'extend', function(name, fn) {
-    _.fn(name, fn, _.singles);
-    _.fn(name, function extendFn() {
+_.define(D, 'extend', function(name, fn, singles) {
+    _.fn(singles || [Element], name, fn);
+    _.fn(_.lists, name, function listFn() {
         var args = arguments;
         return this.each(function eachFn() {
             return fn.apply(this, args);
         });
-    }, _.lists);
+    });
 });
-_.fn(_.core);
 // /core.js
 
 // traverse.js
-_.traverse = {
+_.parents = [Element, DocumentFragment, D];
+_.fn(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
             list = new _.List(count);
@@ -175,25 +171,20 @@ _.traverse = {
     },
     query: function(selector) {
         return this.queryAll(selector, 1)[0];
-    },
-    only: function(b, e) {
-        var arr = this.toArray();
-        return new _.List(b >= 0 || b < 0 ?
-            arr.slice(b, e || (b + 1) || undefined) :
-            arr.filter(
-                typeof b === "function" ? b : 
-                    e === undefined ? function match(el){ return el.matches(b); } :
-                        function eachVal(el){ return el.each(b) === e; }
-            )
-        );
     }
-};
-
-_.define(D, 'queryAll', _.traverse.queryAll);
-_.define(D, 'query', _.traverse.query);
-_.fn('queryAll', _.traverse.queryAll);
-_.fn('query', _.traverse.query);
-_.fn('only', _.traverse.only, _.lists);
+});
+_.fn(_.lists, 'only', function only(b, e) {
+    var arr = this.toArray(),
+        num = b >= 0 || b < 0,
+        solo = arguments.length === 1;
+    arr = num ? arr.slice(b, e || (b + 1) || undefined) :
+                arr.filter(
+                    typeof b === "function" ? b :
+                    solo ? function match(el){ return el.matches(b); } :
+                           function eachVal(el){ return el.each(b) === e; }
+                );
+    return num && solo ? arr[0] : new _.List(arr);
+});
 
 // ensure element.matches(selector) availability
 var Ep = Element.prototype,
@@ -238,14 +229,14 @@ D.extend('add', function(arg, ref) {
     }
     A.insert(this, arg, ref);// arg is an append-able
     return arg;
-});
+}, _.parents);
 
 D.extend('remove', function() {
     var parent = this.parentNode;
     if (parent) {
         parent.removeChild(this);
     }
-});
+}, _.nodes);
 // /alter.js
 
 // emmet.js
@@ -314,6 +305,7 @@ AE.emmet = {
 
 // elements.js
 var E = _.elements = {
+    protos: [Element, DocumentFragment].concat(_.lists),
     read: function(el) {
         for (var i=0; el && i < el.children.length; i++) {
             var child = el.children[i],
@@ -325,7 +317,7 @@ var E = _.elements = {
         }
     },
     fn: function(name, set, prop, value) {
-        _.fn(name, {
+        _.fn(E.protos, name, {
             get: function nodes() {
                 return this.each(set).only(prop, value);
             }

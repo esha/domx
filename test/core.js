@@ -30,19 +30,38 @@ Test assertions:
     });
 
     var _ = D._;
-    module("D._");
+    module("core API");
 
-    test("API", function() {
+    test("_.", function() {
         equal(typeof _.version, "string", "_.version");
         strictEqual(_.slice, Array.prototype.slice, "_.slice");
         equal(typeof _.isList, "function", "_.isList");
         equal(Array.isArray(_.lists), true, "_.lists");
-        equal(Array.isArray(_.singles), true, "_.singles");
+        equal(Array.isArray(_.nodes), true, "_.nodes");
         equal(typeof _.fn, "function", "_.fn");
         equal(typeof _.define, "function", "_.define");
         equal(typeof _.resolve, "function", "_.resolve");
         equal(typeof _.fill, "function", "_.fill");
-        equal(typeof _.core, "object", "_.core");
+    });
+
+    test("D.extend", function() {
+        equal(typeof D.extend, "function", "document.extend");
+    });
+
+    test("each()", function() {
+        var set = _.lists.concat(_.nodes);
+        expect(set.length);
+        set.forEach(function(_class) {
+            ok(_class.prototype.each, _class.name+'.prototype.each');
+        });
+    });
+
+    test("toArray()", function() {
+        var set = _.lists.concat(_.nodes);
+        expect(set.length);
+        set.forEach(function(_class) {
+            ok(_class.prototype.toArray, _class.name+'.prototype.toArray');
+        });
     });
 
     test("_.isList", function() {
@@ -109,24 +128,6 @@ Test assertions:
         for (var key in o) {
             notEqual(key, 'one', 'defined props should not be enumerable');
         }
-    });
-
-    module('core DOM extensions');
-
-    test("each()", function() {
-        var set = _.lists.concat(_.singles);
-        expect(set.length);
-        set.forEach(function(_class) {
-            equal(_class.prototype.each, _.core.each);
-        });
-    });
-
-    test("toArray()", function() {
-        var set = _.lists.concat(_.singles);
-        expect(set.length);
-        set.forEach(function(_class) {
-            equal(_class.prototype.toArray, _.core.toArray);
-        });
     });
 
     module("each()");
@@ -260,7 +261,7 @@ Test assertions:
         D._.resolve['-class'] = 'classList.remove';
         var divs = D.querySelectorAll('section > div').each('classList.add','bar');
         divs.each(function(el) {
-            ok(el.className.indexOf('bar') >= 0, 'have class bar');
+            ok(el.className.indexOf('bar') >= 0, 'have class bar');// fails in IE9
         });
         var    ret = divs.each('-class', 'bar');
         strictEqual(ret, divs, 'should return self');
