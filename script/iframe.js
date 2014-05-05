@@ -1,8 +1,8 @@
 (function(D) {
     var timeout;
-    function elementsSelected(elements) {
+    function selected(elements) {
         if (timeout){ clearTimeout(timeout); }
-        var arr = elements.toArray();
+        var arr = elements.toArray && elements.toArray() || elements;
         timeout = setTimeout(function() {
             arr.forEach(highlight);
             setTimeout(function(){ arr.forEach(unhighlight); }, 1000)
@@ -14,10 +14,11 @@
     D.addEventListener("DOMContentLoaded", function() {
         // modify iframe's DOMx list to handle the demo content
         var add = D._.List.prototype.add;
-        Object.defineProperty(D._.List.prototype, 'add', { value: function() {
-            var ret = add.apply(this, arguments);
-            elementsSelected(ret);
-            return ret;
+        Object.defineProperty(D._.List.prototype, 'add', { value: function(item) {
+            if (D.isList(item)) {
+                selected(item);
+            }
+            return add.apply(this, arguments);
         }});
 
         var shadowDom = D.query("#shadow-dom"),
