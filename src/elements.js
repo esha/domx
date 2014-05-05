@@ -21,7 +21,7 @@
         }
     };
     E.fn('$text', 'childNodes', 'nodeType', 3);
-    E.fn('$comment', 'childNodes', 'nodeType', 3);
+    E.fn('$comment', 'childNodes', 'nodeType', 8);
 
     // early availability
     D._.define(D, 'html', D.documentElement);
