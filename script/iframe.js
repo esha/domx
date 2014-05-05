@@ -2,7 +2,8 @@
     var timeout;
     function selected(elements) {
         if (timeout){ clearTimeout(timeout); }
-        var arr = elements.toArray && elements.toArray() || elements;
+        var arr = elements.toArray ? elements.toArray() : elements.forEach ? elements : [elements];
+        window.console.log('selected', elements);
         timeout = setTimeout(function() {
             arr.forEach(highlight);
             setTimeout(function(){ arr.forEach(unhighlight); }, 1000)
