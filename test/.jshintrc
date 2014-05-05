@@ -17,6 +17,8 @@
     "HTMLElement",
     "HTMLCollection",
     "Element",
+    "Text",
+    "Comment",
     "QUnit",
     "module",
     "test",
