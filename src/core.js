@@ -58,7 +58,9 @@
             }
             var val = el[key];
             if (val !== undefined) {
-                if (typeof val === "function") { return val.apply(el, args); }
+                if (typeof val === "function" && val.apply) {
+                    return val.apply(el, args);
+                }
                 else if (args) { el[key] = args[0]; }
                 else { return val; }
             }
