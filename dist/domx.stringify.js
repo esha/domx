@@ -1,4 +1,4 @@
-/*! domx - v0.1.0 - 2014-05-04
+/*! domx - v0.7.0 - 2014-05-04
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 (function(window, D) {

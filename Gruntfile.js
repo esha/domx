@@ -29,10 +29,24 @@ module.exports = function(grunt) {
               'src/elements.js'],
         dest: 'dist/<%= pkg.name %>.js'
       },
+      base: {
+        src: ['src/core.js',
+              'src/traverse.js',
+              'src/alter.js'],
+        dest: 'dist/<%= pkg.name %>.base.js'
+      },
+      emmet: {
+        src: ['src/emmet.js'],
+        dest: 'dist/<%= pkg.name %>.emmet.js'
+      },
+      elements: {
+        src: ['src/elements.js'],
+        dest: 'dist/<%= pkg.name %>.elements.js'
+      },
       stringify: {
         src: ['src/stringify.js'],
         dest: 'dist/<%= pkg.name %>.stringify.js'
-      }
+      },
     },
     uglify: {
       options: {
@@ -42,6 +56,10 @@ module.exports = function(grunt) {
       dist: {
         src: ['dist/<%= pkg.name %>.js'],
         dest: 'dist/<%= pkg.name %>.min.js'
+      },
+      base: {
+        src: ['dist/<%= pkg.name %>.base.js'],
+        dest: 'dist/<%= pkg.name %>.base.min.js'
       },
     },
     compress: {
