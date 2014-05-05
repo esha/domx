@@ -22,8 +22,8 @@
                 arr.slice(b, e || (b + 1) || undefined) :
                 arr.filter(
                     typeof b === "function" ? b : 
-                        e === undefined ? function(el){ return el.matches(b); } :
-                            function(el){ return el.each(b) === e; }
+                        e === undefined ? function match(el){ return el.matches(b); } :
+                            function eachVal(el){ return el.each(b) === e; }
                 )
             );
         }
