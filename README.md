@@ -1,65 +1,66 @@
-[domx][home] is a small, [extensible][fn] library to help you enjoy the DOM in a simple, direct way.
+[domx][home] is a small, [extensible][extend] library to help you enjoy the DOM in a simple, direct, and very powerful way.
 
 Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq].
 
-[home]: http://nbubna.github.io/domx
-[demo]: http://nbubna.github.io/domx#Demo
-[api]: http://nbubna.github.io/domx#API
-[faq]: http://nbubna.github.io/domx#FAQ
-[fn]: http://nbubna.github.io/domx#_.fn
+[home]: http://esha.github.io/domx
+[demo]: http://esha.github.io/domx#Demo
+[api]: http://esha.github.io/domx#API
+[faq]: http://esha.github.io/domx#FAQ
 
-#### Full Version:
+#### Standard Version:
 
 Download: [domx.min.js][full-min] or [domx.js][full] [![Build Status](https://travis-ci.org/esha/domx.png?branch=master)](https://travis-ci.org/esha/domx)  
 [Bower][bower]: `bower install domx`  
 [NPM][npm]: `npm install domx`   
-[Component][component]: `component install nbubna/domx`  
+[Component][component]: `component install esha/domx`  
 
-Includes [dot-traversal][dot], [`query()`][query], [`each()`][each], [`only()`][only], [`add()`][add], [`remove()`][remove], [`toArray()`][toArray] and [emmet abbreviations][abbr] in [`add()`][add-emmet]:  
-* [domx.core.js][core]
-* [domx.alter.js][alter]
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`add()`][add], [`remove()`][remove], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`add()`][add-emmet], and [dot-traversal][dot]:  
+* [domx.base.js][base]
 * [domx.emmet.js][emmet]
+* [domx.elements.js][elements]
 
 [npm]: https://npmjs.org/package/domx
 [bower]: http://bower.io/
 [component]: http://component.io/
 
-[full-min]: https://raw.github.com/nbubna/domx/master/dist/domx.min.js
-[full]: https://raw.github.com/nbubna/domx/master/dist/domx.js
-[base-min]: http://raw.github.com/nbubna/domx/master/dist/domx.base.min.js
-[base]: http://raw.github.com/nbubna/domx/master/dist/domx.base.js
-[core-min]: https://raw.github.com/nbubna/domx/master/dist/domx.core.min.js
-[core]: http://raw.github.com/nbubna/domx/master/dist/domx.core.js
-[alter]: http://raw.github.com/nbubna/domx/master/dist/domx.alter.js
-[emmet]: http://raw.github.com/nbubna/domx/master/dist/domx.emmet.js
+[full-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
+[full]: https://raw.github.com/esha/domx/master/dist/domx.js
+[base-min]: http://raw.github.com/esha/domx/master/dist/domx.base.min.js
+[base]: http://raw.github.com/esha/domx/master/dist/domx.base.js
+[core-min]: https://raw.github.com/esha/domx/master/dist/domx.core.min.js
 
-[dot]: http://nbubna.github.io/domx#dot-traversal
-[query]: http://nbubna.github.io/domx#query()
-[each]: http://nbubna.github.io/domx#each()
-[only]: http://nbubna.github.io/domx#only()
-[add]: http://nbubna.github.io/domx#add()
-[add-emmet]: http://nbubna.github.io/domx#add(emmet)
-[remove]: http://nbubna.github.io/domx#remove()
-[toArray]: http://nbubna.github.io/domx#toArray()
+[core]: http://raw.github.com/esha/domx/master/src/core.js
+[traverse]: http://raw.github.com/esha/domx/master/src/traverse.js
+[alter]: http://raw.github.com/esha/domx/master/src/alter.js
+[emmet]: http://raw.github.com/esha/domx/master/dist/domx.emmet.js
+[elements]: http://raw.github.com/esha/domx/master/dist/domx.elements.js
+[stringify]: http://raw.github.com/esha/domx/master/dist/domx.stringify.js
+
+[each]: http://esha.github.io/domx#each()
+[toArray]: http://esha.github.io/domx#toArray()
+[extend]: http://esha.github.io/domx#extend()
+
+[query]: http://esha.github.io/domx#query()
+[queryAll]: http://esha.github.io/domx#queryAll()
+[only]: http://esha.github.io/domx#only()
+
+[add]: http://esha.github.io/domx#add()
+[remove]: http://esha.github.io/domx#remove()
+
+[add-emmet]: http://esha.github.io/domx#add(emmet)
 [abbr]: http://docs.emmet.io/abbreviations/syntax/
+
+[dot]: http://esha.github.io/domx#dot-traversal
 
 #### Base Version:
 
 Download: [domx.min.js][base-min]  or  [domx.js][base]  
 
-Includes [dot-traversal][dot], [`query()`][query], [`each()`][each], [`only()`][only], [`add()`][add], [`remove()`][remove] and [`toArray()`][toArray]:
-* [domx.core.js][core]
-* [domx.alter.js][alter]
-
-#### Core Version:
-
-Download: [domx.min.js][core-min]  or  [domx.js][core]  
-
-Includes [dot-traversal][dot], [`query()`][query], [`each()`][each], [`only()`][only] and [`toArray()`][toArray]:
-* [domx.core.js][core]
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`add()`][add], [`remove()`][remove], and [`toArray()`][toArray]:  
+* [domx.base.js][base]
 
 
 ### Release History
-* 2013-07-24 [v0.1.0][] (first public release)
+* 2014-05-04 [v0.7.0][] (first public release)
 
-[v0.1.0]: https://github.com/nbubna/domx/tree/0.1.0
+[v0.7.0]: https://github.com/esha/domx/tree/0.7.0
