@@ -1,7 +1,7 @@
 (function(D) {
     "use strict";
 
-    function xList(limit) {
+    function XList(limit) {
         if (typeof limit === "number") {
             this.limit = limit;
             this.add(_.slice(arguments, 1));
@@ -14,9 +14,9 @@
         version: "<%= pkg.version %>",
         slice: Array.prototype.slice,
         noop: function(){},
-        List: xList,
+        List: XList,
         singles: [Element, Text, Comment],
-        lists: [NodeList, HTMLCollection, xList],
+        lists: [NodeList, HTMLCollection, XList],
         isList: function(o) {
             return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                    o instanceof NodeList ||// phantomjs foolishly calls these functions
@@ -140,7 +140,7 @@
             }
             return -1;
         }
-    }, [xList]);
+    }, [XList]);
 
     // extend the DOM!
     _.define(D, '_', _);
