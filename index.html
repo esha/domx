@@ -142,21 +142,23 @@ document.body.each('classList.toggle', 'ready');// each works on both single ele
 </pre>
         </article>
         <article>
-          <h4><a name="only()">only</a>(<span class="variable">selector|index|filter|slice</span> <span class="variable optional">, endSlice</span>) <span class="since">0.7.0</span></h4>
+          <h4><a name="only()">only</a>(<span class="variable">selector|index|filter|slice|property</span> <span class="variable optional">, endSlice|value</span>) <span class="since">0.7.0</span></h4>
           <p>When you want to narrow down a selection, <code>only</code> allows you to easily filter
           that list by selector, index, slice, or filtering function.</p>
           <pre class="example">
-var items = document.queryAll('.items'); // all li elements
+var items = document.queryAll('.items'); // all items
 
 items.only('.highlighted'); // subset that matches selector
 
-items.only(3).textContent = "Fourth li element!"; // index (special case, returns single element)
+items.only(3).textContent = "Fourth item!"; // index (special case, returns single element)
 
 items.only(-1).id = 'last'; // negative index works too
 
 items.only(function(o,i){ return !(i%2); }); // filter function returns even elements
 
 items.only(3, 9).each('add', 'button');// specific slice of elements
+
+items.only('tagName', 'DIV');// only &lt;div class="item"&gt; elements
 </pre>
         </article>
         <article>
