@@ -13,8 +13,8 @@
 
 	D.addEventListener("DOMContentLoaded", function() {
 		// modify iframe's DOMx list to handle the demo content
-		var add = D._.XList.prototype.add;
-		Object.defineProperty(D._.XList.prototype, 'add', { value: function() {
+		var add = D._.List.prototype.add;
+		Object.defineProperty(D._.List.prototype, 'add', { value: function() {
 			var ret = add.apply(this, arguments);
 			elementsSelected(ret);
 			return ret;
