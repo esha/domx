@@ -1,6 +1,6 @@
 {
     "name": "domx",
-    "version": "0.1.0",
+    "version": "0.7.0",
     "main": "dist/domx.min.js",
     "description": "An intuitive, extensible way to work directly with the DOM.",
     "keywords": [
