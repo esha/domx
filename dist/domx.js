@@ -1,5 +1,5 @@
-/*! domx - v0.1.0 - 2014-05-02
-* http://nbubna.github.io/domx/
+/*! domx - v0.1.0 - 2014-05-04
+* http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 (function(D) {
     "use strict";
@@ -18,7 +18,7 @@
         slice: Array.prototype.slice,
         noop: function(){},
         List: List,
-        singles: [Element],
+        singles: [Element, Text, Comment],
         lists: [NodeList, HTMLCollection, List],
         isList: function(o) {
             return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
@@ -61,7 +61,9 @@
             }
             var val = el[key];
             if (val !== undefined) {
-                if (typeof val === "function") { return val.apply(el, args); }
+                if (typeof val === "function" && val.apply) {
+                    return val.apply(el, args);
+                }
                 else if (args) { el[key] = args[0]; }
                 else { return val; }
             }
@@ -120,17 +122,16 @@
     _.fn({
         length: 0,
         limit: -1,
-        add: function(list) {
-            list = arguments.length < 2 && _.isList(list) ? list : arguments;
-            for (var i=0,m=list.length; i<m; i++) {
-                var item = list[i];
-                if (_.isList(item)) {
-                    this.add(item);
-                } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
-                    this[this.length++] = item;
-                    if (this.length === this.limit) {
-                        return _.define(this, 'add', _.noop);
-                    }
+        add: function(item) {
+            if (arguments.length > 1 || _.isList(item)) {
+                var list = arguments.length > 1 ? arguments : item;
+                for (var i=0,m=list.length; i<m; i++) {
+                    this.add(list[i]);
+                }
+            } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
+                this[this.length++] = item;
+                if (this.length === this.limit) {
+                    this.add = _.noop;
                 }
             }
         },
@@ -183,8 +184,8 @@
                 arr.slice(b, e || (b + 1) || undefined) :
                 arr.filter(
                     typeof b === "function" ? b : 
-                        e === undefined ? function(el){ return el.matches(b); } :
-                            function(el){ return el.each(b) === e; }
+                        e === undefined ? function match(el){ return el.matches(b); } :
+                            function eachVal(el){ return el.each(b) === e; }
                 )
             );
         }
@@ -343,7 +344,7 @@
         }
     };
     E.fn('$text', 'childNodes', 'nodeType', 3);
-    E.fn('$comment', 'childNodes', 'nodeType', 3);
+    E.fn('$comment', 'childNodes', 'nodeType', 8);
 
     // early availability
     D._.define(D, 'html', D.documentElement);

@@ -1,17 +1,10 @@
-/*! domx - v0.1.0 - 2014-05-02
-* http://nbubna.github.io/domx/
+/*! domx - v0.1.0 - 2014-05-04
+* http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 (function(window, D) {
     "use strict";
 
     var _ = D._.stringify = {
-        fn: function(markup, indent) {
-            var s = '';
-            this.each(function(el) {
-                s += _.print(el, markup||false, indent||'');
-            });
-            return s;
-        },
         map: Array.prototype.map,
         specialPrefix: '_',
         markup: {
@@ -100,6 +93,12 @@
             return s !== undefined && s !== null && s !== '';
         }
     };
-    D._.fn('stringify', _.fn);
+    D._.fn('stringify', function(markup, indent) {
+        var s = '';
+        this.each(function(el) {
+            s += _.print(el, markup||false, indent||'');
+        });
+        return s;
+    });
 
 })(window, document);
