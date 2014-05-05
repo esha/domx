@@ -15,11 +15,9 @@ module.exports = function(grunt) {
     clean: {
       files: ['dist']
     },
-    concat: {
+    frame: {
       options: {
-        banner: '<%= banner %>',
-        process: true,
-        stripBanners: true
+        frame: 'src/frame.js',
       },
       dist: {
         src: ['src/core.js',
@@ -36,14 +34,23 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name %>.base.js'
       },
       emmet: {
+        options: {
+          frame: 'src/plugin-frame.js',
+        },
         src: ['src/emmet.js'],
         dest: 'dist/<%= pkg.name %>.emmet.js'
       },
       elements: {
+        options: {
+          frame: 'src/plugin-frame.js',
+        },
         src: ['src/elements.js'],
         dest: 'dist/<%= pkg.name %>.elements.js'
       },
       stringify: {
+        options: {
+          frame: 'src/plugin-frame.js',
+        },
         src: ['src/stringify.js'],
         dest: 'dist/<%= pkg.name %>.stringify.js'
       },
@@ -85,7 +92,14 @@ module.exports = function(grunt) {
         options: {
           jshintrc: 'src/.jshintrc'
         },
-        src: ['src/**/*.js']
+        src: ['src/**/*.js',
+              '!src/*frame.js']
+      },
+      dist: {
+        options: {
+          jshintrc: 'src/.jshintrc-dist'
+        },
+        src: ['dist/*.js']
       },
       test: {
         options: {
@@ -111,8 +125,8 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadTasks('tasks');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -120,6 +134,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compress');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'clean', 'concat', 'uglify', 'compress', 'qunit']);
+  grunt.registerTask('default', ['clean', 'frame', 'jshint', 'uglify', 'compress', 'qunit']);
 
 };
