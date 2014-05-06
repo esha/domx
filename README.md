@@ -7,7 +7,7 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq].
 [api]: http://esha.github.io/domx#API
 [faq]: http://esha.github.io/domx#FAQ
 
-#### Standard Version:
+#### Full Version:
 
 Download: [domx.min.js][full-min] or [domx.js][full] [![Build Status](https://travis-ci.org/esha/domx.png?branch=master)](https://travis-ci.org/esha/domx)  
 [Bower][bower]: `bower install domx`  
@@ -27,7 +27,6 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 [full]: https://raw.github.com/esha/domx/master/dist/domx.js
 [base-min]: http://raw.github.com/esha/domx/master/dist/domx.base.min.js
 [base]: http://raw.github.com/esha/domx/master/dist/domx.base.js
-[core-min]: https://raw.github.com/esha/domx/master/dist/domx.core.min.js
 
 [core]: http://raw.github.com/esha/domx/master/src/core.js
 [traverse]: http://raw.github.com/esha/domx/master/src/traverse.js
