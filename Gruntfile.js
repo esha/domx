@@ -23,6 +23,7 @@ module.exports = function(grunt) {
         src: ['src/core.js',
               'src/traverse.js',
               'src/alter.js',
+              'src/value.js',
               'src/emmet.js',
               'src/elements.js'],
         dest: 'dist/<%= pkg.name %>.js'
@@ -30,7 +31,8 @@ module.exports = function(grunt) {
       base: {
         src: ['src/core.js',
               'src/traverse.js',
-              'src/alter.js'],
+              'src/alter.js',
+              'src/value.js'],
         dest: 'dist/<%= pkg.name %>.base.js'
       },
       emmet: {

@@ -14,7 +14,7 @@ Download: [domx.min.js][full-min] or [domx.js][full] [![Build Status](https://tr
 [NPM][npm]: `npm install domx`   
 [Component][component]: `component install esha/domx`  
 
-Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`add()`][add], [`remove()`][remove], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`add()`][add-emmet], and [dot-traversal][dot]:  
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`add()`][add], [`remove()`][remove], [`value`][value], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`add()`][add-emmet], and [dot-traversal][dot]:  
 * [domx.base.js][base]
 * [domx.emmet.js][emmet]
 * [domx.elements.js][elements]
@@ -31,6 +31,7 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 [core]: http://raw.github.com/esha/domx/master/src/core.js
 [traverse]: http://raw.github.com/esha/domx/master/src/traverse.js
 [alter]: http://raw.github.com/esha/domx/master/src/alter.js
+[value]: http://raw.github.com/esha/domx/master/src/value.js
 [emmet]: http://raw.github.com/esha/domx/master/dist/domx.emmet.js
 [elements]: http://raw.github.com/esha/domx/master/dist/domx.elements.js
 [stringify]: http://raw.github.com/esha/domx/master/dist/domx.stringify.js
@@ -46,6 +47,8 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 [add]: http://esha.github.io/domx#add()
 [remove]: http://esha.github.io/domx#remove()
 
+[value]: http://esha.github.io/domx#value
+
 [add-emmet]: http://esha.github.io/domx#add(emmet)
 [abbr]: http://docs.emmet.io/abbreviations/syntax/
 
@@ -55,7 +58,7 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 
 Download: [domx.min.js][base-min]  or  [domx.js][base]  
 
-Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`add()`][add], [`remove()`][remove], and [`toArray()`][toArray]:  
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`add()`][add], [`remove()`][remove], [`value`][value], and [`toArray()`][toArray]:  
 * [domx.base.js][base]
 
 
