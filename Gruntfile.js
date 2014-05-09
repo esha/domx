@@ -24,6 +24,7 @@ module.exports = function(grunt) {
               'src/traverse.js',
               'src/alter.js',
               'src/value.js',
+              'src/repeat.js',
               'src/emmet.js',
               'src/elements.js'],
         dest: 'dist/<%= pkg.name %>.js'
@@ -34,6 +35,13 @@ module.exports = function(grunt) {
               'src/alter.js',
               'src/value.js'],
         dest: 'dist/<%= pkg.name %>.base.js'
+      },
+      repeat: {
+        options: {
+          frame: 'src/plugin-frame.js',
+        },
+        src: ['src/repeat.js'],
+        dest: 'dist/<%= pkg.name %>.repeat.js'
       },
       emmet: {
         options: {
