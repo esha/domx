@@ -6,23 +6,22 @@
     "use strict";
 
 // core.js
-function XList(limit) {
+window.DOMxList = function DOMxList(limit) {
     if (typeof limit === "number") {
         this.limit = limit;
         this.add(_.slice(arguments, 1));
     } else {
         this.add(arguments);
     }
-}
+};
 
 // expose utilities
 _ = {
     version: "0.8.0",
     slice: Array.prototype.slice,
     noop: function(){},
-    List: XList,
     nodes: [Element, Text, Comment],
-    lists: [NodeList, HTMLCollection, XList],
+    lists: [NodeList, HTMLCollection, DOMxList],
     isList: function(o) {
         return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                o instanceof NodeList ||// phantomjs foolishly calls these functions
@@ -102,7 +101,7 @@ _.fn(_.nodes.concat(_.lists), {
         }
         return !results.length ? this : // no results, be fluent
             !_.isList(this) ? results[0] : // single source, single result
-            results[0].toArray ? new _.List(results) : // convert array to DOMx (and combine sub-lists)
+            results[0].toArray ? new DOMxList(results) : // convert array to DOMx (and combine sub-lists)
             results;
     },
     toArray: function(arr) {
@@ -118,8 +117,8 @@ _.fn(_.nodes.concat(_.lists), {
     }
 });
 
-// define XList functions
-_.fn([XList], {
+// define DOMxList functions
+_.fn([DOMxList], {
     length: 0,
     limit: -1,
     add: function(item) {
@@ -161,7 +160,7 @@ _.parents = [Element, DocumentFragment, D];
 _.fn(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
-            list = new _.List(count);
+            list = new DOMxList(count);
         for (var i=0, m=self.length; i<m && (!count || count > list.length); i++) {
             list.add(self[i][
                 count === list.length+1 ? 'querySelector' : 'querySelectorAll'
@@ -183,7 +182,7 @@ _.fn(_.lists, 'only', function only(b, e) {
                     solo ? function match(el){ return el.matches(b); } :
                            function eachVal(el){ return el.each(b) === e; }
                 );
-    return num && solo ? arr[0] : new _.List(arr);
+    return num && solo ? arr[0] : new DOMxList(arr);
 });
 
 // ensure element.matches(selector) availability
@@ -221,7 +220,7 @@ D.extend('add', function(arg, ref) {
         return A.create(this, arg, ref);
     }
     if (_.isList(arg)) {// list of append-ables
-        var list = new _.List();
+        var list = new DOMxList();
         for (var i=0,m=arg.length; i<m; i++) {
             list.add(this.add(arg[i], ref));
         }

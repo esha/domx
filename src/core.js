@@ -1,21 +1,20 @@
 // core.js
-function XList(limit) {
+window.DOMxList = function DOMxList(limit) {
     if (typeof limit === "number") {
         this.limit = limit;
         this.add(_.slice(arguments, 1));
     } else {
         this.add(arguments);
     }
-}
+};
 
 // expose utilities
 _ = {
     version: "<%= pkg.version %>",
     slice: Array.prototype.slice,
     noop: function(){},
-    List: XList,
     nodes: [Element, Text, Comment],
-    lists: [NodeList, HTMLCollection, XList],
+    lists: [NodeList, HTMLCollection, DOMxList],
     isList: function(o) {
         return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                o instanceof NodeList ||// phantomjs foolishly calls these functions
@@ -95,7 +94,7 @@ _.fn(_.nodes.concat(_.lists), {
         }
         return !results.length ? this : // no results, be fluent
             !_.isList(this) ? results[0] : // single source, single result
-            results[0].toArray ? new _.List(results) : // convert array to DOMx (and combine sub-lists)
+            results[0].toArray ? new DOMxList(results) : // convert array to DOMx (and combine sub-lists)
             results;
     },
     toArray: function(arr) {
@@ -111,8 +110,8 @@ _.fn(_.nodes.concat(_.lists), {
     }
 });
 
-// define XList functions
-_.fn([XList], {
+// define DOMxList functions
+_.fn([DOMxList], {
     length: 0,
     limit: -1,
     add: function(item) {

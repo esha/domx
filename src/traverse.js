@@ -3,7 +3,7 @@ _.parents = [Element, DocumentFragment, D];
 _.fn(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
-            list = new _.List(count);
+            list = new DOMxList(count);
         for (var i=0, m=self.length; i<m && (!count || count > list.length); i++) {
             list.add(self[i][
                 count === list.length+1 ? 'querySelector' : 'querySelectorAll'
@@ -25,7 +25,7 @@ _.fn(_.lists, 'only', function only(b, e) {
                     solo ? function match(el){ return el.matches(b); } :
                            function eachVal(el){ return el.each(b) === e; }
                 );
-    return num && solo ? arr[0] : new _.List(arr);
+    return num && solo ? arr[0] : new DOMxList(arr);
 });
 
 // ensure element.matches(selector) availability

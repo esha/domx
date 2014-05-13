@@ -16,6 +16,7 @@
     "NodeList",
     "HTMLElement",
     "HTMLCollection",
+    "DOMxList",
     "Element",
     "Text",
     "Comment",

@@ -66,7 +66,7 @@ Test assertions:
 
     test("_.isList", function() {
         ok(_.isList([]), "array is list");
-        ok(_.isList(new _.List()), "_.List is list");
+        ok(_.isList(new DOMxList()), "DOMxList is list");
         ok(_.isList(arguments), "arguments is list");
         ok(_.isList(D.querySelectorAll('body')), "NodeList is list");
         ok(_.isList(D.body.children), "HTMLCollection is list");
@@ -81,12 +81,12 @@ Test assertions:
         ok(!_.isList(D.createTextNode('foo')), "text node is not list");
     });
 
-    test('_.List', function() {
-        var list = new _.List();
+    test('DOMxList', function() {
+        var list = new DOMxList();
         equal(list.length, 0);
-        ok(list instanceof _.List);
+        ok(list instanceof DOMxList);
 
-        list = new _.List([1,2]);
+        list = new DOMxList([1,2]);
         equal(list.length, 2);
         equal(list[0], 1);
         equal(list[1], 2);
@@ -101,7 +101,7 @@ Test assertions:
         equal(list.indexOf(1), 0);
         equal(list.indexOf(0), -1);
 
-        list = new _.List();
+        list = new DOMxList();
         list.limit = 1;
         list.add(1,2);
         equal(list.length, 1);

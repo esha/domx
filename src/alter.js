@@ -27,7 +27,7 @@ D.extend('add', function(arg, ref) {
         return A.create(this, arg, ref);
     }
     if (_.isList(arg)) {// list of append-ables
-        var list = new _.List();
+        var list = new DOMxList();
         for (var i=0,m=arg.length; i<m; i++) {
             list.add(this.add(arg[i], ref));
         }
