@@ -1,6 +1,6 @@
 {
     "name": "domx",
-    "version": "0.7.1",
+    "version": "0.8.0",
     "main": "dist/domx.min.js",
     "description": "An intuitive, extensible way to work directly with the DOM.",
     "keywords": [
@@ -13,7 +13,7 @@
         "manipulate",
         "extend",
         "native",
-        "voyeur",
+        "repeat",
         "element"
     ],
     "author": {

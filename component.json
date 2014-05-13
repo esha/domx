@@ -2,10 +2,9 @@
   "name": "domx",
   "repo": "esha/domx",
   "description": "An intuitive, extensible way to work directly with the DOM.",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "keywords": [
     "HTML",
-    "voyeur",
     "DOM",
     "traverse",
     "manipulate",
@@ -15,6 +14,7 @@
     "query",
     "element",
     "emmet",
+    "repeat",
     "native"
   ],
   "dependencies": {},

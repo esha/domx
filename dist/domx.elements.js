@@ -1,4 +1,4 @@
-/*! domx - v0.7.1 - 2014-05-13
+/*! domx - v0.8.0 - 2014-05-13
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -45,6 +45,5 @@ D.addEventListener('DOMContentLoaded', function() {
     }
 });
 // /elements.js
-
 
 })(document, document._);
