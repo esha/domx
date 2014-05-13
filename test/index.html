@@ -32,6 +32,9 @@
       <div id="last"></div>
     </section>
   </div>
-  <div id="repeater" data-repeat=".foo" data-repeat-none>There are no foos.</div>
+  <div class="other" data-repeat=".foo" data-repeat-none>There are <b>no</b> foos.</div>
+  <div class="self" data-repeat data-repeat-none="No items." data-repeat-first>
+    <span class="item"></span>
+  </div>
 </body>
 </html>
