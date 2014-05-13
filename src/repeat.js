@@ -17,13 +17,13 @@ var R = _.repeat = {
         }
         el.parentNode.insertBefore(anchor, el);
         _.define(anchor, 'source', source);
-        if (!keep) {
+        if (keep !== true) {
             el.remove();
         }
         return id;
     },
-    repeat: function(parent, anchor, val) {
-        var repeat = anchor.source.cloneNode(true);
+    repeat: function(parent, anchor, source, val) {
+        var repeat = source.cloneNode(true);
         if (val !== undefined && val !== null) {
             repeat.value = val;
         }
@@ -41,13 +41,14 @@ D.extend('repeat', function repeat(val) {
     if (val === false) {
         return parent.queryAll(selectAll).remove();
     }
-    var anchor = parent.query('x-repeat'+selector);
-    if (anchor.getAttribute('data-repeat-first')) {
-        anchor = parent.query(selector+'[data-index="0"]');
+    var anchor = parent.query('x-repeat'+selector),
+        source = anchor.source;
+    if (anchor.hasAttribute('data-repeat-first')) {
+        anchor = parent.query(selector+'[data-index]') || anchor;
     }
     var ret = Array.isArray(val) ?
-        val.map(function(v){ return R.repeat(parent, anchor, v); }) :
-        R.repeat(parent, anchor, val);
+        val.map(function(v){ return R.repeat(parent, anchor, source, v); }) :
+        R.repeat(parent, anchor, source, val);
     parent.queryAll(selectAll).each('setAttribute', 'data-index', '${i}');
     return ret;
 });
