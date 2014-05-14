@@ -15,6 +15,7 @@ _.fn(_.parents.concat(_.lists), {
         return this.queryAll(selector, 1)[0];
     }
 });
+
 _.fn(_.lists, 'only', function only(b, e) {
     var arr = this.toArray(),
         num = b >= 0 || b < 0,
@@ -27,6 +28,16 @@ _.fn(_.lists, 'only', function only(b, e) {
                 );
     return num && solo ? arr[0] : new DOMxList(arr);
 });
+
+D.extend('all', function(path, inclusive, _list) {
+    var list = _list || new DOMxList(),
+        el = inclusive ? this : this[path];
+    while (el) {
+        list.add(el);
+        el = _.isList(el) ? el.all(path, 0, list) && 0 : el[path];
+    }
+    return list;
+}, [Node]);
 
 // ensure element.matches(selector) availability
 var Ep = Element.prototype,

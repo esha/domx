@@ -46,6 +46,14 @@ Test assertions:
         });
     });
 
+    test("all()", function() {
+        var set = _.lists.concat([Node]);
+        expect(set.length);
+        set.forEach(function(_class) {
+            ok(_class.prototype.all, _class.name+'.prototype.all');
+        });
+    });
+
     test("queryAll()", function() {
         var set = _.lists.concat(_.parents);
         expect(set.length);
@@ -123,6 +131,27 @@ Test assertions:
         var divs = D.queryAll('section > div'),
             odds = function(n,i){ return i%2; };
         deepEqual(divs.only(odds).each('tagName'), ['DIV','DIV'], "got two odd divs");
+    });
+
+    module('all()');
+
+    test("parents", function() {
+        var divs = D.queryAll('section > div'),
+            parents = divs.all('parentElement');
+        equal(parents.length, 4);
+    });
+
+    test("nextElementSibling, inclusive", function() {
+        var div = D.query('#first'),
+            siblings = div.all('nextElementSibling', true);
+        equal(siblings.length, 5);
+    });
+
+    test("children, on multiple", function() {
+        var gps = D.body.queryAll('aside,section');
+        equal(gps.length, 2);
+        var desc = gps.all('children');
+        equal(desc.length, 10);
     });
 
 }(document));
