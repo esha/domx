@@ -94,7 +94,7 @@ Test assertions:
         list.add([[3,4],5]);
         equal(list.length, 5);
 
-        list.add(null);
+        equal(list.add(null), list, "fluent");
         list.add(undefined);
         equal(list.length, 5);
 

@@ -126,6 +126,7 @@ _.fn([DOMxList], {
                 this.add = _.noop;
             }
         }
+        return this;
     },
     indexOf: function(item) {
         for (var i=0; i<this.length; i++) {
