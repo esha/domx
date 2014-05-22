@@ -21,17 +21,17 @@
   */
 
     var _ = D._;
-	module("D element creation");
+	module("append(emmet)");
 
 	test("nested", function() {
-		var nested = D.body.add('div>div');
+		var nested = D.body.append('div>div');
 		equal(nested.tagName, "DIV", "Tags created.");
 		ok(D.queryAll('body > div').only(-1).query('div'), 'Tags found.');
 		nested.parentNode.remove();
 	});
 
 	test("siblings with kids", function() {
-		var h1 = D.body.add('section.bro+section.bro').add('h1');
+		var h1 = D.body.append('section.bro+section.bro').append('h1');
 
 		equal(h1.tagName, "H1", "Tag created");
 		equal(h1.parentNode.tagName, "SECTION", "Tag within parent");
@@ -40,19 +40,19 @@
 	});
 
 	test("element id", function() {
-		ok(D.body.add('span#foo'), 'have element');
+		ok(D.body.append('span#foo'), 'have element');
 		equal(D.query('body > span').id, 'foo', 'has right id');
 		D.query('#foo').remove();
 	});
 
 	test("element class", function() {
-		ok(D.body.add('div#classes.bar.woogie'), 'have element');
+		ok(D.body.append('div#classes.bar.woogie'), 'have element');
 		equal(D.query('#classes').getAttribute('class'), 'bar woogie', 'has right classes');
 		D.query('#classes').remove();
 	});
 
 	test("element attr", 4, function() {
-		ok(D.body.add('div#attrs[test foo=bar bar="woogie baz"]'), 'have element');
+		ok(D.body.append('div#attrs[test foo=bar bar="woogie baz"]'), 'have element');
 		var el = D.query('#attrs');
 		equal(el.getAttribute('test'), '', 'has empty test attr');
 		equal(el.getAttribute('foo'), 'bar', 'foo attr is bar');
@@ -61,7 +61,7 @@
 	});
 
 	test("climb up context", 4, function() {
-		equal(D.body.add('p>div>div>span^h2^^h1').tagName, 'H1', 'right element');
+		equal(D.body.append('p>div>div>span^h2^^h1').tagName, 'H1', 'right element');
 		ok(D.query('p > div > div > span'), 'have initial tree');
 		ok(D.query('p > div > h2'), 'h2 went in right place');
 		ok(D.query('body > h1'), 'h1 went in right place');
@@ -70,7 +70,7 @@
 	});
 
 	test("multiplier", 4, function() {
-		var spans = D.body.add('span*5');
+		var spans = D.body.append('span*5');
 
 		ok(_.isList(spans), "Multiple elements created and is list");
 		ok(spans.length === 5, "Exact amount of elements preset");
@@ -80,11 +80,11 @@
 	});
 
 	test("text", function() {
-		var text = D.body.add('p#text{hello world!}');
+		var text = D.body.append('p#text{hello world!}');
 		ok(text, 'have element');
 		equal(D.query('#text').textContent, 'hello world!', 'has right text');
 		text.remove();
-		var mixed = D.body.add('p#mixed{a}>span+{ b}');
+		var mixed = D.body.append('p#mixed{a}>span+{ b}');
 		equal(mixed.textContent, 'a b', 'both text parts');
 		ok(mixed.query('span'), 'and child node');
 		mixed.remove();

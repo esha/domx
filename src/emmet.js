@@ -1,5 +1,5 @@
 // emmet.js
-var AE = _.add;
+var AE = _.append;
 AE.create = function(node, code, ref) {
     var parts = code.split(AE.emmetRE()),
         root = D.createDocumentFragment(),

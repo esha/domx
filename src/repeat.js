@@ -30,7 +30,7 @@ var R = _.repeat = {
         parent.insertBefore(repeat, anchor);
         return repeat;
     },
-    style: D.head.add('style')
+    style: D.head.append('style')
 };
 
 D.extend('repeat', function repeat(val) {

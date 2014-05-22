@@ -1,5 +1,5 @@
-// alter.js
-var A = _.add = {
+// append.js
+var A = _.append = {
     create: function(node, tag, ref) {
         return A.insert(node, D.createElement(tag), ref);
     },
@@ -14,7 +14,7 @@ var A = _.add = {
     },
     find: function(node, ref) {
         switch (typeof ref) {
-            case "string": return node[ref+'Child'];
+            case "string": return node[ref] || node.only(ref);
             case "number": return node.children[ref];
             case "object": return ref;
             case "function": return ref.call(node, node);
@@ -22,14 +22,14 @@ var A = _.add = {
     }
 };
 
-D.extend('add', function(arg, ref) {
+D.extend('append', function(arg, ref) {
     if (typeof arg === "string") {// turn arg into an appendable
         return A.create(this, arg, ref);
     }
     if (_.isList(arg)) {// list of append-ables
         var list = new DOMxList();
         for (var i=0,m=arg.length; i<m; i++) {
-            list.add(this.add(arg[i], ref));
+            list.add(this.append(arg[i], ref));
         }
         return list;
     }
@@ -43,4 +43,4 @@ D.extend('remove', function() {
         parent.removeChild(this);
     }
 }, _.nodes);
-// /alter.js
+// /append.js

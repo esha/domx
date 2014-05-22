@@ -21,34 +21,41 @@
   */
 
   var _ = D._;
-	module("D element creation");
+	module("append()");
 
 	test("basic", function() {
 		ok(!D.query('body > a'), "no A to begin with");
-		equal(D.body.add('a').tagName, "A", "Tag created.");
+		equal(D.body.append('a').tagName, "A", "Tag created.");
 		ok(D.query('body > a'), 'Tag found.');
 		D.query('body > a').remove();
 	});
 
-	test("add node", function() {
-		var node = document.createElement('article');
-		equal(D.body.add(node), node, "added node and got it back");
-		ok(D.body.query('article') && 'each' in node, 'added node has been assimilated');
+	test("append node", function() {
+		var node = D.createElement('article');
+		equal(D.body.append(node), node, "appended node and got it back");
+		ok(D.body.query('article') && 'each' in node, 'appended node has been assimilated');
 		node.remove();
 	});
 
-	test("add list", function() {
-		var list = ['nav', document.createElement('nav'), ['nav']];
-		equal(D.body.add(list).length, 3, 'added three nav elements');
+	test("append list", function() {
+		var list = ['nav', D.createElement('nav'), ['nav']];
+		equal(D.body.append(list).length, 3, 'appended three nav elements');
 		D.queryAll('nav').remove();
 	});
 
-  //TODO: test add(el, ref);
+    test("append to list", function() {
+        var list = D.queryAll('section.foo > div');
+        list.append('test');
+        var tests = D.queryAll('.foo > div > test');
+        equal(tests.length, list.length, 'appended a test element to each div');
+    });
 
-  module("D element removal");
+  //TODO: test append(el, ref);
+
+  module("remove()");
 
   test("single", 3, function() {
-    var el = D.body.add('doomed');
+    var el = D.body.append('doomed');
     ok(el, 'have element');
     el.remove();
     ok(!el.parentNode, 'no parent after removal');
@@ -56,7 +63,7 @@
   });
 
   test("list", 8, function() {
-    var list = D.body.add('doa*5');
+    var list = D.body.append('doa*5');
     ok(_.isList(list), 'have list');
     strictEqual(list.remove(), list, 'remove returns self');
     list.each(function(doa) {
