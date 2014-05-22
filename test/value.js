@@ -24,8 +24,8 @@
     module(".value");
 
     test("_.", function() {
-        equal(typeof _.get, "function", "_.get");
-        equal(typeof _.set, "function", "_.set");
+        equal(typeof _.get, "object", "_.get");
+        equal(typeof _.set, "object", "_.set");
     });
 
     test(".value presence", function() {
@@ -38,6 +38,13 @@
             ok(!desc.enumerable);
             ok(!desc.writable);
             ok(desc.configurable);
+        });
+    });
+
+    test("valueFor() presence", function() {
+        expect(_.nodes.length);
+        _.nodes.forEach(function(_class) {
+            ok(_class.prototype.valueFor, _class.name+'.prototype.valueFor');
         });
     });
 
@@ -71,33 +78,12 @@
     });
 
     test("element", function() {
-        var node = D.body.add('span[value=attr]{text}');
+        var node = D.body.append('span[value=attr]{text}');
         testNode(node, 'attr');
         equal(node.textContent, 'text');
         node.removeAttribute('value');
         testNode(node, 'text');
         equal(node.children.length, 0);
-        var markup = ' <span>child</span> ';
-        node.value = markup;
-        equal(node.children.length, 1);
-        equal(node.value, markup);
-        node.remove();
-    });
-
-    test("custom get/set", function() {
-        expect(4);
-        var node = D.body.add('custom');
-        _.get.CUSTOM = function(el) {
-            equal(el, node);
-            return this.getAttribute('attr');
-        };
-        _.set.CUSTOM = function(el, value) {
-            equal(this, node);
-            return el.setAttribute('attr', value);
-        };
-        node.value = 42;
-        strictEqual(node.getAttribute('attr'), "42");
-        equal(node.value, 42);
         node.remove();
     });
 
