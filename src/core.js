@@ -94,7 +94,7 @@ _.fn(_.nodes.concat(_.lists), {
         }
         return !results.length ? this : // no results, be fluent
             !_.isList(this) ? results[0] : // single source, single result
-            results[0].toArray ? new DOMxList(results) : // convert array to DOMx (and combine sub-lists)
+            results[0] && results[0].each ? new DOMxList(results) : // convert to DOMx (combines sub-lists)
             results;
     },
     toArray: function(arr) {
