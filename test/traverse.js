@@ -133,6 +133,18 @@ Test assertions:
         deepEqual(divs.only(odds).each('tagName'), ['DIV','DIV'], "got two odd divs");
     });
 
+    test('mixed node types by selector', function() {
+        var list = new DOMxList(),
+            text = D.createTextNode('hello'),
+            el = D.createElement('test');
+        el.textContent = 'hello';
+        text.test = true;
+        list.add(el, text);
+        equal(list.length, 2);
+        list = list.only('test');
+        equal(list.length, 2);
+    });
+
     module('all()');
 
     test("parents", function() {

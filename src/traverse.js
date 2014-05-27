@@ -23,8 +23,12 @@ _.fn(_.lists, 'only', function only(b, e) {
     arr = num ? arr.slice(b, e || (b + 1) || undefined) :
                 arr.filter(
                     typeof b === "function" ? b :
-                    solo ? function match(el){ return el.matches(b); } :
-                           function eachVal(el){ return el.each(b) === e; }
+                    solo ? function match(el) {
+                               return el.matches && el.matches(b) || b in el;
+                           } :
+                           function eachVal(el) {
+                               return (el.each && el.each(b) || el[b]) === e;
+                           }
                 );
     return num && solo ? arr[0] : new DOMxList(arr);
 });
