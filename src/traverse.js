@@ -17,20 +17,21 @@ _.fn(_.parents.concat(_.lists), {
 });
 
 _.fn(_.lists, 'only', function only(b, e) {
-    var arr = this.toArray(),
-        num = b >= 0 || b < 0,
-        solo = arguments.length === 1;
-    arr = num ? arr.slice(b, e || (b + 1) || undefined) :
-                arr.filter(
-                    typeof b === "function" ? b :
-                    solo ? function match(el) {
-                               return el.matches && el.matches(b) || b in el;
-                           } :
-                           function eachVal(el) {
-                               return (el.each && el.each(b) || el[b]) === e;
-                           }
-                );
-    return num && solo ? arr[0] : new DOMxList(arr);
+    var arr = this.toArray();
+    arr = b >= 0 || b < 0 ?
+        arr.slice(b, e || (b + 1) || undefined) :
+        arr.filter(
+            typeof b === "function" ?
+                b :
+                arguments.length === 1 ?
+                    function match(el) {
+                        return el[el.matches ? 'matches' : 'hasOwnProperty'](b);
+                    } :
+                    function eachVal(el) {
+                        return (el.each && el.each(b) || el[b]) === e;
+                    }
+        );
+    return new DOMxList(arr);
 });
 
 D.extend('all', function(path, inclusive, _list) {

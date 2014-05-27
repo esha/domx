@@ -108,8 +108,8 @@ Test assertions:
 
     test("by index", function() {
         var divs = D.queryAll('section > div');
-        strictEqual(divs.only(2), divs[2], 'get 3rd one');
-        strictEqual(divs.only(-1), divs[divs.length-1], 'get last one');
+        strictEqual(divs.only(2)[0], divs[2], 'get 3rd one');
+        strictEqual(divs.only(-1)[0], divs[divs.length-1], 'get last one');
     });
 
     test("by slice", function() {
@@ -136,12 +136,14 @@ Test assertions:
     test('mixed node types by selector', function() {
         var list = new DOMxList(),
             text = D.createTextNode('hello'),
-            el = D.createElement('test');
+            el = D.createElement('meta'),
+            exclude = D.createElement('test');
         el.textContent = 'hello';
-        text.test = true;
-        list.add(el, text);
-        equal(list.length, 2);
-        list = list.only('test');
+        text.meta = true;
+        list.add(el, text, exclude);
+        equal(list.length, 3);
+        ok(exclude.meta, 'should have meta method from Element.prototype');
+        list = list.only('meta');
         equal(list.length, 2);
     });
 
