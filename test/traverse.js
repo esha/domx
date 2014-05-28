@@ -168,5 +168,43 @@ Test assertions:
         equal(desc.length, 10);
     });
 
+    test("function ctx/args", function() {
+        expect(5);
+        var list = D.body.all('parentElement', function(parentElement, list) {
+            strictEqual(this, D.body);
+            strictEqual(parentElement, D.html);
+            strictEqual(list.length, 0);
+            ok(list instanceof DOMxList);
+        });
+        equal(list.length, 1);
+    });
+
+    test("function return values", function() {
+        var div = D.query('#first');
+        var all = div.all('parentElement');
+
+        expect(all.length*2 + 3);
+        var returnUndefined = div.all('parentElement', function(parentElement) {
+            ok(parentElement instanceof Node);
+        });
+        deepEqual(returnUndefined, all, "undefined should not change collection");
+
+        var returnNull = div.all('parentElement', function(parentElement) {
+            ok(parentElement);
+            if (parentElement.tagName === 'HTML') {
+                return null;
+            }
+        });
+        equal(returnNull.length+1, all.length, "shouldn't collect <html>");
+
+        var allFirstText = new DOMxList(div.all('parentElement')
+                                            .each('firstChild')
+                                            .each('textContent'));
+        var returnNode = div.all('parentElement', function(parentElement) {
+            return parentElement.firstChild.textContent;
+        });
+        deepEqual(returnNode, allFirstText);
+    });
+
 }(document));
 

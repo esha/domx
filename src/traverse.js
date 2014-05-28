@@ -33,15 +33,21 @@ _.fn(_.lists, 'only', function only(b, e) {
         );
     return new DOMxList(arr);
 });
+D.extend('all', function(prop, fn, inclusive, _list) {
+    if (fn === true){ inclusive = fn; fn = undefined; }
+    _list = _list || new DOMxList();
 
-D.extend('all', function(path, inclusive, _list) {
-    var list = _list || new DOMxList(),
-        el = inclusive ? this : this[path];
-    while (el) {
-        list.add(el);
-        el = _.isList(el) ? el.all(path, 0, list) && 0 : el[path];
+    var value = inclusive ? this : this[prop];
+    if (value) {
+        var result = fn && fn.call(this, value, _list);
+        if (result !== null) {
+            _list.add(result || value);
+        }
+        if (value.all && (value.length || !_.isList(value))) {
+            value.all(prop, fn, false, _list);
+        }
     }
-    return list;
+    return _list;
 }, [Node]);
 
 // ensure element.matches(selector) availability
