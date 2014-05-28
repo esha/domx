@@ -24,8 +24,8 @@
     module(".value");
 
     test("_.", function() {
-        equal(typeof _.get, "object", "_.get");
-        equal(typeof _.set, "object", "_.set");
+        equal(typeof _.get, "function", "_.get");
+        equal(typeof _.set, "function", "_.set");
     });
 
     test(".value presence", function() {
@@ -38,13 +38,6 @@
             ok(!desc.enumerable);
             ok(!desc.writable);
             ok(desc.configurable);
-        });
-    });
-
-    test("valueFor() presence", function() {
-        expect(_.nodes.length);
-        _.nodes.forEach(function(_class) {
-            ok(_class.prototype.valueFor, _class.name+'.prototype.valueFor');
         });
     });
 
