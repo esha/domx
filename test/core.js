@@ -45,7 +45,26 @@ Test assertions:
     });
 
     test("D.extend", function() {
+        expect(_.lists.length*2 + 7);
         equal(typeof D.extend, "function", "document.extend");
+
+        var fn = function() {
+            ok(!_.isList(this));
+            return new DOMxList(this);
+        };
+
+        D.extend('core_test', fn);
+        equal(Element.prototype.core_test, fn);
+        _.lists.forEach(function(_class) {
+            equal(typeof _class.prototype.core_test, "function");
+            equal(_class.prototype.core_test.name, 'listFn');
+        });
+
+        var ret = D.body.core_test();
+        equal(ret.length, 1);
+
+        ret = D.html.children.core_test();
+        equal(ret.length, 2);
     });
 
     test("each()", function() {
