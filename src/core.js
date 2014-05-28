@@ -12,7 +12,7 @@ window.DOMxList = function DOMxList(limit) {
 _ = {
     version: "<%= pkg.version %>",
     slice: Array.prototype.slice,
-    noop: function(){},
+    zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
     lists: [NodeList, HTMLCollection, DOMxList],
     isList: function(o) {
@@ -115,6 +115,7 @@ _.fn([DOMxList], {
     length: 0,
     limit: -1,
     add: function(item) {
+        var l = this.length;
         if (arguments.length > 1 || _.isList(item)) {
             var list = arguments.length > 1 ? arguments : item;
             for (var i=0,m=list.length; i<m; i++) {
@@ -123,10 +124,10 @@ _.fn([DOMxList], {
         } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
             this[this.length++] = item;
             if (this.length === this.limit) {
-                this.add = _.noop;
+                this.add = _.zero;
             }
         }
-        return this;
+        return this.length - l;
     },
     indexOf: function(item) {
         for (var i=0; i<this.length; i++) {

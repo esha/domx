@@ -91,11 +91,11 @@ Test assertions:
         equal(list[0], 1);
         equal(list[1], 2);
 
-        list.add([[3,4],5]);
+        equal(list.add([[3,4],5]), 3, "should add three");
         equal(list.length, 5);
 
-        equal(list.add(null), list, "fluent");
-        list.add(undefined);
+        equal(list.add(null), 0);
+        strictEqual(list.add(undefined), 0);
         equal(list.length, 5);
 
         equal(list.indexOf(1), 0);
@@ -103,7 +103,7 @@ Test assertions:
 
         list = new DOMxList();
         list.limit = 1;
-        list.add(1,2);
+        equal(list.add(1,2), 1, "should add just one");
         equal(list.length, 1);
         equal(list[1], undefined);
     });
