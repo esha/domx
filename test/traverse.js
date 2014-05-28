@@ -46,6 +46,13 @@ Test assertions:
         });
     });
 
+    test("except()", function() {
+        expect(_.lists.length);
+        _.lists.forEach(function(_class) {
+            ok(_class.prototype.except, _class.name+'.prototype.except');
+        });
+    });
+
     test("all()", function() {
         var set = _.lists.concat([Node]);
         expect(set.length);
@@ -147,6 +154,18 @@ Test assertions:
         equal(list.length, 2);
     });
 
+    module("except()");
+
+    test("except is inverse of only", function() {
+        var list = new DOMxList(D.createElement('div'),
+                                D.createElement('span'),
+                                D.createElement('span'));
+        deepEqual(list.except('div'), list.only('span'));
+        deepEqual(list.except(-1), list.only(0,2));
+        deepEqual(list.except(0,2), list.only(2));
+        deepEqual(list.except('tagName', 'SPAN'), list.only('tagName', 'DIV'));
+    });
+
     module('all()');
 
     test("parents", function() {
@@ -165,7 +184,7 @@ Test assertions:
         var gps = D.body.queryAll('aside,section');
         equal(gps.length, 2);
         var desc = gps.all('children');
-        equal(desc.length, 10);
+        equal(desc.length, gps.queryAll('*').length);
     });
 
     test("function ctx/args", function() {

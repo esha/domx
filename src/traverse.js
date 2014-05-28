@@ -16,23 +16,32 @@ _.fn(_.parents.concat(_.lists), {
     }
 });
 
-_.fn(_.lists, 'only', function only(b, e) {
-    var arr = this.toArray();
-    arr = b >= 0 || b < 0 ?
-        arr.slice(b, e || (b + 1) || undefined) :
-        arr.filter(
-            typeof b === "function" ?
-                b :
-                arguments.length === 1 ?
-                    function match(el) {
-                        return el[el.matches ? 'matches' : 'hasOwnProperty'](b);
-                    } :
-                    function eachVal(el) {
-                        return (el.each && el.each(b) || el[b]) === e;
-                    }
-        );
-    return new DOMxList(arr);
+_.fn(_.lists, {
+    only: function only(b, e) {
+        var arr = this.toArray();
+        arr = b >= 0 || b < 0 ?
+            arr.slice(b, e || (b + 1) || undefined) :
+            arr.filter(
+                typeof b === "function" ?
+                    b :
+                    arguments.length === 1 ?
+                        function match(n) {
+                            return n[n.matches ? 'matches' : 'hasOwnProperty'](b);
+                        } :
+                        function eachVal(n) {
+                            return (n.each && n.each(b) || n[b]) === e;
+                        }
+            );
+        return new DOMxList(arr);
+    },
+    except: function except() {
+        var exclude = this.only.apply(this, arguments);
+        return this.only(function(n) {
+            return exclude.indexOf(n) < 0;
+        });
+    }
 });
+
 D.extend('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
     _list = _list || new DOMxList();
