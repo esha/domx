@@ -46,10 +46,10 @@ Test assertions:
         });
     });
 
-    test("except()", function() {
+    test("not()", function() {
         expect(_.lists.length);
         _.lists.forEach(function(_class) {
-            ok(_class.prototype.except, _class.name+'.prototype.except');
+            ok(_class.prototype.not, _class.name+'.prototype.not');
         });
     });
 
@@ -154,16 +154,16 @@ Test assertions:
         equal(list.length, 2);
     });
 
-    module("except()");
+    module("not()");
 
-    test("except is inverse of only", function() {
+    test("not is inverse of only", function() {
         var list = new DOMxList(D.createElement('div'),
                                 D.createElement('span'),
                                 D.createElement('span'));
-        deepEqual(list.except('div'), list.only('span'));
-        deepEqual(list.except(-1), list.only(0,2));
-        deepEqual(list.except(0,2), list.only(2));
-        deepEqual(list.except('tagName', 'SPAN'), list.only('tagName', 'DIV'));
+        deepEqual(list.not('div'), list.only('span'));
+        deepEqual(list.not(-1), list.only(0,2));
+        deepEqual(list.not(0,2), list.only(2));
+        deepEqual(list.not('tagName', 'SPAN'), list.only('tagName', 'DIV'));
     });
 
     module('all()');

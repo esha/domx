@@ -34,7 +34,7 @@ _.fn(_.lists, {
             );
         return new DOMxList(arr);
     },
-    except: function except() {
+    not: function not() {
         var exclude = this.only.apply(this, arguments);
         return this.only(function(n) {
             return exclude.indexOf(n) < 0;
