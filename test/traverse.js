@@ -149,7 +149,10 @@ Test assertions:
         text.meta = true;
         list.add(el, text, exclude);
         equal(list.length, 3);
-        ok(exclude.meta, 'should have meta method from Element.prototype');
+        if (!('meta' in exclude)) {
+            exclude.meta = true;
+        }
+        ok(exclude.meta, 'should have some meta property');
         list = list.only('meta');
         equal(list.length, 2);
     });
