@@ -1,4 +1,4 @@
-/*! domx - v0.8.1 - 2014-05-13
+/*! domx - v0.8.1 - 2014-05-30
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -19,7 +19,7 @@ window.DOMxList = function DOMxList(limit) {
 _ = {
     version: "0.8.1",
     slice: Array.prototype.slice,
-    noop: function(){},
+    zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
     lists: [NodeList, HTMLCollection, DOMxList],
     isList: function(o) {
@@ -101,7 +101,7 @@ _.fn(_.nodes.concat(_.lists), {
         }
         return !results.length ? this : // no results, be fluent
             !_.isList(this) ? results[0] : // single source, single result
-            results[0].toArray ? new DOMxList(results) : // convert array to DOMx (and combine sub-lists)
+            results[0] && results[0].each ? new DOMxList(results) : // convert to DOMx (combines sub-lists)
             results;
     },
     toArray: function(arr) {
@@ -122,6 +122,7 @@ _.fn([DOMxList], {
     length: 0,
     limit: -1,
     add: function(item) {
+        var l = this.length;
         if (arguments.length > 1 || _.isList(item)) {
             var list = arguments.length > 1 ? arguments : item;
             for (var i=0,m=list.length; i<m; i++) {
@@ -130,10 +131,10 @@ _.fn([DOMxList], {
         } else if (item !== null && item !== undefined && this.indexOf(item) < 0) {
             this[this.length++] = item;
             if (this.length === this.limit) {
-                this.add = _.noop;
+                this.add = _.zero;
             }
         }
-        return this;
+        return this.length - l;
     },
     indexOf: function(item) {
         for (var i=0; i<this.length; i++) {
@@ -174,27 +175,47 @@ _.fn(_.parents.concat(_.lists), {
     }
 });
 
-_.fn(_.lists, 'only', function only(b, e) {
-    var arr = this.toArray(),
-        num = b >= 0 || b < 0,
-        solo = arguments.length === 1;
-    arr = num ? arr.slice(b, e || (b + 1) || undefined) :
-                arr.filter(
-                    typeof b === "function" ? b :
-                    solo ? function match(el){ return el.matches(b); } :
-                           function eachVal(el){ return el.each(b) === e; }
-                );
-    return num && solo ? arr[0] : new DOMxList(arr);
+_.fn(_.lists, {
+    only: function only(b, e) {
+        var arr = this.toArray();
+        arr = b >= 0 || b < 0 ?
+            arr.slice(b, e || (b + 1) || undefined) :
+            arr.filter(
+                typeof b === "function" ?
+                    b :
+                    arguments.length === 1 ?
+                        function match(n) {
+                            return n[n.matches ? 'matches' : 'hasOwnProperty'](b);
+                        } :
+                        function eachVal(n) {
+                            return (n.each && n.each(b) || n[b]) === e;
+                        }
+            );
+        return new DOMxList(arr);
+    },
+    not: function not() {
+        var exclude = this.only.apply(this, arguments);
+        return this.only(function(n) {
+            return exclude.indexOf(n) < 0;
+        });
+    }
 });
 
-D.extend('all', function(path, inclusive, _list) {
-    var list = _list || new DOMxList(),
-        el = inclusive ? this : this[path];
-    while (el) {
-        list.add(el);
-        el = _.isList(el) ? el.all(path, 0, list) && 0 : el[path];
+D.extend('all', function(prop, fn, inclusive, _list) {
+    if (fn === true){ inclusive = fn; fn = undefined; }
+    _list = _list || new DOMxList();
+
+    var value = inclusive ? this : this[prop];
+    if (value) {
+        var result = fn && fn.call(this, value, _list);
+        if (result !== null) {
+            _list.add(result || value);
+        }
+        if (value.all && (value.length || !_.isList(value))) {
+            value.all(prop, fn, false, _list);
+        }
     }
-    return list;
+    return _list;
 }, [Node]);
 
 // ensure element.matches(selector) availability
@@ -203,8 +224,8 @@ var Ep = Element.prototype,
 _.define(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
 // /traverse.js
 
-// alter.js
-var A = _.add = {
+// append.js
+var A = _.append = {
     create: function(node, tag, ref) {
         return A.insert(node, D.createElement(tag), ref);
     },
@@ -219,7 +240,7 @@ var A = _.add = {
     },
     find: function(node, ref) {
         switch (typeof ref) {
-            case "string": return node[ref+'Child'];
+            case "string": return node[ref] || node.only(ref);
             case "number": return node.children[ref];
             case "object": return ref;
             case "function": return ref.call(node, node);
@@ -227,14 +248,14 @@ var A = _.add = {
     }
 };
 
-D.extend('add', function(arg, ref) {
+D.extend('append', function(arg, ref) {
     if (typeof arg === "string") {// turn arg into an appendable
         return A.create(this, arg, ref);
     }
     if (_.isList(arg)) {// list of append-ables
         var list = new DOMxList();
         for (var i=0,m=arg.length; i<m; i++) {
-            list.add(this.add(arg[i], ref));
+            list.add(this.append(arg[i], ref));
         }
         return list;
     }
@@ -248,7 +269,7 @@ D.extend('remove', function() {
         parent.removeChild(this);
     }
 }, _.nodes);
-// /alter.js
+// /append.js
 
 _.fn(_.nodes, 'value', {
     get: function() {
@@ -318,7 +339,7 @@ var R = _.repeat = {
         parent.insertBefore(repeat, anchor);
         return repeat;
     },
-    style: D.head.add('style')
+    style: D.head.append('style')
 };
 
 D.extend('repeat', function repeat(val) {
@@ -350,7 +371,7 @@ D.addEventListener('DOMContentLoaded', function() {
 });
 
 // emmet.js
-var AE = _.add;
+var AE = _.append;
 AE.create = function(node, code, ref) {
     var parts = code.split(AE.emmetRE()),
         root = D.createDocumentFragment(),
@@ -413,45 +434,57 @@ AE.emmet = {
 };
 // /emmet.js
 
-// elements.js
-var E = _.elements = {
-    protos: [Element, DocumentFragment].concat(_.lists),
-    read: function(el) {
-        for (var i=0; el && i < el.children.length; i++) {
-            var child = el.children[i],
-                name = child.tagName.toLowerCase();
-            if (!(name in D.head)) {
-                E.fn(name, 'children', 'tagName', child.tagName);
-            }
-            E.read(child);// recurse down the tree
-        }
+// dot.js
+_.define(D, 'html', D.documentElement);
+var dot = _.dot = {
+    names: { 3: '$text', 8: '$comment', 7: '$procins' },
+    fns: {},
+    fn: function(type, name) {
+        return dot.fns[name] || (dot.fns[name] =
+            type === 1 ?
+                function elements() {
+                    return this.each('children').only(name).dot();
+                } :
+                function nodes() {
+                    return this.each('childNodes').only('nodeType', type);
+                }
+        );
     },
-    fn: function(name, set, prop, value) {
-        _.fn(E.protos, name, {
-            get: function nodes() {
-                return this.each(set).only(prop, value);
+    init: function() {
+        D.queryAll('[data-domx-dot]').each(function(el) {
+            el.dot(true);
+            if (Observer && !el._observer) {
+                (el._observer = new Observer(function(changes) {
+                    for (var i=0,m=changes.length; i<m; i++) {
+                        changes[i].target.dot(true);
+                    }
+                })).observe(el, { childList: true, subtree: true });
             }
         });
     }
-};
-E.fn('$text', 'childNodes', 'nodeType', 3);
-E.fn('$comment', 'childNodes', 'nodeType', 8);
+},
+Observer = window.MutationObserver;
 
-// early availability
-_.define(D, 'html', D.documentElement);
-E.read(D.head);
-E.read(D.body);
-// eventual consistency
-D.addEventListener('DOMContentLoaded', function() {
-    E.read(D.body);
-    if (window.MutationObserver) {
-        new MutationObserver(function(mutations) {
-            for (var i=0,m=mutations.length; i<m; i++) {
-                E.read(mutations[i].target);
+_.fn(_.parents.concat(_.lists), 'dot', function(force) {
+    var self = this;
+    if (force || !self._dotted) {
+        self.each('childNodes').each(function(node) {
+            var type = node.nodeType,
+                name = dot.names[type] || node.tagName.toLowerCase();
+            if (!(name in self)) {
+                _.define(self, name, { get: dot.fn(type, name) });
             }
-        }).observe(D.body, { childList: true, subtree: true });
+            if (type === 1) {
+                node.dot();
+            }
+        });
+        _.define(self, '_dotted', true);
     }
+    return self;
 });
-// /elements.js
+
+dot.init();// early availability
+D.addEventListener('DOMContentLoaded', dot.init);// eventual consistency
+// /dot.js
 
 })(document);

@@ -1,4 +1,4 @@
-/*! domx - v0.8.1 - 2014-05-13
+/*! domx - v0.8.1 - 2014-05-30
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -37,7 +37,7 @@ var R = _.repeat = {
         parent.insertBefore(repeat, anchor);
         return repeat;
     },
-    style: D.head.add('style')
+    style: D.head.append('style')
 };
 
 D.extend('repeat', function repeat(val) {

@@ -26,7 +26,7 @@ module.exports = function(grunt) {
               'src/value.js',
               'src/repeat.js',
               'src/emmet.js',
-              'src/elements.js'],
+              'src/dot.js'],
         dest: 'dist/<%= pkg.name %>.js'
       },
       base: {
@@ -50,12 +50,12 @@ module.exports = function(grunt) {
         src: ['src/emmet.js'],
         dest: 'dist/<%= pkg.name %>.emmet.js'
       },
-      elements: {
+      dot: {
         options: {
           frame: 'src/plugin-frame.js',
         },
-        src: ['src/elements.js'],
-        dest: 'dist/<%= pkg.name %>.elements.js'
+        src: ['src/dot.js'],
+        dest: 'dist/<%= pkg.name %>.dot.js'
       },
       stringify: {
         options: {

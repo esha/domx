@@ -1,4 +1,4 @@
-/*! domx - v0.8.1 - 2014-05-13
+/*! domx - v0.8.1 - 2014-05-30
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -6,7 +6,7 @@
     "use strict";
 
 // emmet.js
-var AE = _.add;
+var AE = _.append;
 AE.create = function(node, code, ref) {
     var parts = code.split(AE.emmetRE()),
         root = D.createDocumentFragment(),
