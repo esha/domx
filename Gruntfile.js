@@ -31,24 +31,18 @@ module.exports = function(grunt) {
       },
       base: {
         src: ['src/core.js',
-              'src/traverse.js',
-              'src/append.js',
-              'src/value.js'],
+              'src/traverse.js'],
         dest: 'dist/<%= pkg.name %>.base.js'
       },
-      repeat: {
+      edit: {
         options: {
           frame: 'src/plugin-frame.js',
         },
-        src: ['src/repeat.js'],
-        dest: 'dist/<%= pkg.name %>.repeat.js'
-      },
-      emmet: {
-        options: {
-          frame: 'src/plugin-frame.js',
-        },
-        src: ['src/emmet.js'],
-        dest: 'dist/<%= pkg.name %>.emmet.js'
+        src: ['src/append.js',
+              'src/emmet.js',
+              'src/value.js',
+              'src/repeat.js'],
+        dest: 'dist/<%= pkg.name %>.edit.js'
       },
       dot: {
         options: {
