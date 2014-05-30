@@ -33,28 +33,28 @@
   <div class="content">
     <div class="wrapper">
       <div class="info">
-        <p>DOMx is a lightweight, powerful way for you to enjoy working directly with the DOM. &nbsp; <a class="download" href="https://rawgit.com/esha/domx/master/dist/domx.min.js.gz">domx.min.js (~2.5kb, gzip)</a></p>
+        <p>DOMx is the empowering way to traverse, manipulate, and extend the DOM. &nbsp; <a class="download" href="https://rawgit.com/esha/domx/master/dist/domx.min.js.gz">domx.min.js (~3.5kb, gzip)</a></p>
 
       </div>
       <div class="banner columns">
-        <div class="half">
+        <!--div class="half">
           <a name="Demo"><h3>Input</h3></a>
           <textarea id="input" wrap="off" title="Type 'restart' to reset the demo."></textarea>
         </div><div class="half">
           <h3>Output</h3>
           <div id="output"><iframe src="iframe.html"></iframe></div>
         </div>
-      </div>
+      </div-->
       <div class="features columns">
         <div class="third">
           <h3>Powerful</h3>
-          <p>DOMx empowers use of <em>all</em> native DOM features with brevity, clarity, and more power than ever.</p>
+          <p>DOMx enables use of <em>all</em> native DOM features to traverse and manipulate with ease, clarity, and power.</p>
         </div><div class="third">
-          <h3>Intuitive</h3>
-          <p>DOMx builds on the native DOM so you can navigate, manipulate, and <em>use</em> the DOM with readable, consistent code.</p>
+          <h3>Consistent</h3>
+          <p>DOMx embraces DOM standards rather than create yet-another-API. Our simple utility functions augment native features, <em>without recreating or obscuring</em> them.</p>
         </div><div class="third">
           <h3>Extensible</h3>
-          <p>DOMx provides the means for you to easily and <em>correctly</em> extend the DOM.</p>
+          <p>DOMx empowers developers to easily, safely, and <em>correctly</em> extend the DOM.</p>
         </div>
       </div>
       <div class="info">
@@ -72,7 +72,7 @@ window.$ = document.queryAll.bind(document);
           <p>or, you can do what i do and alias <code>document</code> to <code>D</code> in the <a href="http://en.wikipedia.org/wiki/Immediately-invoked_function_expression">IIFE</a> wrapping your code:</p>
           <pre class="example">
 (function(D) {
-  D.body.classList.add('hooray');
+  D.body.classList.append('hooray');
   ...
 }(document));
 </pre>
@@ -148,17 +148,58 @@ document.body.each('classList.toggle', 'ready');// each works on both single ele
           <pre class="example">
 var items = document.queryAll('.items'); // all items
 
-items.only('.highlighted'); // subset that matches selector
+items.only(':nth-child(even)'); // subset that matches selector
 
 items.only(3).textContent = "Fourth item!"; // index (special case, returns single element)
 
 items.only(-1).id = 'last'; // negative index works too
 
-items.only(function(o,i){ return !(i%2); }); // filter function returns even elements
+items.only(function(el,i){ return el.id.indexOf(i) > 0; }); // arbitrary filter function
 
-items.only(3, 9).each('add', 'button');// specific slice of elements
+items.only(3, 9);// specific slice of elements
 
 items.only('tagName', 'DIV');// only &lt;div class="item"&gt; elements
+</pre>
+        </article>
+        <article>
+          <h4><a name="not()">not</a>(<span class="variable">selector|index|filter|slice|property</span> <span class="variable optional">, endSlice|value</span>) <span class="since">0.9.0</span></h4>
+          <p>This exactly reverses the behavior of <a href="#only()">only()</a>.</p>
+          <pre class="example">
+var items = document.queryAll('.items'); // all items
+
+items.not(':nth-child(even)'); // subset that does not match the selector
+
+items.not(3).each('textContent') = "Not the fourth!"; // returns all items except the fourth one
+
+items.not(-1).each('id') = 'not last'; // negative index works too
+
+items.not(function(el, i){ return el.id.indexOf(i) > 0; }); // all items whose ids do not contain their index
+
+items.not(3, 9);// all items outside the specified slice
+
+items.not('tagName', 'DIV');// all items that are not &lt;div&gt; elements
+</pre>
+        </article>
+        <article>
+          <h4><a name="all()">all</a>(<span class="variable">property</span> <span class="variable optional">, function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.9.0</span></h4>
+          <p>This function accumulates (and optionally acts upon) nodes recursively via the specified property. Beginning with the node(s) this is called upon, <code>all()</code> resolves the property then calls itself upon the result, gather each node or nodes found along the way. You may optionally provide a function to act on the nodes as <code>all()</code> travels the DOM tree. This function could also affect what nodes are gathered by what it returns. Also, you may optionally include the current node(s) as the first, rather than beginning with the resolved property.</p>
+          <p>When using a function:
+           <ul>
+             <li>The context of the function will be the node currently having the property resolved against it.</li>
+             <li>The function will receive as arguments, the resolved value for the current node and the list of accumulated nodes/values.</li>
+             <li>Returning <code>undefined</code> will not affect the accumulated list of nodes</li>
+             <li>Returning <code>null</code> will cause the "next" value (i.e. the current first arg) to be left out of the list</li>
+             <li>Returning anything else will cause the returned value to be put in the list instead of the "next" value</li>
+          </ul></p>
+          <p>This is a very powerful utility for selecting and/or acting upon well-defined, but often unwieldy properties of the DOM tree.</p>
+          <pre class="example">
+var focused = focusEvent.target.all('parentElement', true); // gets list of all elements containing the focus
+
+var active = document.query('td.active');
+active.all('nextElementSibling').each('classList.add', 'next');// mark all subsequent cells in the row
+active.all('previousElementSibling', function(previousElementSibling, all) {
+  this.classList.remove('next');
+}, true);// uses a function instead of each, and includes self
 </pre>
         </article>
         <article>
@@ -176,40 +217,61 @@ items.toArray(elArr);// will append all .item elements to the existing array
 </pre>
         </article>
         <article>
-          <h4><a name="dot-traversal">element.<span class="variable">tagName...</span></a> <span class="since">0.7.0</span></h4>
-          <p>DOMx allows you to access child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it searches only immediate children
-          and not all descendant elements. The dot-traversal properties always return a list of matching elements.</p>
+          <h4><a name="dot()">dot()</a> and <a name="data-domx-dot">[data-domx-dot]</a> <span class="since">0.9.0</span></h4>
+          <p>Turns on <a href="#dot-traversal">dot traversal</a> properties for the target element (or list) and all descendant elements.</p>
           <pre class="example">
-document.body.header; // returns a list containing only header element that are children of document.body
-document.body.header.each("textContent", "A Better Header!");
+document.body.dot(); // activates dot-traversal for all elements in the document body
+</pre>
+          <pre class="example">
+&lt;body data-domx-dot&gt;
+  &lt;!-- a comment --&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    This is the rest of the header.
+  &lt;/header&gt;
+  ...
+&lt;/body&gt;
 </pre>
         </article>
         <article>
-          <h4><a name="add()">add</a>(<span class="variable">name|Node|list</span>) <span class="since">0.7.0</span></h4>
-          <p>This automatically adds the specified tag or node (or list thereof) to the element(s) on which it was called.</p>
+          <h4><a name="dot-traversal">element.<span class="variable">tagName...</span></a> <span class="since">0.7.0</span></h4>
+          <p>DOMx allows you <a href="#dot()">to turn on</a> access to child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it searches only immediate children and not all descendant elements. The dot-traversal properties <em>always</em> return a list of matching elements.</p>
+          <p>This should <em>NOT</em> be used for long chains, both for performance and robustness issues. This is designed to be a powerful convenience feature for
+          small, stable DOM structures (think <code>ul.li</code>, <code>select.option</code>, and such) that have dot-traversal intentionally enabled on them.</p>
           <pre class="example">
-document.body.add('div'); // returns a newly added div element
+document.body.header; // returns a list containing only header element that are children of document.body
+document.body.header.h1; // returns a list of h1 elements that are children of header elements that are children of document.body
+document.body.header.h1[0].textContent = "A Better Title!";
+document.body.$text; // returns list of all text nodes that are children of the body
+document.body.$comment; // returns list of all comment nodes that are children of the body
+</pre>
+        </article>
+        <article>
+          <h4><a name="append()">append</a>(<span class="variable">name|Node|list</span>) <span class="since">0.7.0</span></h4>
+          <p>This automatically appends the specified tag or node (or list thereof) to the element(s) on which it was called.</p>
+          <pre class="example">
+document.body.append('div'); // returns a newly added div element
 
-document.body.add('div').add('h1'); // returns the new h1 element (with div parent)
+document.body.append('div').append('h1'); // returns the new h1 element (with div parent)
 
 var script = document.createElement('script');
 script.src = '/mylib.js';
-document.head.add(script);
+document.head.append(script);
 
-document.body.add([node1, node2, [ul1, ul2]]); // yummy recursive adding
+document.body.append([node1, node2, [ul1, ul2]]); // yummy recursive append
 </pre>
         </article>
         <article>
-          <h4><a name="add(emmet)">add</a>('<span class="variable">emmet-abbr</span>') <span class="since">0.7.0</span></h4>
+          <h4><a name="append(emmet)">append</a>('<span class="variable">emmet-abbr</span>') <span class="since">0.7.0</span></h4>
           <p>The standard document.js artifact comes with the "emmet" extension, which lets you use
-          <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> to add elements to the DOM.
+          <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> to append elements to the DOM.
           This extension supports most emmet features, except grouping and numbering. Those may be added later.</p>
           <pre class="example">
-document.body.add('ul>li{list item text}*10');
+document.body.append('ul>li{list item text}*10');
 
 //Use in conjuction with only
-document.body.add('ul>li{item}*10')
-  .only(function(li,i){ return i%2; })
+document.body.append('ul>li{item}*10')
+  .only(':nth-child(odd)')
   .each('classList.add','odd');
 </pre>
         </article>
@@ -264,7 +326,7 @@ document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;H
         <p>Yes, of course. Don't do that. Use <code>query()</code> and <code>queryAll()</code> when doing "whole page" work. Dot-traversal is best for small, well-defined node structures, like getting the <code>&lt;li&gt;</code> elements in a <code>&lt;ul&gt;</code>.</p>
         <p class="question">Functions that return either elements or arrays are bad. I saw it get ugly once!</p>
         <p class="question">Hey, this is just like <a href="http://nbubna.github.io/HTML">HTML.js</a>...</p>
-        <p>Yep, same author, similar concepts, better implementation.</p>
+        <p>Yep, same author, similar concepts, better implementation. Consider it the official successor, with a better name than "HTML.js 2.0".</p>
         <p class="question">I have a suggestion, where do I put it?</p>
         <p>I do a happy dance when you <a href="http://github.com/esha/domx">create an issue on Github.</a></p>
       </div>
