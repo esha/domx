@@ -2,7 +2,7 @@
   "name": "domx",
   "repo": "esha/domx",
   "description": "An intuitive, extensible way to work directly with the DOM.",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "keywords": [
     "HTML",
     "DOM",
@@ -12,7 +12,7 @@
     "better",
     "befriend",
     "query",
-    "element",
+    "dot",
     "emmet",
     "repeat",
     "native"
@@ -23,7 +23,6 @@
   "main": "src/component.js",
   "scripts": [
     "src/component.js",
-    "dist/domx.event.js",
     "dist/domx.js"
   ]
 }

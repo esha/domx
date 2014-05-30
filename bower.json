@@ -1,6 +1,6 @@
 {
     "name": "domx",
-    "version": "0.8.1",
+    "version": "0.9.0",
     "main": "dist/domx.min.js",
     "description": "An intuitive, extensible way to work directly with the DOM.",
     "keywords": [
@@ -14,7 +14,7 @@
         "extend",
         "native",
         "repeat",
-        "element"
+        "dot"
     ],
     "author": {
         "name": "ESHA Research",
