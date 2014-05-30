@@ -177,9 +177,10 @@ Test assertions:
         equal(parents.length, 4);
     });
 
-    test("nextElementSibling, inclusive", function() {
+    test("next[ElementSibling], inclusive", function() {
+        _.resolve.next = 'nextElementSibling';
         var div = D.query('#first'),
-            siblings = div.all('nextElementSibling', true);
+            siblings = div.all('next', true);
         equal(siblings.length, 5);
     });
 
