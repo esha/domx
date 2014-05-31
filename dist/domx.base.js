@@ -1,4 +1,4 @@
-/*! domx - v0.9.0 - 2014-05-30
+/*! domx - v0.9.1 - 2014-05-30
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -17,7 +17,7 @@ window.DOMxList = function DOMxList(limit) {
 
 // expose utilities
 _ = {
-    version: "0.9.0",
+    version: "0.9.1",
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
@@ -205,7 +205,7 @@ D.extend('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
     _list = _list || new DOMxList();
 
-    var value = inclusive ? this : this[prop];
+    var value = inclusive ? this : this[_.resolve[prop] || prop];
     if (value) {
         var result = fn && fn.call(this, value, _list);
         if (result !== null) {
