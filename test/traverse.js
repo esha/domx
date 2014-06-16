@@ -229,5 +229,28 @@ Test assertions:
         deepEqual(returnNode, allFirstText);
     });
 
+    module('utmost');
+
+    test("utmost(parent*)", function() {
+        var div = D.query('#first');
+        equal(document.documentElement, div.utmost('parentElement'));
+        equal(document, div.utmost('parentNode'));
+    });
+
+    test("utmost(alias)", function() {
+        var div = D.query('#first');
+        _.resolve.previous = 'previousElementSibling';
+        _.resolve.next = 'nextElementSibling';
+        equal(null, div.utmost('previous'));
+        equal(D.query('#last'), div.utmost('next'));
+        delete _.resolve.previous;
+        delete _.resolve.next;
+    });
+
+    test("utmost(undefined)", function() {
+        var div = D.query('#first');
+        equal(undefined, div.utmost('whatever'));
+    });
+
 }(document));
 

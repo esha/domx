@@ -42,6 +42,13 @@ _.fn(_.lists, {
     }
 });
 
+_.fn(_.nodes, 'utmost', function(prop, _penultimate) {
+    var value = this[_.resolve[prop] || prop];
+    return value === null || value === undefined ?
+        _penultimate || value :
+        value.utmost ? value.utmost(prop, value) : value;
+});
+
 D.extend('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
     _list = _list || new DOMxList();
