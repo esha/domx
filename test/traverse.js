@@ -185,7 +185,7 @@ Test assertions:
     });
 
     test("children, on multiple", function() {
-        var gps = D.body.queryAll('aside,section');
+        var gps = D.getElementById('qunit-fixture').queryAll('aside,section');
         equal(gps.length, 2);
         var desc = gps.all('children');
         equal(desc.length, gps.queryAll('*').length);
