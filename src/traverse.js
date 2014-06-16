@@ -29,7 +29,7 @@ _.fn(_.lists, {
                             return n[n.matches ? 'matches' : 'hasOwnProperty'](b);
                         } :
                         function eachVal(n) {
-                            return (n.each && n.each(b) || n[b]) === e;
+                            return (n.each ? n.each(b) : n[b]) === e;
                         }
             );
         return new DOMxList(arr);
