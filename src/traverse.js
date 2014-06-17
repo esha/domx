@@ -42,11 +42,13 @@ _.fn(_.lists, {
     }
 });
 
-_.fn(_.nodes, 'utmost', function(prop, _penultimate) {
-    var value = this[_.resolve[prop] || prop];
-    return value === null || value === undefined ?
-        _penultimate || value :
-        value.utmost ? value.utmost(prop, value) : value;
+_.utmost = function(node, prop, previous) {
+    return node && (node = node[prop]) ?
+        _.utmost(node, prop, node) :
+        previous || node;
+};
+_.fn(_.nodes, 'utmost', function(prop) {
+    return _.utmost(this, _.resolve[prop] || prop);
 });
 
 D.extend('all', function(prop, fn, inclusive, _list) {
