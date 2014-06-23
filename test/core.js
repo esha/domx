@@ -45,7 +45,7 @@ Test assertions:
     });
 
     test("D.extend", function() {
-        expect(_.lists.length*2 + 7);
+        expect(_.lists.length*2 + 9);
         equal(typeof D.extend, "function", "document.extend");
 
         var fn = function() {
@@ -65,6 +65,10 @@ Test assertions:
 
         ret = D.html.children.core_test();
         equal(ret.length, 2);
+
+        D.extend('core_test', function(){ return true; }, true);
+        strictEqual(D.body.core_test(), true, 'overridden core_test');
+        deepEqual(D.html.children.core_test(), [true,true], 'overridden core_test');
     });
 
     test("each()", function() {
