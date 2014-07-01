@@ -1,6 +1,6 @@
 // traverse.js
 _.parents = [Element, DocumentFragment, D];
-_.fn(_.parents.concat(_.lists), {
+_.define(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
             list = new DOMxList(count);
@@ -16,7 +16,7 @@ _.fn(_.parents.concat(_.lists), {
     }
 });
 
-_.fn(_.lists, {
+_.define(_.lists, {
     only: function only(b, e) {
         var arr = this.toArray();
         arr = b >= 0 || b < 0 ?
@@ -47,7 +47,7 @@ _.utmost = function(node, prop, previous) {
         _.utmost(node, prop, node) :
         previous || node;
 };
-_.fn(_.nodes, 'utmost', function(prop) {
+_.define(_.nodes, 'utmost', function(prop) {
     return _.utmost(this, _.resolve[prop] || prop);
 });
 
@@ -71,5 +71,5 @@ D.extend('all', function(prop, fn, inclusive, _list) {
 // ensure element.matches(selector) availability
 var Ep = Element.prototype,
     aS = 'atchesSelector';
-_.define(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
+_.defprop(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
 // /traverse.js

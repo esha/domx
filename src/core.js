@@ -20,18 +20,18 @@ _ = {
                o instanceof NodeList ||// phantomjs foolishly calls these functions
                o instanceof HTMLCollection;
     },
-    fn: function(targets, name, value, force) {
+    define: function(targets, name, value, force) {
         if (typeof name === "string") {
             for (var i=0,m=targets.length; i<m; i++) {
-                _.define(targets[i].prototype || targets[i], name, value, force);
+                _.defprop(targets[i].prototype || targets[i], name, value, force);
             }
         } else {
             for (var key in name) {// name is key/val object, value is force
-                _.fn(targets, key, name[key], value);
+                _.define(targets, key, name[key], value);
             }
         }
     },
-    define: function(o, key, val, force) {
+    defprop: function(o, key, val, force) {
         if (force || !(key in o)) { try {// never redefine, never fail
             var opts = val.get || val.set ? val : {value:val, writable:true};
             opts.configurable = true;
@@ -73,10 +73,10 @@ _ = {
         return ret;
     }
 };
-_.define(D, '_', _);
+_.defprop(D, '_', _);
 
 // define foundation on Node and lists
-_.fn([Node].concat(_.lists), {
+_.define([Node].concat(_.lists), {
     each: function(fn) {
         var self = _.isList(this) ? this : [this],
             results = [],
@@ -111,7 +111,7 @@ _.fn([Node].concat(_.lists), {
 });
 
 // define DOMxList functions
-_.fn([DOMxList], {
+_.define([DOMxList], {
     length: 0,
     limit: -1,
     add: function(item) {
@@ -139,13 +139,13 @@ _.fn([DOMxList], {
     }
 });
 
-_.define(D, 'extend', function(name, fn, singles, force) {
+_.defprop(D, 'extend', function(name, fn, singles, force) {
     if (!Array.isArray(singles)) {
         force = singles;
         singles = [Element];
     }
-    _.fn(singles, name, fn, force);
-    _.fn(_.lists, name, function listFn() {
+    _.define(singles, name, fn, force);
+    _.define(_.lists, name, function listFn() {
         var args = arguments;
         return this.each(function eachFn() {
             return fn.apply(this, args);

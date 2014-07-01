@@ -38,8 +38,8 @@ Test assertions:
         equal(typeof _.isList, "function", "_.isList");
         equal(Array.isArray(_.lists), true, "_.lists");
         equal(Array.isArray(_.nodes), true, "_.nodes");
-        equal(typeof _.fn, "function", "_.fn");
         equal(typeof _.define, "function", "_.define");
+        equal(typeof _.defprop, "function", "_.defprop");
         equal(typeof _.resolve, "function", "_.resolve");
         equal(typeof _.fill, "function", "_.fill");
     });
@@ -131,12 +131,12 @@ Test assertions:
         equal(list[1], undefined);
     });
 
-    test("_.define", function() {
+    test("_.defprop", function() {
         var o = {has:true};
-        _.define(o, 'has', false);
+        _.defprop(o, 'has', false);
         equal(o.has, true, 'should not redefine existing properties');
 
-        _.define(o, 'one', 1);
+        _.defprop(o, 'one', 1);
         strictEqual(o.one, 1);
         ok(o.hasOwnProperty('one'));
 
@@ -144,7 +144,7 @@ Test assertions:
         equal(o.one, undefined, 'should be configurable');
 
         var count = 0;
-        _.define(o, 'getter', {get: function(){ return count++; }});
+        _.defprop(o, 'getter', {get: function(){ return count++; }});
         equal(o.getter, 0);
         equal(o.getter, 1);
 

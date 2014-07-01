@@ -4,7 +4,7 @@
     var _ = D._,
     E = _.elements = {
         define: function(name) {
-            _.fn(name, {
+            _.define(name, {
                 get: function elements() {
                     return this.each('children').only('tagName.toLowerCase', name);
                 }
@@ -26,7 +26,7 @@
     'table caption tr th td tbody thead tfoot col colgroup form fieldset legend label';
     l.split(' ').forEach(E.define);
 
-    _.fn('$text', { get: E.byType(3) });
-    _.fn('$comment', { get: E.byType(8) });
+    _.define('$text', { get: E.byType(3) });
+    _.define('$comment', { get: E.byType(8) });
 
 })(document);

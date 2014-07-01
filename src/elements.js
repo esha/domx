@@ -12,7 +12,7 @@ var E = _.elements = {
         }
     },
     fn: function(name, set, prop, value) {
-        _.fn(E.protos, name, {
+        _.define(E.protos, name, {
             get: function nodes() {
                 return this.each(set).only(prop, value);
             }
@@ -23,7 +23,7 @@ E.fn('$text', 'childNodes', 'nodeType', 3);
 E.fn('$comment', 'childNodes', 'nodeType', 8);
 
 // early availability
-_.define(D, 'html', D.documentElement);
+_.defprop(D, 'html', D.documentElement);
 E.read(D.head);
 E.read(D.body);
 // eventual consistency
