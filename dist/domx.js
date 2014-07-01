@@ -1,4 +1,4 @@
-/*! domx - v0.9.1 - 2014-05-30
+/*! domx - v0.9.1 - 2014-06-30
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -27,19 +27,19 @@ _ = {
                o instanceof NodeList ||// phantomjs foolishly calls these functions
                o instanceof HTMLCollection;
     },
-    fn: function(targets, name, value) {
+    define: function(targets, name, value, force) {
         if (typeof name === "string") {
             for (var i=0,m=targets.length; i<m; i++) {
-                _.define(targets[i].prototype || targets[i], name, value);
+                _.defprop(targets[i].prototype || targets[i], name, value, force);
             }
         } else {
-            for (var key in name) {// name must be a key/val object
-                _.fn(targets, key, name[key]);
+            for (var key in name) {// name is key/val object, value is force
+                _.define(targets, key, name[key], value);
             }
         }
     },
-    define: function(o, key, val) {
-        if (!(key in o)) { try {// never redefine, never fail
+    defprop: function(o, key, val, force) {
+        if (force || !(key in o)) { try {// never redefine, never fail
             var opts = val.get || val.set ? val : {value:val, writable:true};
             opts.configurable = true;
             Object.defineProperty(o, key, opts);
@@ -80,10 +80,10 @@ _ = {
         return ret;
     }
 };
-_.define(D, '_', _);
+_.defprop(D, '_', _);
 
-// define foundation on nodes and lists
-_.fn(_.nodes.concat(_.lists), {
+// define foundation on Node and lists
+_.define([Node].concat(_.lists), {
     each: function(fn) {
         var self = _.isList(this) ? this : [this],
             results = [],
@@ -118,7 +118,7 @@ _.fn(_.nodes.concat(_.lists), {
 });
 
 // define DOMxList functions
-_.fn([DOMxList], {
+_.define([DOMxList], {
     length: 0,
     limit: -1,
     add: function(item) {
@@ -146,20 +146,24 @@ _.fn([DOMxList], {
     }
 });
 
-_.define(D, 'extend', function(name, fn, singles) {
-    _.fn(singles || [Element], name, fn);
-    _.fn(_.lists, name, function listFn() {
+_.defprop(D, 'extend', function(name, fn, singles, force) {
+    if (!Array.isArray(singles)) {
+        force = singles;
+        singles = [Element];
+    }
+    _.define(singles, name, fn, force);
+    _.define(_.lists, name, function listFn() {
         var args = arguments;
         return this.each(function eachFn() {
             return fn.apply(this, args);
         });
-    });
+    }, force);
 });
 // /core.js
 
 // traverse.js
 _.parents = [Element, DocumentFragment, D];
-_.fn(_.parents.concat(_.lists), {
+_.define(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
             list = new DOMxList(count);
@@ -175,7 +179,7 @@ _.fn(_.parents.concat(_.lists), {
     }
 });
 
-_.fn(_.lists, {
+_.define(_.lists, {
     only: function only(b, e) {
         var arr = this.toArray();
         arr = b >= 0 || b < 0 ?
@@ -188,7 +192,7 @@ _.fn(_.lists, {
                             return n[n.matches ? 'matches' : 'hasOwnProperty'](b);
                         } :
                         function eachVal(n) {
-                            return (n.each && n.each(b) || n[b]) === e;
+                            return (n.each ? n.each(b) : n[b]) === e;
                         }
             );
         return new DOMxList(arr);
@@ -199,6 +203,15 @@ _.fn(_.lists, {
             return exclude.indexOf(n) < 0;
         });
     }
+});
+
+_.utmost = function(node, prop, previous) {
+    return node && (node = node[prop]) ?
+        _.utmost(node, prop, node) :
+        previous || node;
+};
+_.define(_.nodes, 'utmost', function(prop) {
+    return _.utmost(this, _.resolve[prop] || prop);
 });
 
 D.extend('all', function(prop, fn, inclusive, _list) {
@@ -221,7 +234,7 @@ D.extend('all', function(prop, fn, inclusive, _list) {
 // ensure element.matches(selector) availability
 var Ep = Element.prototype,
     aS = 'atchesSelector';
-_.define(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
+_.defprop(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
 // /traverse.js
 
 // append.js
@@ -271,42 +284,328 @@ D.extend('remove', function() {
 }, _.nodes);
 // /append.js
 
-_.fn(_.nodes, 'value', {
-    get: function() {
-        var value = (_.get[this.tagName] || _.get).call(this, this);
-        if (value) {
-            try{ value = JSON.parse(value); }catch(e){}
+var V = _.values = {
+    /*jshint evil:true */
+    resolve: function(context, reference) {
+        return eval('context'+(reference.charAt(0) !== '[' ? '.'+reference : reference));
+    },
+    parse: function(value) {
+        if (typeof value === "string") {
+            try {
+                value = JSON.parse(value);
+            } catch (e) {}
+        } else if (Array.isArray(value)) {
+            value = value.map(V.parse);
         }
         return value;
     },
-    set: function(value) {
-        if (value && typeof value !== "string") {
-            try{ value = JSON.stringify(value); }catch(e){}
+    string: function(value) {
+        if (value !== undefined && typeof value !== "string") {
+            try {
+                value = JSON.stringify(value);
+            } catch (e) {
+                value = value+'';
+            }
         }
-        return (_.set[this.tagName] || _.set).call(this, this, value);
+        return value;
+    },
+    nameNodes: function(parent, nameFn, possibleParentFn, attrFn) {
+        var done = [];
+        for (var i=0; i<parent.childNodes.length; i++) {
+            var node = parent.childNodes[i],
+                name = node.name,
+                nodeValue = null;
+            if (name && done.indexOf(node) < 0) {
+                done.push(node);
+                nodeValue = nameFn(name, node);
+            } else if (possibleParentFn && !node.useSimpleValue()) {
+                possibleParentFn(node);
+            }
+            if (node.useAttrValues) {
+                for (var a=0; a < node.attributes.length; a++) {
+                    attrFn(node.attributes[a], nodeValue);
+                }
+            }
+        }
+    },
+    combine: function(oldValue, newValue) {
+        if (oldValue === undefined || oldValue === newValue) {
+            return newValue;
+        }
+        if (Array.isArray(oldValue)) {
+            if (oldValue.indexOf(newValue) < 0) {
+                oldValue.push(newValue);
+            }
+            return oldValue;
+        }
+        return [oldValue, newValue];
+    },
+    getNameValue: function(parent, value) {
+        V.nameNodes(parent, function(name, node) {
+            return value[name] = V.combine(value[name], node.nameValue);
+        }, function(possibleParent) {
+            V.getNameValue(possibleParent, value);
+        }, function(attr, nodeValue) {
+            var val = nodeValue || value;
+            val[attr.name] = attr.simpleValue;
+        });
+        return value;
+    },
+    setNameValue: function(parent, values) {
+        V.nameNodes(parent, function(name, node) {
+            var value = V.resolve(values, name);
+            if (value !== undefined) {
+                return node.nameValue = value;
+            }
+        }, function(possibleParent) {
+            V.setNameValue(possibleParent, values);
+        }, function(attr, node, elValues) {
+            var value = V.resolve(elValues || values, attr.name);
+            if (value !== undefined) {
+                attr.simpleValue = value;
+            }
+        });
+    },
+    booleanAttr: function(attr) {
+        return {
+            get: function() {
+                return this.hasAttribute(attr);
+            },
+            set: function(value) {
+                this[value ? 'setAttribute' : 'removeAttribute'](attr, true);
+            }
+        };
+    },
+    nameRE: /\$\{([^}]+)\}/
+};
+
+_.define([Node], {
+    value: {
+        get: function() {
+            return this.hasAttribute && this.hasAttribute('value') ?
+                this.getAttribute('value') :
+                this.textContent;
+        },
+        set: function(value) {
+            if (this.hasAttribute && this.hasAttribute('value')) {
+                this.setAttribute('value', value);
+            } else {
+                this.textContent = value;
+            }
+        }
+    },
+    simpleValue:  {
+        get: function(){ return V.parse(this.value); },
+        set: function(value){ this.value = V.string(value); }
+    },
+    useSimpleValue: function() {
+        var kids = !this.noValues && this.childNodes.length;
+        return !kids || (kids === 1 && !!this.childNodes[0].useSimpleValue());
+    },
+    fullValue: {
+        get: function() {
+            return this.useSimpleValue() ? this.simpleValue : V.getNameValue(this, {});
+        },
+        set: function(value) {
+            if (this.useSimpleValue() || typeof value !== "object") {
+                this.simpleValue = value;
+            } else {
+                V.setNameValue(this, value);
+            }
+        }
+    },
+    nameParent: {
+        get: function() {
+            var node = this,
+                parent;
+            while ((parent = node.parentNode)) {
+                if (parent.name) {
+                    return parent;
+                }
+                node = parent;
+            }
+            return node === this ? null : node;
+        }
+    },
+    nameGroup: {
+        get: function() {
+            var el = this,
+                name = el.name;
+            return name ? el.parentNode ?
+                el.nameParent.queryNameAll(name) :
+                new DOMxList(el) :
+                null;
+        }
+    },
+    nameValue: {
+        get: function() {
+            var values;
+            if (this.name) {
+                this.nameGroup.each(function(node) {
+                    values = V.combine(values, node.fullValue);
+                });
+            }
+            return values || this.fullValue;
+        },
+        set: function(values) {
+            if (this.name && Array.isArray(values)) {
+                this.nameGroup.each(function(node, i) {
+                    node.nameValue = values[i];
+                    //TODO: declarative opts for repeat/remove when sizes mismatch?
+                });
+            } else {
+                this.fullValue = values;
+            }
+        }
     }
 });
-_.get = function(node) {
-    return node.nodeValue ||
-        (node.hasAttribute && node.hasAttribute('value') ?
-            node.getAttribute('value') :
-            (node.children && node.children.length ?
-                node.innerHTML :
-                node.textContent
-            )
-        );
-};
-_.set = function(node, value) {
-    if (!node.hasAttribute) {
-        node.nodeValue = value;
-    } else if (node.hasAttribute('value')) {
-        node.setAttribute('value', value);
-    } else if (value && value.trim().charAt(0) === '<') {
-        node.innerHTML = value;
-    } else {
-        node.textContent = value;
+_.define([Attr], {
+    useSimpleValue: function(){ return true; },
+}, true);
+
+_.define([Element], {
+    name: {
+        get: function(){ return this.getAttribute('name'); },
+        set: function(name){ this.setAttribute('name', name); }
+    },
+    simpleValue: {
+        get: function() {
+            var parser = this.getAttribute('data-values-parse');
+            parser = parser && V.resolve(window, parser) || V.parse;
+            return parser.call(this, this.value);
+        },
+        set: function(value) {
+            var stringify = this.getAttribute('data-values-stringify');
+            stringify = stringify && V.resolve(window, stringify) || V.string;
+            this.value = stringify.call(this, value);
+        }
+    },
+    useAttrValues: V.booleanAttr('data-values-attr'),
+    noValues: V.booleanAttr('data-values-none')
+}, true);
+
+_.define(_.parents, {
+    queryName: function(name) {
+        return this.queryNameAll(name, 1);
+    },
+    queryNameAll: function(name, _list) {
+        _list = _list === false ? _list : new DOMxList();
+        for (var i=0; i < this.childNodes.length; i++) {
+            var node = this.childNodes[i],
+                nodeName = node.name,
+                ret;
+            if (nodeName === name) {
+                if (!_list) {
+                    return node;
+                } else {
+                    _list.add(node);
+                }
+            } else if (node.nodeType === 1) {
+                if (nodeName) {
+                    if (name.indexOf(nodeName+'.') === 0) {
+                        ret = node.queryNameAll(name.substring(nodeName.length+1), _list);
+                        if (_list !== ret) {
+                            return ret;
+                        }
+                    }
+                } else {
+                    ret = node.queryNameAll(name, _list);
+                    if (_list !== ret) {
+                        return ret;
+                    }
+                }
+            }
+        }
+        if (this.useAttrValues) {
+            var el = this;
+            for (var a=0; a < el.attributes.length; a++) {
+                var attr = el.attributes[a];
+                if (attr.name === name) {
+                    if (!_list) {
+                        return attr;
+                    } else {
+                        attr.parentNode = el;
+                        _list.add(attr);
+                    }
+                }
+            }
+        }
+        return _list;
     }
-};
+});
+
+_.define([Text], {
+    useSimpleValue: function() {
+        return !!this.noValues || !this.splitOnName();
+    },
+    splitOnName: function() {
+        var text = this,
+            match = text.value.match(V.nameRE);
+        if (match) {
+            var start = match.index,
+                name = match[0];
+            if (start > 0) {
+                text.splitText(start);
+                text.noValues = true;
+                text = text.nextSibling;
+            }
+            if (text.value.length > name.length) {
+                text.splitText(name.length);
+            }
+            text.name = match[1];
+            text.value = '';
+            return text;
+        } else {
+            this.noValues = true;
+        }
+    }
+}, true);
+
+_.define([HTMLInputElement], {
+    nameValue: {
+        get: function() {
+            var type = this.type;
+            if (type === 'radio' || type === 'checkbox') {
+                var value = this.nameGroup.only('checked', true).each('simpleValue');
+                return this.type === 'radio' ? value[0] : value;
+            }
+            return this.value;
+        },
+        set: function(value) {
+            if (this.type === 'checkbox') {
+                value = (Array.isArray(value) ? value : [value]).map(V.string);
+                this.nameGroup.each(function(input) {
+                    input.checked = value.indexOf(input.value) >= 0;
+                });
+            } else {
+                this.value = V.string(value);
+            }
+        }
+    }
+}, true);
+
+_.define([HTMLSelectElement], {
+    nameValue: {
+        get: function() {
+            return this.multiple ?
+                this.children.only('selected', true).each('simpleValue') :
+                V.parse(this.value);
+        },
+        set: function(value) {
+            if (this.multiple) {
+                value = (Array.isArray(value) ? value : [value]).map(V.string);
+                this.children.each(function(option) {
+                    if (value.indexOf(option.value) >= 0) {
+                        option.selected = true;
+                    }
+                });
+            } else {
+                this.value = V.string(value);
+            }
+        }
+    }
+}, true);
+
 var R = _.repeat = {
     id: 'data-repeat-id',
     count: 0,
@@ -325,7 +624,7 @@ var R = _.repeat = {
             anchor.setAttribute(attr.name, attr.value);
         }
         el.parentNode.insertBefore(anchor, el);
-        _.define(anchor, 'source', source);
+        _.defprop(anchor, 'source', source);
         if (keep !== true) {
             el.remove();
         }
@@ -334,7 +633,7 @@ var R = _.repeat = {
     repeat: function(parent, anchor, source, val) {
         var repeat = source.cloneNode(true);
         if (val !== undefined && val !== null) {
-            repeat.value = val;
+            repeat.nameValue = val;
         }
         parent.insertBefore(repeat, anchor);
         return repeat;
@@ -435,7 +734,7 @@ AE.emmet = {
 // /emmet.js
 
 // dot.js
-_.define(D, 'html', D.documentElement);
+_.defprop(D, 'html', D.documentElement);
 var dot = _.dot = {
     names: { 3: '$text', 8: '$comment', 7: '$procins' },
     fns: {},
@@ -465,20 +764,20 @@ var dot = _.dot = {
 },
 Observer = window.MutationObserver;
 
-_.fn(_.parents.concat(_.lists), 'dot', function(force) {
+_.define(_.parents.concat(_.lists), 'dot', function(force) {
     var self = this;
     if (force || !self._dotted) {
         self.each('childNodes').each(function(node) {
             var type = node.nodeType,
                 name = dot.names[type] || node.tagName.toLowerCase();
             if (!(name in self)) {
-                _.define(self, name, { get: dot.fn(type, name) });
+                _.defprop(self, name, { get: dot.fn(type, name) });
             }
             if (type === 1) {
                 node.dot();
             }
         });
-        _.define(self, '_dotted', true);
+        _.defprop(self, '_dotted', true);
     }
     return self;
 });

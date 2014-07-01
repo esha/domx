@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         src: ['src/core.js',
               'src/traverse.js',
               'src/append.js',
-              'src/value.js',
+              'src/values.js',
               'src/repeat.js',
               'src/emmet.js',
               'src/dot.js'],
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         },
         src: ['src/append.js',
               'src/emmet.js',
-              'src/value.js',
+              'src/values.js',
               'src/repeat.js'],
         dest: 'dist/<%= pkg.name %>.edit.js'
       },

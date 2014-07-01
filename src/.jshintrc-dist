@@ -17,6 +17,7 @@
     "DOMxList",
     "DocumentFragment",
     "Text",
-    "Comment"
+    "Comment",
+    "Attr"
   ]
 }

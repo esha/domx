@@ -1,4 +1,4 @@
-/*! domx - v0.9.1 - 2014-05-30
+/*! domx - v0.9.1 - 2014-06-30
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -27,19 +27,19 @@ _ = {
                o instanceof NodeList ||// phantomjs foolishly calls these functions
                o instanceof HTMLCollection;
     },
-    fn: function(targets, name, value) {
+    define: function(targets, name, value, force) {
         if (typeof name === "string") {
             for (var i=0,m=targets.length; i<m; i++) {
-                _.define(targets[i].prototype || targets[i], name, value);
+                _.defprop(targets[i].prototype || targets[i], name, value, force);
             }
         } else {
-            for (var key in name) {// name must be a key/val object
-                _.fn(targets, key, name[key]);
+            for (var key in name) {// name is key/val object, value is force
+                _.define(targets, key, name[key], value);
             }
         }
     },
-    define: function(o, key, val) {
-        if (!(key in o)) { try {// never redefine, never fail
+    defprop: function(o, key, val, force) {
+        if (force || !(key in o)) { try {// never redefine, never fail
             var opts = val.get || val.set ? val : {value:val, writable:true};
             opts.configurable = true;
             Object.defineProperty(o, key, opts);
@@ -80,10 +80,10 @@ _ = {
         return ret;
     }
 };
-_.define(D, '_', _);
+_.defprop(D, '_', _);
 
-// define foundation on nodes and lists
-_.fn(_.nodes.concat(_.lists), {
+// define foundation on Node and lists
+_.define([Node].concat(_.lists), {
     each: function(fn) {
         var self = _.isList(this) ? this : [this],
             results = [],
@@ -118,7 +118,7 @@ _.fn(_.nodes.concat(_.lists), {
 });
 
 // define DOMxList functions
-_.fn([DOMxList], {
+_.define([DOMxList], {
     length: 0,
     limit: -1,
     add: function(item) {
@@ -146,20 +146,24 @@ _.fn([DOMxList], {
     }
 });
 
-_.define(D, 'extend', function(name, fn, singles) {
-    _.fn(singles || [Element], name, fn);
-    _.fn(_.lists, name, function listFn() {
+_.defprop(D, 'extend', function(name, fn, singles, force) {
+    if (!Array.isArray(singles)) {
+        force = singles;
+        singles = [Element];
+    }
+    _.define(singles, name, fn, force);
+    _.define(_.lists, name, function listFn() {
         var args = arguments;
         return this.each(function eachFn() {
             return fn.apply(this, args);
         });
-    });
+    }, force);
 });
 // /core.js
 
 // traverse.js
 _.parents = [Element, DocumentFragment, D];
-_.fn(_.parents.concat(_.lists), {
+_.define(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
             list = new DOMxList(count);
@@ -175,7 +179,7 @@ _.fn(_.parents.concat(_.lists), {
     }
 });
 
-_.fn(_.lists, {
+_.define(_.lists, {
     only: function only(b, e) {
         var arr = this.toArray();
         arr = b >= 0 || b < 0 ?
@@ -188,7 +192,7 @@ _.fn(_.lists, {
                             return n[n.matches ? 'matches' : 'hasOwnProperty'](b);
                         } :
                         function eachVal(n) {
-                            return (n.each && n.each(b) || n[b]) === e;
+                            return (n.each ? n.each(b) : n[b]) === e;
                         }
             );
         return new DOMxList(arr);
@@ -199,6 +203,15 @@ _.fn(_.lists, {
             return exclude.indexOf(n) < 0;
         });
     }
+});
+
+_.utmost = function(node, prop, previous) {
+    return node && (node = node[prop]) ?
+        _.utmost(node, prop, node) :
+        previous || node;
+};
+_.define(_.nodes, 'utmost', function(prop) {
+    return _.utmost(this, _.resolve[prop] || prop);
 });
 
 D.extend('all', function(prop, fn, inclusive, _list) {
@@ -221,7 +234,7 @@ D.extend('all', function(prop, fn, inclusive, _list) {
 // ensure element.matches(selector) availability
 var Ep = Element.prototype,
     aS = 'atchesSelector';
-_.define(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
+_.defprop(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
 // /traverse.js
 
 
