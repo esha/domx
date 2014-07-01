@@ -56,10 +56,17 @@ _ = {
             else if (args) { el[key] = args[0]; }
             else { return val; }
         }
-        else if (args) {
-            if (args[0] === null){ _el.removeAttribute(_key); }
-            else { _el.setAttribute(_key, args[0]); }
-        } else { return _el.getAttribute(_key); }
+        else if (_el.nodeType === 1) {
+            if (args) {
+                if (args[0] === null) {
+                    _el.removeAttribute(_key);
+                } else {
+                    _el.setAttribute(_key, args[0]);
+                }
+            } else {
+                return _el.getAttribute(_key);
+            }
+        }
     },
     fill: function(args, index, el) {
         var ret = [];
