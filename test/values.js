@@ -35,8 +35,8 @@
         equal(typeof _.values, "object", "_.values");
     });
 
-    testMethod([Node,Attr], 'useSimpleValue');
-    ['value','simpleValue','fullValue','nameValue'].forEach(function(prop) {
+    testMethod([Node,Attr], 'useBaseValue');
+    ['value','baseValue','properValue','nameValue'].forEach(function(prop) {
         testProperty(Node, prop);
     });
     ['nameParent','nameGroup'].forEach(function(prop) {
@@ -49,41 +49,41 @@
     testMethod(_.parents, 'queryName');
     testMethod(_.parents, 'queryNameAll');
 
-    function testSimpleValue(node, initial) {
+    function testBaseValue(node, initial) {
         if (arguments.length !== 2) {
-            initial = node.simpleValue;
+            initial = node.baseValue;
         }
         if (node.nodeType !== 1) {
-            equal(node.simpleValue, node.nodeValue);
+            equal(node.baseValue, node.nodeValue);
         }
-        equal(node.simpleValue, initial);
-        node.simpleValue = true;
-        strictEqual(node.simpleValue, true);
-        node.simpleValue = 42;
-        strictEqual(node.simpleValue, 42);
-        node.simpleValue = ['an','array'];
-        deepEqual(node.simpleValue, ['an','array']);
-        node.simpleValue = {key:'value'};
-        deepEqual(node.simpleValue, {key:"value"});
-        node.simpleValue = 'string';
-        equal(node.simpleValue, 'string');
-        node.simpleValue = initial;
+        equal(node.baseValue, initial);
+        node.baseValue = true;
+        strictEqual(node.baseValue, true);
+        node.baseValue = 42;
+        strictEqual(node.baseValue, 42);
+        node.baseValue = ['an','array'];
+        deepEqual(node.baseValue, ['an','array']);
+        node.baseValue = {key:'value'};
+        deepEqual(node.baseValue, {key:"value"});
+        node.baseValue = 'string';
+        equal(node.baseValue, 'string');
+        node.baseValue = initial;
     }
 
     test("text node", function() {
-        testSimpleValue(D.createTextNode('text'), 'text');
+        testBaseValue(D.createTextNode('text'), 'text');
     });
 
     test("comment", function() {
-        testSimpleValue(D.createComment('<content>'), '<content>');
+        testBaseValue(D.createComment('<content>'), '<content>');
     });
 
     test("element", function() {
         var node = D.body.append('span[value=attr]{text}');
         equal(node.textContent, 'text');
-        testSimpleValue(node, 'attr');
+        testBaseValue(node, 'attr');
         node.removeAttribute('value');
-        testSimpleValue(node, 'text');
+        testBaseValue(node, 'text');
         equal(node.children.length, 0);
         node.remove();
     });

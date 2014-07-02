@@ -1,4 +1,4 @@
-/*! domx - v0.9.1 - 2014-06-30
+/*! domx - v0.9.1 - 2014-07-02
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -63,10 +63,17 @@ _ = {
             else if (args) { el[key] = args[0]; }
             else { return val; }
         }
-        else if (args) {
-            if (args[0] === null){ _el.removeAttribute(_key); }
-            else { _el.setAttribute(_key, args[0]); }
-        } else { return _el.getAttribute(_key); }
+        else if (_el.nodeType === 1) {
+            if (args) {
+                if (args[0] === null) {
+                    _el.removeAttribute(_key);
+                } else {
+                    _el.setAttribute(_key, args[0]);
+                }
+            } else {
+                return _el.getAttribute(_key);
+            }
+        }
     },
     fill: function(args, index, el) {
         var ret = [];

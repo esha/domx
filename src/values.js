@@ -23,6 +23,10 @@ var V = _.values = {
         }
         return value;
     },
+    stringifyFor: function(el) {
+        var stringify = el.getAttribute('data-values-stringify');
+        return stringify && V.resolve(window, stringify) || V.string;        
+    },
     nameNodes: function(parent, nameFn, possibleParentFn, attrFn) {
         var done = [];
         for (var i=0; i<parent.childNodes.length; i++) {
@@ -32,7 +36,7 @@ var V = _.values = {
             if (name && done.indexOf(node) < 0) {
                 done.push(node);
                 nodeValue = nameFn(name, node);
-            } else if (possibleParentFn && !node.useSimpleValue()) {
+            } else if (possibleParentFn && !node.useBaseValue()) {
                 possibleParentFn(node);
             }
             if (node.useAttrValues) {
@@ -61,7 +65,7 @@ var V = _.values = {
             V.getNameValue(possibleParent, value);
         }, function(attr, nodeValue) {
             var val = nodeValue || value;
-            val[attr.name] = attr.simpleValue;
+            val[attr.name] = attr.baseValue;
         });
         return value;
     },
@@ -76,7 +80,7 @@ var V = _.values = {
         }, function(attr, node, elValues) {
             var value = V.resolve(elValues || values, attr.name);
             if (value !== undefined) {
-                attr.simpleValue = value;
+                attr.baseValue = value;
             }
         });
     },
@@ -108,21 +112,21 @@ _.define([Node], {
             }
         }
     },
-    simpleValue:  {
+    baseValue:  {
         get: function(){ return V.parse(this.value); },
         set: function(value){ this.value = V.string(value); }
     },
-    useSimpleValue: function() {
+    useBaseValue: function() {
         var kids = !this.noValues && this.childNodes.length;
-        return !kids || (kids === 1 && !!this.childNodes[0].useSimpleValue());
+        return !kids || (kids === 1 && !!this.childNodes[0].useBaseValue());
     },
-    fullValue: {
+    properValue: {
         get: function() {
-            return this.useSimpleValue() ? this.simpleValue : V.getNameValue(this, {});
+            return this.useBaseValue() ? this.baseValue : V.getNameValue(this, {});
         },
         set: function(value) {
-            if (this.useSimpleValue() || typeof value !== "object") {
-                this.simpleValue = value;
+            if (this.useBaseValue() || typeof value !== "object") {
+                this.baseValue = value;
             } else {
                 V.setNameValue(this, value);
             }
@@ -156,25 +160,36 @@ _.define([Node], {
             var values;
             if (this.name) {
                 this.nameGroup.each(function(node) {
-                    values = V.combine(values, node.fullValue);
+                    values = V.combine(values, node.properValue);
                 });
             }
-            return values || this.fullValue;
+            return values || this.properValue;
         },
         set: function(values) {
             if (this.name && Array.isArray(values)) {
-                this.nameGroup.each(function(node, i) {
-                    node.nameValue = values[i];
-                    //TODO: declarative opts for repeat/remove when sizes mismatch?
+                var group = this.nameGroup;
+                if (!values.length && group.length && !group[0].hasAttribute(R.id)) {
+                    R.init(group[0], true);
+                }
+                group.each(function(node, i) {
+                    if (i < values.length) {
+                        node.nameValue = values[i];
+                    } else {
+                        node.remove();
+                    }
                 });
+                while (group.length < values.length) {
+                    var last = group[group.length - 1];
+                    group.add(last.repeat(values[group.length]));
+                }
             } else {
-                this.fullValue = values;
+                this.properValue = values;
             }
         }
     }
 });
 _.define([Attr], {
-    useSimpleValue: function(){ return true; },
+    useBaseValue: function(){ return true; },
 }, true);
 
 _.define([Element], {
@@ -182,16 +197,14 @@ _.define([Element], {
         get: function(){ return this.getAttribute('name'); },
         set: function(name){ this.setAttribute('name', name); }
     },
-    simpleValue: {
+    baseValue: {
         get: function() {
             var parser = this.getAttribute('data-values-parse');
             parser = parser && V.resolve(window, parser) || V.parse;
             return parser.call(this, this.value);
         },
         set: function(value) {
-            var stringify = this.getAttribute('data-values-stringify');
-            stringify = stringify && V.resolve(window, stringify) || V.string;
-            this.value = stringify.call(this, value);
+            this.value = V.stringifyFor(this).call(this, value);
         }
     },
     useAttrValues: V.booleanAttr('data-values-attr'),
@@ -200,15 +213,15 @@ _.define([Element], {
 
 _.define(_.parents, {
     queryName: function(name) {
-        return this.queryNameAll(name, 1);
+        return this.queryNameAll(name, false);
     },
     queryNameAll: function(name, _list) {
-        _list = _list === false ? _list : new DOMxList();
+        _list = _list === undefined ? new DOMxList() : _list;
         for (var i=0; i < this.childNodes.length; i++) {
             var node = this.childNodes[i],
                 nodeName = node.name,
                 ret;
-            if (nodeName === name) {
+            if (nodeName === name && node.tagName !== 'X-REPEAT') {
                 if (!_list) {
                     return node;
                 } else {
@@ -249,7 +262,7 @@ _.define(_.parents, {
 });
 
 _.define([Text], {
-    useSimpleValue: function() {
+    useBaseValue: function() {
         return !!this.noValues || !this.splitOnName();
     },
     splitOnName: function() {
@@ -276,34 +289,60 @@ _.define([Text], {
 }, true);
 
 _.define([HTMLInputElement], {
+    properValue:  {
+        get: function() {
+            var input = this;
+            return (input.type !== 'radio' && input.type !== 'checkbox') || input.checked ?
+                input.baseValue :
+                null;
+        },
+        set: function(value) {
+            var input = this;
+            if (input.type === 'checkbox') {
+                value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
+                input.checked = value.indexOf(input.value) >= 0;
+            } else {
+                this.baseValue = value;
+            }
+        }
+    },
     nameValue: {
         get: function() {
             var type = this.type;
             if (type === 'radio' || type === 'checkbox') {
-                var value = this.nameGroup.only('checked', true).each('simpleValue');
-                return this.type === 'radio' ? value[0] : value;
+                var group = this.nameGroup,
+                    value;
+                group.each(function(node) {
+                    value = V.combine(value, node.properValue);
+                });
+                return Array.isArray(value) && (this.type === 'radio' || group.length === 1) ?
+                    value[0] :
+                    value;
             }
-            return this.value;
+            return this.properValue;
         },
         set: function(value) {
             if (this.type === 'checkbox') {
-                value = (Array.isArray(value) ? value : [value]).map(V.string);
+                value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
                 this.nameGroup.each(function(input) {
                     input.checked = value.indexOf(input.value) >= 0;
                 });
             } else {
-                this.value = V.string(value);
+                this.properValue = value;
             }
         }
     }
 }, true);
 
 _.define([HTMLSelectElement], {
-    nameValue: {
+    properValue: {
         get: function() {
-            return this.multiple ?
-                this.children.only('selected', true).each('simpleValue') :
-                V.parse(this.value);
+            if (this.multiple) {
+                var selected = this.children.only('selected', true);
+                return selected.length ? selected.each('properValue') :
+                    this.children.length > 1 ? [] : null;
+            }
+            return V.parse(this.value);
         },
         set: function(value) {
             if (this.multiple) {

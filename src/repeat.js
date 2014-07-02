@@ -15,7 +15,7 @@ var R = _.repeat = {
             }
             anchor.setAttribute(attr.name, attr.value);
         }
-        el.parentNode.insertBefore(anchor, el);
+        el.parentNode.insertBefore(anchor, el.nextSibling);
         _.defprop(anchor, 'source', source);
         if (keep !== true) {
             el.remove();
@@ -25,7 +25,7 @@ var R = _.repeat = {
     repeat: function(parent, anchor, source, val) {
         var repeat = source.cloneNode(true);
         if (val !== undefined && val !== null) {
-            repeat.nameValue = val;
+            repeat.properValue = val;
         }
         parent.insertBefore(repeat, anchor);
         return repeat;

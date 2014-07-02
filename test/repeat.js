@@ -44,11 +44,12 @@
     test("via javascript", function() {
         var el = D.queryAll('section');
         equal(el.length, 1, "only one to start");
-        el.repeat();
+        el = el[0];
+        var copy = el.repeat();
         equal(D.queryAll('section').length, 2, "now have two");
-        var xrepeat = el[0].parentNode.query('x-repeat');
+        var xrepeat = el.parentNode.query('x-repeat');
         equal(xrepeat instanceof Element, true, "has sibling x-repeat");
-        equal(xrepeat.nextElementSibling, el[0], "xrepeat is first");
+        equal(xrepeat.previousElementSibling, copy, "xrepeat is last");
     });
 
     test('via data-repeat="selector"', function() {
