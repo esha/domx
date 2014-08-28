@@ -1,4 +1,4 @@
-/*! domx - v0.10.0 - 2014-07-02
+/*! domx - v0.10.1 - 2014-08-28
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -17,7 +17,7 @@ window.DOMxList = function DOMxList(limit) {
 
 // expose utilities
 _ = {
-    version: "0.10.0",
+    version: "0.10.1",
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
@@ -339,8 +339,9 @@ var V = _.values = {
             }
         }
     },
-    combine: function(oldValue, newValue) {
-        if (oldValue === undefined || oldValue === newValue) {
+    combine: function(oldValue, newValue, rejectNull) {
+        if (oldValue === undefined || oldValue === newValue ||
+            (rejectNull && oldValue === null)) {
             return newValue;
         }
         if (Array.isArray(oldValue)) {
@@ -606,13 +607,13 @@ _.define([HTMLInputElement], {
                 var group = this.nameGroup,
                     value;
                 group.each(function(node) {
-                    value = V.combine(value, node.properValue);
+                    value = V.combine(value, node.properValue, true);
                 });
                 return Array.isArray(value) && (this.type === 'radio' || group.length === 1) ?
                     value[0] :
                     value;
             }
-            return this.properValue;
+            return this.baseValue;
         },
         set: function(value) {
             if (this.type === 'checkbox') {
@@ -621,7 +622,7 @@ _.define([HTMLInputElement], {
                     input.checked = value.indexOf(input.value) >= 0;
                 });
             } else {
-                this.properValue = value;
+                this.baseValue = value;
             }
         }
     }

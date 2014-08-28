@@ -14,7 +14,7 @@ Download: [domx.min.js][full-min] or [domx.js][full] [![Build Status](https://tr
 [NPM][npm]: `npm install domx`   
 [Component][component]: `component install esha/domx`  
 
-Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`append()`][append], [`remove()`][remove], [`value`][value], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`append()`][append-emmet], and [dot()traversal][dot-traversal]:  
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`utmost()`][utmost], [`append()`][append], [`remove()`][remove], [`value`][value], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`append()`][append-emmet], and [dot()traversal][dot-traversal]:  
 * [domx.base.js][base]
 * [domx.emmet.js][emmet]
 * [domx.dot.js][dot]
@@ -45,6 +45,7 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 [only]: http://esha.github.io/domx#only()
 [not]: http://esha.github.io/domx#not()
 [all]: http://esha.github.io/domx#all()
+[utmost]: http://esha.github.io/domx#utmost()
 
 [append]: http://esha.github.io/domx#append()
 [remove]: http://esha.github.io/domx#remove()
@@ -66,11 +67,11 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 
 ### Release History
 * 2014-05-04 [v0.7.0][] (first public release)
-* 2014-05-05 [v0.7.1][] (only(index), _.fn requires targets)
 * 2014-05-13 [v0.8.1][] (repeat(), append())
 * 2014-05-30 [v0.9.1][] (not(), all(), dot())
+* 2014-08-28 [v0.10.1][] (utmost(), complete values rewrite)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
-[v0.7.1]: https://github.com/esha/domx/tree/0.7.1
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
 [v0.9.1]: https://github.com/esha/domx/tree/0.9.1
+[v0.10.1]: https://github.com/esha/domx/tree/0.10.1
