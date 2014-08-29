@@ -3,6 +3,9 @@ var V = _.values = {
     resolve: function(context, reference) {
         return eval('context'+(reference.charAt(0) !== '[' ? '.'+reference : reference));
     },
+    name: function(node) {
+        return node.tagName === 'FORM' ? node.getAttribute('name') : node.name;
+    },
     parse: function(value) {
         if (typeof value === "string") {
             try {
@@ -31,7 +34,7 @@ var V = _.values = {
         var done = [];
         for (var i=0; i<parent.childNodes.length; i++) {
             var node = parent.childNodes[i],
-                name = node.name,
+                name = V.name(node),
                 nodeValue = null;
             if (name && done.indexOf(node) < 0) {
                 done.push(node);
@@ -138,7 +141,7 @@ _.define([Node], {
             var node = this,
                 parent;
             while ((parent = node.parentNode)) {
-                if (parent.name) {
+                if (V.name(parent)) {
                     return parent;
                 }
                 node = parent;
@@ -149,7 +152,7 @@ _.define([Node], {
     nameGroup: {
         get: function() {
             var el = this,
-                name = el.name;
+                name = V.name(el);
             return name ? el.parentNode ?
                 el.nameParent.queryNameAll(name) :
                 new DOMxList(el) :
@@ -159,7 +162,7 @@ _.define([Node], {
     nameValue: {
         get: function() {
             var values;
-            if (this.name) {
+            if (V.name(this)) {
                 this.nameGroup.each(function(node) {
                     values = V.combine(values, node.properValue);
                 });
@@ -167,7 +170,7 @@ _.define([Node], {
             return values || this.properValue;
         },
         set: function(values) {
-            if (this.name && Array.isArray(values)) {
+            if (V.name(this) && Array.isArray(values)) {
                 var group = this.nameGroup;
                 if (!values.length && group.length && !group[0].hasAttribute(R.id)) {
                     R.init(group[0], true);
@@ -220,7 +223,7 @@ _.define(_.parents, {
         _list = _list === undefined ? new DOMxList() : _list;
         for (var i=0; i < this.childNodes.length; i++) {
             var node = this.childNodes[i],
-                nodeName = node.name,
+                nodeName = V.name(node),
                 ret;
             if (nodeName === name && node.tagName !== 'X-REPEAT') {
                 if (!_list) {
