@@ -69,9 +69,9 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 * 2014-05-04 [v0.7.0][] (first public release)
 * 2014-05-13 [v0.8.1][] (repeat(), append())
 * 2014-05-30 [v0.9.1][] (not(), all(), dot())
-* 2014-08-29 [v0.10.2][] (utmost(), complete values rewrite)
+* 2014-09-08 [v0.10.3][] (utmost(), complete values rewrite)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
 [v0.9.1]: https://github.com/esha/domx/tree/0.9.1
-[v0.10.2]: https://github.com/esha/domx/tree/0.10.2
+[v0.10.3]: https://github.com/esha/domx/tree/0.10.3

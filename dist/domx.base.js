@@ -1,4 +1,4 @@
-/*! domx - v0.10.2 - 2014-08-29
+/*! domx - v0.10.3 - 2014-09-08
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -17,7 +17,7 @@ window.DOMxList = function DOMxList(limit) {
 
 // expose utilities
 _ = {
-    version: "0.10.2",
+    version: "0.10.3",
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
     nodes: [Element, Text, Comment],

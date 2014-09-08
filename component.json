@@ -2,7 +2,7 @@
   "name": "domx",
   "repo": "esha/domx",
   "description": "An intuitive, extensible way to work directly with the DOM.",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "keywords": [
     "HTML",
     "DOM",
