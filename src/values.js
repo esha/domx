@@ -1,7 +1,7 @@
 var V = _.values = {
     /*jshint evil:true */
     resolve: function(context, reference) {
-        return eval('context'+(reference.charAt(0) !== '[' ? '.'+reference : reference));
+        return eval('context["'+reference+'"]');
     },
     name: function(node) {
         return node.tagName === 'FORM' ? node.getAttribute('name') : node.name;
