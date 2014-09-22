@@ -1,4 +1,4 @@
-/*! domx - v0.10.3 - 2014-09-08
+/*! domx - v0.10.3 - 2014-09-22
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -420,7 +420,7 @@ _.define([HTMLInputElement], {
         },
         set: function(value) {
             var input = this;
-            if (input.type === 'checkbox') {
+            if (input.type === 'checkbox' || input.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
                 input.checked = value.indexOf(input.value) >= 0;
             } else {
@@ -444,7 +444,7 @@ _.define([HTMLInputElement], {
             return this.baseValue;
         },
         set: function(value) {
-            if (this.type === 'checkbox') {
+            if (this.type === 'checkbox' || this.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
                 this.nameGroup.each(function(input) {
                     input.checked = value.indexOf(input.value) >= 0;

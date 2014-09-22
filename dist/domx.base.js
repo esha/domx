@@ -1,4 +1,4 @@
-/*! domx - v0.10.3 - 2014-09-08
+/*! domx - v0.10.3 - 2014-09-22
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -212,14 +212,49 @@ _.define(_.lists, {
     }
 });
 
-_.utmost = function(node, prop, previous) {
-    return node && (node = node[prop]) ?
-        _.utmost(node, prop, node) :
-        previous || node;
+_.estFnArgs = function(node, prop, test, inclusive) {
+    prop = _.resolve[prop] || prop;
+    if (!(prop in node)) {
+        inclusive = test === undefined ?
+            typeof prop === "boolean" ? prop : true :
+            test;
+        test = prop;
+        prop = 'parentElement';
+    }
+    if (typeof test === "boolean") {
+        inclusive = test;
+        test = null;
+    }
+    if (!test) {
+        test = function(){ return true; };
+    } else if (typeof test === "string") {
+        var selector = test;
+        test = function(node) {
+            return node.matches && node.matches(selector);
+        };
+    }
+    return [prop, test, inclusive||false];
 };
-_.define(_.nodes, 'utmost', function(prop) {
-    return _.utmost(this, _.resolve[prop] || prop);
+
+_.define(_.nodes, 'farthest', function(prop, test, inclusive) {
+    var args = _.estFnArgs(this, prop, test, inclusive);
+    return _.farthest(this, args[0], args[1], args[2] && args[1](this) ? this : null);
 });
+_.farthest = function(node, prop, test, previous) {
+    return node && (node = node[prop]) ?
+        _.farthest(node, prop, test, test(node) ? node : previous) :
+        previous;
+};
+
+_.define(_.nodes, 'closest', function(prop, test, inclusive) {
+    var args = _.estFnArgs(this, prop, test, inclusive);
+    return args[2] && args[1](this) ? this : _.closest(this, args[0], args[1]);
+});
+_.closest = function(node, prop, test) {
+    return node && (node = node[prop]) ?
+        test(node) ? node : _.closest(node, prop, test) :
+        null;
+};
 
 D.extend('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
