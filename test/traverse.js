@@ -229,27 +229,74 @@ Test assertions:
         deepEqual(returnNode, allFirstText);
     });
 
-    module('utmost');
+    module('farthest');
 
-    test("utmost(parent*)", function() {
+    test("farthest(parent*)", function() {
         var div = D.query('#first');
-        equal(document.documentElement, div.utmost('parentElement'));
-        equal(document, div.utmost('parentNode'));
+        equal(document.documentElement, div.farthest());
+        equal(document.documentElement, div.farthest('parentElement'));
+        equal(document, div.farthest('parentNode'));
     });
 
-    test("utmost(alias)", function() {
+    test('farthest([prop, ]selector[, inclusive])', function() {
+        var div = D.query('#first');
+        equal(div, div.farthest('#first'));
+        equal(null, div.farthest('#first', false));
+        equal(document.body, div.farthest('body'));
+        equal(D.query('#last'), div.farthest('nextElementSibling'));
+        equal(D.query('#last'), div.farthest('nextSibling', 'div'));
+    });
+
+    test("farthest(alias)", function() {
         var div = D.query('#first');
         _.resolve.previous = 'previousElementSibling';
         _.resolve.next = 'nextElementSibling';
-        equal(null, div.utmost('previous'));
-        equal(D.query('#last'), div.utmost('next'));
+        equal(null, div.farthest('previous'));
+        equal(D.query('#last'), div.farthest('next'));
         delete _.resolve.previous;
         delete _.resolve.next;
     });
 
-    test("utmost(undefined)", function() {
+    test("farthest(nomatch)", function() {
         var div = D.query('#first');
-        equal(undefined, div.utmost('whatever'));
+        strictEqual(null, div.farthest('whatever'));
+    });
+
+    module('closest');
+
+    test("closest(parent*)", function() {
+        var div = D.query('#first');
+        equal(div, div.closest());
+        equal(div.parentElement, div.closest('parentElement'));
+        equal(document, div.closest('parentNode', function(node) {
+            return !(node instanceof HTMLElement);
+        }));
+    });
+
+    test('closest([prop, ]selector[, inclusive])', function() {
+        var div = D.query('#first');
+        equal(div, div.closest('#first'));
+        equal(null, div.closest('#first', false));
+        equal(document.body, div.closest('body'));
+        equal(D.query('#identity'), div.closest('nextElementSibling'));
+        equal(div, div.closest('nextSibling', true));
+        equal(div, div.closest('nextSibling', 'div', true));
+        equal(D.query('#identity'), div.closest('nextSibling', 'div'));
+    });
+
+    test("closest(alias)", function() {
+        var div = D.query('#first');
+        _.resolve.previous = 'previousElementSibling';
+        _.resolve.next = 'nextElementSibling';
+        equal(null, div.closest('previous'));
+        equal(D.query('#identity'), div.closest('next'));
+        delete _.resolve.previous;
+        delete _.resolve.next;
+    });
+
+    test("closest(nomatch)", function() {
+        var div = D.query('#first');
+        strictEqual(null, div.closest('whatever'));
     });
 
 }(document));
