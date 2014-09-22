@@ -302,7 +302,7 @@ _.define([HTMLInputElement], {
         },
         set: function(value) {
             var input = this;
-            if (input.type === 'checkbox') {
+            if (input.type === 'checkbox' || input.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
                 input.checked = value.indexOf(input.value) >= 0;
             } else {
@@ -326,7 +326,7 @@ _.define([HTMLInputElement], {
             return this.baseValue;
         },
         set: function(value) {
-            if (this.type === 'checkbox') {
+            if (this.type === 'checkbox' || this.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
                 this.nameGroup.each(function(input) {
                     input.checked = value.indexOf(input.value) >= 0;
