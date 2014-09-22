@@ -2,7 +2,7 @@
   "name": "domx",
   "title": "DOMx",
   "description": "An intuitive, extensible way to work directly with the DOM.",
-  "version": "0.10.3",
+  "version": "0.11.0",
   "homepage": "http://esha.github.io/domx/",
   "author": {
     "name": "ESHA Research",
