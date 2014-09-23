@@ -1,7 +1,7 @@
 {
     "name": "domx",
-    "version": "0.11.0",
-    "main": "dist/domx.min.js",
+    "version": "0.11.1",
+    "main": "dist/domx.js",
     "description": "An intuitive, extensible way to work directly with the DOM.",
     "keywords": [
         "HTML",

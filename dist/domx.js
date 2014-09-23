@@ -1,4 +1,4 @@
-/*! domx - v0.11.0 - 2014-09-22
+/*! domx - v0.11.1 - 2014-09-22
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -17,7 +17,7 @@ window.DOMxList = function DOMxList(limit) {
 
 // expose utilities
 _ = {
-    version: "0.11.0",
+    version: "0.11.1",
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
@@ -426,7 +426,14 @@ var V = _.values = {
             }
         };
     },
-    nameRE: /\$\{([^}]+)\}/
+    nameRE: /\$\{([^}]+)\}/,
+    changeEvent: window.CustomEvent ? function(node) {
+        node.dispatchEvent(new CustomEvent('change', { bubbles:true }));
+    } : function(node) {
+        var e = D.createEvent('CustomEvent');
+        e.initCustomEvent('change', true);
+        node.dispatchEvent(e);
+    }
 };
 
 _.define([Node], {
@@ -446,7 +453,13 @@ _.define([Node], {
     },
     baseValue:  {
         get: function(){ return V.parse(this.value); },
-        set: function(value){ this.value = V.string(value); }
+        set: function(value) {
+            var oldValue = this.value,
+                newValue = this.value = V.string(value);
+            if (oldValue !== newValue) {
+                V.changeEvent(this);
+            }
+        }
     },
     useBaseValue: function() {
         var kids = !this.noValues && this.childNodes.length;
@@ -536,7 +549,11 @@ _.define([Element], {
             return parser.call(this, this.value);
         },
         set: function(value) {
-            this.value = V.stringifyFor(this).call(this, value);
+            var oldValue = this.value,
+                newValue = this.value = V.stringifyFor(this).call(this, value);
+            if (oldValue !== newValue) {
+                V.changeEvent(this);
+            }
         }
     },
     useAttrValues: V.booleanAttr('data-values-attr'),
@@ -632,7 +649,7 @@ _.define([HTMLInputElement], {
             var input = this;
             if (input.type === 'checkbox' || input.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
-                input.checked = value.indexOf(input.value) >= 0;
+                input.checked = value.indexOf(input.baseValue) >= 0;
             } else {
                 this.baseValue = value;
             }
@@ -657,7 +674,7 @@ _.define([HTMLInputElement], {
             if (this.type === 'checkbox' || this.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
                 this.nameGroup.each(function(input) {
-                    input.checked = value.indexOf(input.value) >= 0;
+                    input.checked = value.indexOf(input.baseValue) >= 0;
                 });
             } else {
                 this.baseValue = value;
@@ -674,18 +691,18 @@ _.define([HTMLSelectElement], {
                 return selected.length ? selected.each('properValue') :
                     this.children.length > 1 ? [] : null;
             }
-            return V.parse(this.value);
+            return V.parse(this.baseValue);
         },
         set: function(value) {
             if (this.multiple) {
                 value = (Array.isArray(value) ? value : [value]).map(V.string);
                 this.children.each(function(option) {
-                    if (value.indexOf(option.value) >= 0) {
+                    if (value.indexOf(option.baseValue) >= 0) {
                         option.selected = true;
                     }
                 });
             } else {
-                this.value = V.string(value);
+                this.baseValue = V.string(value);
             }
         }
     }
