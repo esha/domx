@@ -70,10 +70,10 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 * 2014-05-13 [v0.8.1][] (repeat(), append())
 * 2014-05-30 [v0.9.1][] (not(), all(), dot())
 * 2014-09-08 [v0.10.3][] (utmost(), complete values rewrite)
-* 2014-09-22 [v0.11.1][] (s/utmost()/farthest(), closest(), value change events)
+* 2014-09-22 [v0.11.2][] (s/utmost()/farthest(), closest(), value change events)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
 [v0.9.1]: https://github.com/esha/domx/tree/0.9.1
 [v0.10.3]: https://github.com/esha/domx/tree/0.10.3
-[v0.11.1]: https://github.com/esha/domx/tree/0.11.1
+[v0.11.2]: https://github.com/esha/domx/tree/0.11.2

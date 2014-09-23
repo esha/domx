@@ -1,4 +1,4 @@
-/*! domx - v0.11.1 - 2014-09-22
+/*! domx - v0.11.2 - 2014-09-23
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -439,7 +439,11 @@ _.define([HTMLInputElement], {
             var input = this;
             if (input.type === 'checkbox' || input.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
-                input.checked = value.indexOf(input.baseValue) >= 0;
+                var was = input.checked;
+                input.checked = value.indexOf(input.value) >= 0;
+                if (was !== input.checked) {
+                    V.changeEvent(input);
+                }
             } else {
                 this.baseValue = value;
             }
@@ -463,9 +467,17 @@ _.define([HTMLInputElement], {
         set: function(value) {
             if (this.type === 'checkbox' || this.type === 'radio') {
                 value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
+                var changed = false;
                 this.nameGroup.each(function(input) {
-                    input.checked = value.indexOf(input.baseValue) >= 0;
+                    var was = input.checked;
+                    input.checked = value.indexOf(input.value) >= 0;
+                    if (was !== input.checked) {
+                        changed = true;
+                    }
                 });
+                if (changed) {
+                    V.changeEvent(this);
+                }
             } else {
                 this.baseValue = value;
             }
@@ -486,13 +498,19 @@ _.define([HTMLSelectElement], {
         set: function(value) {
             if (this.multiple) {
                 value = (Array.isArray(value) ? value : [value]).map(V.string);
+                var changed = false;
                 this.children.each(function(option) {
-                    if (value.indexOf(option.baseValue) >= 0) {
-                        option.selected = true;
+                    var was = option.selected;
+                    option.selected = value.indexOf(option.value) >= 0;
+                    if (option.select !== was) {
+                        changed = true;
                     }
                 });
+                if (changed) {
+                    V.changeEvent(this);
+                }
             } else {
-                this.baseValue = V.string(value);
+                this.baseValue = value;
             }
         }
     }
