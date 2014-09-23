@@ -89,18 +89,31 @@
     });
 
     test('change event', function() {
-        expect(4);
+        expect(10);
         var el = D.body.append('input[value=old]'),
             listener = function(e) {
                 ok(e instanceof window.Event);
                 equal(e.target, el);
             };
-        equal(el.properValue, 'old');
         D.body.addEventListener('change', listener);
+
+        equal(el.properValue, 'old');
         el.properValue = 'new';
-        D.body.removeEventListener('change', listener);
         equal(el.properValue, 'new');
         el.remove();
+
+        el = D.body.append('input[type=radio][value=value][checked=true]');
+        el.properValue = 'old';
+        el.remove();
+
+        el = D.body.append('select[multiple]');
+        el.append('option*3').each('textContent', '${i}');
+        deepEqual(el.properValue, []);
+        el.properValue = [0,1,2];
+        deepEqual(el.properValue, [0,1,2]);
+        el.remove();
+
+        D.body.removeEventListener('change', listener);
     });
 
 }(document));
