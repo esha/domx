@@ -203,6 +203,34 @@ active.all('previousElementSibling', function(previousElementSibling, all) {
 </pre>
         </article>
         <article>
+          <h4><a name="closest()">closest</a>(<span class="variable optional">property</span> <span class="variable optional">, selector|function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.11.0</span></h4>
+          <p>In the absence of arguments, this returns the parent element (or self, if none). If given only a selector (or custom test function), it will follow the <code>parentElement</code> chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will
+          default to <code>false</code>.</p>
+          <pre class="example">
+var container = event.target.closest('.container'); // gets the closest element with 'container' class
+
+var active = document.query('.active');
+active.closest('nextElementSibling', '.action');// retrieves the closest, subsequent sibling with 'action' class
+active.closest('parentNode', function(node) {
+  return node.value && node.value.indexOf('example') >=0;
+}, true);// returns the closest node (self-included) with a value that includes the string 'example'
+</pre>
+        </article>
+        <article>
+          <h4><a name="farthest()">farthest</a>(<span class="variable optional">property</span> <span class="variable optional">, selector|function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.11.0</span></h4>
+          <p>In the absence of arguments, this returns the farthest parent element (or self, if none). If given only a selector (or custom test function), it will follow the <code>parentElement</code> chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will
+          default to <code>false</code>.</p>
+          <pre class="example">
+var container = event.target.farthest('.container'); // gets the farthest element with 'container' class
+
+var active = document.query('.active');
+active.farthest('nextElementSibling', '.action');// retrieves the farthest, subsequent sibling with 'action' class
+active.farthest('parentNode', function(node) {
+  return node.value && node.value.indexOf('example') >=0;
+}, true);// returns the farthest node (self-included) with a value that includes the string 'example'
+</pre>
+        </article>
+        <article>
           <h4><a name="toArray()">toArray</a>(<span class="variable optional">array</span>) <span class="since">0.7.0</span></h4>
           <p>Returns an actual <code>Array</code> of elements instead of a list object (e.g. <code>NodeList</code>).
           Optionally, you can provide an array into which the elements should be pushed.</p>
