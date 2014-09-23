@@ -88,4 +88,19 @@
         node.remove();
     });
 
+    test('change event', function() {
+        expect(4);
+        var el = D.body.append('input[value=old]'),
+            listener = function(e) {
+                ok(e instanceof window.Event);
+                equal(e.target, el);
+            };
+        equal(el.properValue, 'old');
+        D.body.addEventListener('change', listener);
+        el.properValue = 'new';
+        D.body.removeEventListener('change', listener);
+        equal(el.properValue, 'new');
+        el.remove();
+    });
+
 }(document));
