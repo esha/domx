@@ -1,38 +1,29 @@
 [domx][home] is a small, [extensible][extend] library to help you enjoy the DOM in a simple, direct, and very powerful way.
 
-Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq].
+Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq]
 
 [home]: http://esha.github.io/domx
 [demo]: http://esha.github.io/domx#Demo
 [api]: http://esha.github.io/domx#API
 [faq]: http://esha.github.io/domx#FAQ
 
-#### Full Version:
-
-Download: [domx.min.js][full-min] or [domx.js][full] [![Build Status](https://travis-ci.org/esha/domx.png?branch=master)](https://travis-ci.org/esha/domx)  
 [Bower][bower]: `bower install domx`  
 [NPM][npm]: `npm install domx`   
 [Component][component]: `component install esha/domx`  
-
-Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], [`value`][value], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`append()`][append-emmet], and [dot()traversal][dot-traversal]:  
-* [domx.base.js][base]
-* [domx.emmet.js][emmet]
-* [domx.dot.js][dot]
+[![Build Status](https://travis-ci.org/esha/domx.png?branch=master)](https://travis-ci.org/esha/domx)  
 
 [npm]: https://npmjs.org/package/domx
 [bower]: http://bower.io/
 [component]: http://component.io/
 
+#### Full Version:
+
+Download: [domx.min.js][full-min] or [domx.js][full]  
+
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], [`properValue`][properValue], [`repeat()`][repeat], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
+
 [full-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
 [full]: https://raw.github.com/esha/domx/master/dist/domx.js
-
-[core]: http://raw.github.com/esha/domx/master/src/core.js
-[traverse]: http://raw.github.com/esha/domx/master/src/traverse.js
-[append]: http://raw.github.com/esha/domx/master/src/append.js
-[value]: http://raw.github.com/esha/domx/master/src/value.js
-[emmet]: http://raw.github.com/esha/domx/master/dist/domx.emmet.js
-[dot]: http://raw.github.com/esha/domx/master/dist/domx.dot.js
-[stringify]: http://raw.github.com/esha/domx/master/dist/domx.stringify.js
 
 [each]: http://esha.github.io/domx#each()
 [toArray]: http://esha.github.io/domx#toArray()
@@ -50,25 +41,39 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 [remove]: http://esha.github.io/domx#remove()
 
 [value]: http://esha.github.io/domx#value
+[baseValue]: http://esha.github.io/domx#baseValue
+[useBaseValue]: http://esha.github.io/domx#useBaseValue()
+[properValue]: http://esha.github.io/domx#properValue
+[nameParent]: http://esha.github.io/domx#nameParent
+[nameGroup]: http://esha.github.io/domx#nameGroup
+[nameValue]: http://esha.github.io/domx#nameValue
 
-[append-emmet]: http://esha.github.io/domx#append(emmet)
+[repeat]: http://esha.github.io/domx#repeat
+
+[emmet]: http://esha.github.io/domx#append(emmet)
 [abbr]: http://docs.emmet.io/abbreviations/syntax/
 
-[dot-traversal]: http://esha.github.io/domx#dot-traversal
+[dot]: http://esha.github.io/domx#dot
 
 #### Base Version:
 
 Download: [domx.min.js][base-min]  or  [domx.js][base]  
 
 Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], and [`toArray()`][toArray]:  
-* [domx.base.js][base]
 
 [base-min]: http://raw.github.com/esha/domx/master/dist/domx.base.min.js
 [base]: http://raw.github.com/esha/domx/master/dist/domx.base.js
 
 #### Plugin Versions:
 
-These are the features of the full version that are left out of the "base" version, packaged as plugins for a la carte inclusion: [emmet support][emmet-plugin], [values properties][values-plugin], [repeat support][repeat-plugin], and [dot traversal][dot-plugin]. Also, there is the [stringify][stringify-plugin] used for the [demo][demo].
+Features stripped out of the "base" version, packaged as plugins for a la carte inclusion.  
+
+Download:
+* [domx.emmet.js][emmet-plugin] - supports [emmet][emmet] [abbreviations][abbr] for `append()`
+* [domx.values.js][values-plugin] - adds [`properValue`][properValue] getter/setter for `Node`s (and supporting functions/properties)
+* [domx.repeat.js][repeat-plugin] - adds [`repeat()`][repeat] function
+* [domx.dot.js][dot-plugin] - supports dot-traversal via [`data-domx-dot`][dot] attribute and [`dot()`][dot] function 
+* [domx.stringify.js][stringify-plugin] - generates a string version of the DOM for the demo (also not in the "full" version)
 
 [emmet-plugin]: http://raw.github.com/esha/domx/master/dist/domx.emmet.js
 [values-plugin]: http://raw.github.com/esha/domx/master/dist/domx.values.js
