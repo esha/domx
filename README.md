@@ -25,8 +25,6 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 
 [full-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
 [full]: https://raw.github.com/esha/domx/master/dist/domx.js
-[base-min]: http://raw.github.com/esha/domx/master/dist/domx.base.min.js
-[base]: http://raw.github.com/esha/domx/master/dist/domx.base.js
 
 [core]: http://raw.github.com/esha/domx/master/src/core.js
 [traverse]: http://raw.github.com/esha/domx/master/src/traverse.js
@@ -46,6 +44,7 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 [not]: http://esha.github.io/domx#not()
 [all]: http://esha.github.io/domx#all()
 [farthest]: http://esha.github.io/domx#farthest()
+[closest]: http://esha.github.io/domx#closest()
 
 [append]: http://esha.github.io/domx#append()
 [remove]: http://esha.github.io/domx#remove()
@@ -61,9 +60,21 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 
 Download: [domx.min.js][base-min]  or  [domx.js][base]  
 
-Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`append()`][append], [`remove()`][remove], and [`toArray()`][toArray]:  
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], and [`toArray()`][toArray]:  
 * [domx.base.js][base]
 
+[base-min]: http://raw.github.com/esha/domx/master/dist/domx.base.min.js
+[base]: http://raw.github.com/esha/domx/master/dist/domx.base.js
+
+#### Plugin Versions:
+
+These are the features of the full version that are left out of the "base" version, packaged as plugins for a la carte inclusion: [emmet support][emmet-plugin], [values properties][values-plugin], [repeat support][repeat-plugin], and [dot traversal][dot-plugin]. Also, there is the [stringify][stringify-plugin] used for the [demo][demo].
+
+[emmet-plugin]: http://raw.github.com/esha/domx/master/dist/domx.emmet.js
+[values-plugin]: http://raw.github.com/esha/domx/master/dist/domx.values.js
+[repeat-plugin]: http://raw.github.com/esha/domx/master/dist/domx.repeat.js
+[dot-plugin]: http://raw.github.com/esha/domx/master/dist/domx.dot.js
+[stringify-plugin]: http://raw.github.com/esha/domx/master/dist/domx.stringify.js
 
 ### Release History
 * 2014-05-04 [v0.7.0][] (first public release)

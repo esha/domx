@@ -1,4 +1,4 @@
-/*! domx - v0.11.2 - 2014-09-23
+/*! domx - v0.11.2 - 2014-10-28
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -513,8 +513,8 @@ _.define([Node], {
         set: function(values) {
             if (V.name(this) && Array.isArray(values)) {
                 var group = this.nameGroup;
-                if (!values.length && group.length && !group[0].hasAttribute(R.id)) {
-                    R.init(group[0], true);
+                if (_.repeat && !values.length && group.length && !group[0].hasAttribute(_.repeat.id)) {
+                    _.repeat.init(group[0], true);
                 }
                 group.each(function(node, i) {
                     if (i < values.length) {
@@ -781,12 +781,12 @@ D.extend('repeat', function repeat(val) {
     return ret;
 });
 
-R.style.value = '[data-repeat] { display: none }';
+R.style.textContent = '[data-repeat] { display: none }';
 D.addEventListener('DOMContentLoaded', function() {
     D.queryAll('[data-repeat]').each(R.init);
-    R.style.value = "\nx-repeat { display: none }"+
-                    "\nx-repeat[data-repeat-none] { display: inline-block; }"+
-                    "\n["+R.id+"] + x-repeat[data-repeat-none] { display: none; }";
+    R.style.textContent = "\nx-repeat { display: none }"+
+                          "\nx-repeat[data-repeat-none] { display: inline-block; }"+
+                          "\n["+R.id+"] + x-repeat[data-repeat-none] { display: none; }";
 });
 
 // emmet.js
