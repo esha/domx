@@ -82,9 +82,11 @@ These are the features of the full version that are left out of the "base" versi
 * 2014-05-30 [v0.9.1][] (not(), all(), dot())
 * 2014-09-08 [v0.10.3][] (utmost(), complete values rewrite)
 * 2014-09-22 [v0.11.2][] (s/utmost()/farthest(), closest(), value change events)
+* 2014-10-28 [v0.12.0][] (reorganize secondary versions/plugins)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
 [v0.9.1]: https://github.com/esha/domx/tree/0.9.1
 [v0.10.3]: https://github.com/esha/domx/tree/0.10.3
 [v0.11.2]: https://github.com/esha/domx/tree/0.11.2
+[v0.12.0]: https://github.com/esha/domx/tree/0.12.0
