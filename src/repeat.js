@@ -53,10 +53,10 @@ D.extend('repeat', function repeat(val) {
     return ret;
 });
 
-R.style.value = '[data-repeat] { display: none }';
+R.style.textContent = '[data-repeat] { display: none }';
 D.addEventListener('DOMContentLoaded', function() {
     D.queryAll('[data-repeat]').each(R.init);
-    R.style.value = "\nx-repeat { display: none }"+
-                    "\nx-repeat[data-repeat-none] { display: inline-block; }"+
-                    "\n["+R.id+"] + x-repeat[data-repeat-none] { display: none; }";
+    R.style.textContent = "\nx-repeat { display: none }"+
+                          "\nx-repeat[data-repeat-none] { display: inline-block; }"+
+                          "\n["+R.id+"] + x-repeat[data-repeat-none] { display: none; }";
 });

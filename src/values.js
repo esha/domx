@@ -185,8 +185,8 @@ _.define([Node], {
         set: function(values) {
             if (V.name(this) && Array.isArray(values)) {
                 var group = this.nameGroup;
-                if (!values.length && group.length && !group[0].hasAttribute(R.id)) {
-                    R.init(group[0], true);
+                if (_.repeat && !values.length && group.length && !group[0].hasAttribute(_.repeat.id)) {
+                    _.repeat.init(group[0], true);
                 }
                 group.each(function(node, i) {
                     if (i < values.length) {
