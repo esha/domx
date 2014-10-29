@@ -57,7 +57,7 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 
 #### Base Version:
 
-Download: [domx.min.js][base-min]  or  [domx.js][base]  
+Download: [domx.base.min.js][base-min]  or  [domx.base.js][base]  
 
 Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], and [`toArray()`][toArray]:  
 
