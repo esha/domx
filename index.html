@@ -33,7 +33,7 @@
   <div class="content">
     <div class="wrapper">
       <div class="info">
-        <p>DOMx is the empowering way to traverse, manipulate, and extend the DOM. &nbsp; <a class="download" href="https://rawgit.com/esha/domx/master/dist/domx.min.js.gz">domx.min.js (~3.5kb, gzip)</a></p>
+        <p>DOMx is an empowering way to traverse, manipulate, and extend the DOM. &nbsp; <a class="download" href="https://rawgit.com/esha/domx/master/dist/domx.min.js.gz">domx.min.js (~5kb, gzip)</a></p>
 
       </div>
       <div class="banner columns">
@@ -51,10 +51,10 @@
           <p>DOMx enables use of <em>all</em> native DOM features to traverse and manipulate with ease, clarity, and power.</p>
         </div><div class="third">
           <h3>Consistent</h3>
-          <p>DOMx embraces DOM standards rather than create yet-another-API. Our simple utility functions augment native features, <em>without recreating or obscuring</em> them.</p>
+          <p>DOMx embraces DOM types rather than create yet-another-API. Our simple utility functions augment native features, <em>without recreating or obscuring</em> them.</p>
         </div><div class="third">
           <h3>Extensible</h3>
-          <p>DOMx empowers developers to easily, safely, and <em>correctly</em> extend the DOM.</p>
+          <p>DOMx empowers developers to carefully and <em>correctly</em> extend the DOM with ease.</p>
         </div>
       </div>
       <div class="info">
@@ -146,7 +146,7 @@ document.body.each('classList.toggle', 'ready');// each works on both single ele
           <p>When you want to narrow down a selection, <code>only</code> allows you to easily filter
           that list by selector, index, slice, or filtering function.</p>
           <pre class="example">
-var items = document.queryAll('.items'); // all items
+var items = document.queryAll('.item'); // all items
 
 items.only(':nth-child(even)'); // subset that matches selector
 
@@ -158,20 +158,20 @@ items.only(function(el,i){ return el.id.indexOf(i) > 0; }); // arbitrary filter 
 
 items.only(3, 9);// specific slice of elements
 
-items.only('tagName', 'DIV');// only &lt;div class="item"&gt; elements
+items.only('textContent', 'example');// only items with 'example' as the content
 </pre>
         </article>
         <article>
           <h4><a name="not()">not</a>(<span class="variable">selector|index|filter|slice|property</span> <span class="variable optional">, endSlice|value</span>) <span class="since">0.9.0</span></h4>
           <p>This exactly reverses the behavior of <a href="#only()">only()</a>.</p>
           <pre class="example">
-var items = document.queryAll('.items'); // all items
+var items = document.queryAll('.item'); // all items
 
 items.not(':nth-child(even)'); // subset that does not match the selector
 
-items.not(3).each('textContent') = "Not the fourth!"; // returns all items except the fourth one
+items.not(3).each('textContent', "Not the fourth!"); // returns all items except the fourth one
 
-items.not(-1).each('id') = 'not last'; // negative index works too
+items.not(-1).each('setAttribute', 'not-last', 'true'); // negative index works too
 
 items.not(function(el, i){ return el.id.indexOf(i) > 0; }); // all items whose ids do not contain their index
 
@@ -264,8 +264,8 @@ document.body.dot(); // activates dot-traversal for all elements in the document
         <article>
           <h4><a name="dot-traversal">element.<span class="variable">tagName...</span></a> <span class="since">0.7.0</span></h4>
           <p>DOMx allows you <a href="#dot()">to turn on</a> access to child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it searches only immediate children and not all descendant elements. The dot-traversal properties <em>always</em> return a list of matching elements.</p>
-          <p>This should <em>NOT</em> be used for long chains, both for performance and robustness issues. This is designed to be a powerful convenience feature for
-          small, stable DOM structures (think <code>ul.li</code>, <code>select.option</code>, and such) that have dot-traversal intentionally enabled on them.</p>
+          <p>This should <em>NOT</em> be used for long chains, as that would be fragile design. This is designed to be a powerful convenience feature for
+          stable DOM structures (think <code>ul.li</code>, <code>table.tbody.tr</code>, and such) when dot-traversal is enabled on them either declaratively or programmatically.</p>
           <pre class="example">
 document.body.header; // returns a list containing only header element that are children of document.body
 document.body.header.h1; // returns a list of h1 elements that are children of header elements that are children of document.body
@@ -342,18 +342,29 @@ document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;H
         <p class="question">Why not just use jQuery?</p>
         <p>Asking this question is kinda like saying that a very large swiss-army knife is the only tool you'll ever want. Some people prefer to <a href="http://component.io">collect specialized tools</a>. Some people don't like jQuery's wrapper obscuring the <a href="https://developer.mozilla.org/en-US/docs/Web/API">riches of</a> <a href="http://docs.webplatform.org/wiki/dom#Index_of_all_DOM_topics">the native DOM</a>. Some <a href="http:/github.com/nbubna">people</a> prefer empowering tools to universal ones. There's <a href="http://youmightnotneedjquery.com">other reasons</a> out there too, but hopefully that's enough to move on to more useful questions.</p>
         <p class="question">I thought we were supposed to extend the DOM with <a href="http://webcomponents.org/">web components</a>!</p>
-        <p>You are! But let's not pretend that web components will ever mean you don't need to manipulate and traverse the DOM directly. And when you want to do that within some fancy-pants web component, you might find yourself wanting a bit more power than the vanilla DOM gives. Then, instead of importing a big library like jQuery, you'll be glad to have the power of DOMx in just a few meager kilobytes.
+        <p>You are! But let's not pretend that web components will ever mean you don't need to manipulate and traverse the DOM directly. And when you want to do that within some fancy-pants web component, you might find yourself wanting a bit more power than the vanilla DOM gives. Then, instead of importing a big library like jQuery, you'll be glad to have the power of DOMx in just a few kilobytes. And even when web components reign supreme, there will always be a place for page-wide work to be done.
         </p>
         <p class="question">Which browsers does DOMx support?</p>
         <p>Modern ones: Firefox, Chrome, Safari, Opera, IE9+ and the like.</p>
         <p class="question">Isn't extending the DOM <a href="http://perfectionkills.com/whats-wrong-with-extending-the-dom/">a bad idea</a>?</p>
-        <p>Not at all. Unless you care to prop up the diminishing market share of IE6/7/8, <a href="https://github.com/nbubna/mind-hacking/blob/gh-pages/extending-the-dom.md">DOM extension</a> is no longer to be feared.</p>
+        <p>Not at all. Unless you care to prop up the diminishing market share of IE6/7/8, <a href="https://github.com/nbubna/mind-hacking/blob/gh-pages/extending-the-dom.md">DOM extension</a> is no longer to be feared, just employed with discretion.</p>
         <p class="question">How does the dot-traversal work?</p>
         <p>By dynamically defining getter functions for the elements you use in the page.</p>
         <p class="question">Aren't those long dot-traversal chains a bad idea when pages are so dynamic?</p>
         <p>Yes, of course. Don't do that. Use <code>query()</code> and <code>queryAll()</code> when doing "whole page" work. Dot-traversal is best for small, well-defined node structures, like getting the <code>&lt;li&gt;</code> elements in a <code>&lt;ul&gt;</code>.</p>
-        <p class="question">Hey, this is just like <a href="http://nbubna.github.io/HTML">HTML.js</a>...</p>
+        <p class="question">Hey, this is just like <a href="http://nbubna.github.io/HTML">HTML(.js)</a>...</p>
         <p>Yep, same author, similar concepts, better implementation. Consider it the official successor, with a better name than "HTML.js 2.0".</p>
+        <p class="question">How is this better than HTML(.js)?</p>
+        <p>
+          <ul>
+          <li>It extends prototypes, rather than instances, making it faster and avoiding the need to use <code>HTML.ify(node)</code></li>
+          <li>It has more and better traversal abilities.</li>
+          <li>Traversal methods always return a list or a node/null, not both. This is a bit less convenient and a lot more self-documenting.</li>
+          <li>Dot traversal is no longer automatic, but must be turned on. This is more robust and more performant.</li>
+          <li>It further reinforces the primacy of the native DOM by lacking any exported/global variable.</li>
+          <li>It adds powerful features for value binding and templating.</li>
+          </ul>
+        </p>
         <p class="question">I have a suggestion, where do I put it?</p>
         <p>I do a happy dance when you <a href="http://github.com/esha/domx">create an issue on Github.</a></p>
       </div>
