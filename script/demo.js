@@ -1,11 +1,11 @@
-(function(window, document) {
+(function(window, D) {
     "use strict";
 
-    var Demo = function Demo(input, output, story) {
+    var Demo = function Demo(input, dom, display, output, story) {
         if (!(this instanceof Demo)) {
-            return new Demo(input, output, story);
+            return new Demo(input, dom, display, output, story);
         }
-        this.start(input, output, story);
+        this.start(input, dom, display, output, story);
     };
     Demo.prototype = {
         timing: {
@@ -15,19 +15,35 @@
             tick: 250,
             minTicks: 8
         },
-        start: function(input, output, story) {
-            this.input = input;
-            this.output = output;
+        start: function(input, dom, display, output, story) {
+            this.input = input = D.query(input);
+            this.dom = Demo.docify(dom = D.query(dom));
+            this.display = display = D.query(display);
+            this.output = output = D.query(output);
             this.story = story;
             this.intent(input);
             var self = this,
                 next = function(){ self.next(); };
-            this._exec = function(){ self.execute(); };
+            this._exec = function() {
+                self.execute(self.dom);
+            };
             this._tick = function() {
-                if (self.index){ self.execute(); }
+                if (self.index){ self.execute(self.dom); }
                 setTimeout(next, self.calcPause());
             };
             this._tick();
+
+            var update = function() {
+                display.innerHTML = dom.stringify(true);
+            };
+            update();
+            this._observer = new MutationObserver(update)
+                .observe(this.dom.html, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    characterData: true
+                });
         },
         restart: function() {
             this.index = 0;
@@ -55,27 +71,31 @@
                 timeout = setTimeout(self._exec, self.timing.intent);
             });
         },
-        doc: function(o) {
-            return o.createElement ? o :
-                   o.contentWindow ? o.contentWindow.document :
-                   o.ownerDocument ||
-                   document;
-        },
-        execute: function() {
-            var code = this.input.value,
-                doc = this.doc(this.output),
-                script = doc.createElement("script"),
-                previous = doc.getElementById("executable");
+        execute: function(document) {
+            var code = this.input.value;
             if (code.trim().indexOf('restart') === 0) {
                 this.restart();
             } else {
-                code = code.replace('remove()', 'remove(true)');
-                script.innerHTML = code;
-                script.id = "executable";
-                if (previous) {
-                    doc.body.removeChild(previous);
+                var result;
+                try {
+                    result = eval(code);
+                    Demo.flash(result);
+                } catch (e) {
+                    e.code = code;
+                    result = e;
                 }
-                doc.body.appendChild(script);
+                if (this.output) {
+                    if (result !== undefined) {
+                        var log = this.output.innerHTML;
+                        this.output.innerHTML = '<p class="line">'+
+                            Demo.describe(result)+'</p>\n' + log;
+                    }
+                } else {
+                    console.log(code);
+                    if (result) {
+                        console.log(result);
+                    }
+                }
             }
         },
         animate: function(text, next, update, finish) {
@@ -97,15 +117,65 @@
         index: 0
     };
 
+    Demo.docify = function(el) {
+        var d = document.createDocumentFragment();
+        d.html = d.documentElement = document.createElement('html');
+        d.appendChild(d.html);
+        d.html.appendChild(d.body = document.createElement('body'));
+        el.remove();
+        d.body.appendChild(el);
+        d.html.dot();
+        try {
+            delete d.parentNode;
+            d.parentNode = window;
+        } catch (e) {}
+        return d;
+    };
+
+    Demo.describe = function(el) {
+        if (document._.isList(el) && el.each) {
+            return el.each(Demo.describe).join(', ');
+        }
+        if (el instanceof HTMLElement) {
+            var id = el.getAttribute('id'),
+                classes = el.getAttribute('class');
+            return '&lt;'+
+                el.tagName.toLowerCase()+
+                (id ? '#'+id : '')+
+                (classes ? '.'+classes.split(' ').join('.') : '')+
+            '&gt;';
+        }
+        if (typeof el === "object") {
+            return JSON.stringify(el);
+        }
+        return el && el.value || (el+'');
+    }
+
+    // this all hitches on css animations and stringify's _attr support
+    Demo.highlight = function(el) {
+        if (el.setAttribute) {
+            el.setAttribute('_highlight', 'true');
+        }
+    };
+    Demo.unhighlight = function(el) {
+        if (el.removeAttribute) {
+            el.removeAttribute('_highlight');
+        }
+    };
+    var flashTimeout;
+    Demo.flash = function(el) {
+        if (el && el.each) {
+            if (flashTimeout){ clearTimeout(flashTimeout); }
+            flashTimeout = setTimeout(function() {
+                el.each(Demo.highlight);
+                setTimeout(function() {
+                    el.each(Demo.unhighlight);
+                }, 1000);
+            }, Demo.flash.time || 100);
+        }
+    };
+
     window.Demo = Demo;
 
-    // we need a chainable remove() for the demo
-    try {
-        var _remove = HTMLElement.prototype.remove;
-        HTMLElement.prototype.remove = function(chain) {
-            var ret = _.remove.apply(this, arguments);
-            return chain ? this : ret;
-        };
-    } catch (e) {}
 
 })(window, document);

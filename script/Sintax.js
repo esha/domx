@@ -26,7 +26,7 @@ var Sintax = {
 		var keywords = {
 			//Javascript keywords
 			"js": ["var", "new", "function", "return"],
-			"element": ["document", "Aristochart"],
+			"element": ["document", "window"],
 
 			//Types
 			"type": ["Object", "Number", "String", "Array", "Boolean"],
@@ -58,3 +58,4 @@ var Sintax = {
 		return text;
 	}
 };
+Sintax.highlight();

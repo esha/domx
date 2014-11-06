@@ -14,26 +14,16 @@ body {
   color: #ffffff;
 }
 .wrapper {
-  width: 85%;
+  width: 95%;
   margin: 0 auto;
 }
-.columns div {
-  display: inline-block;
-  vertical-align: top;
-  zoom: 1;
-  *display: inline;
-}
-.half {
-  width: 50%;
-}
-.third {
-  width: 33%;
-}
-.fifth {
-  width: 20%;
-}
-.fourfifths {
-  width: 80%;
+@media (min-width: 52em) {
+  .half {
+    width: 50%;
+  }
+  .third {
+    width: 33%;
+  }
 }
 h2 {
   font-family: "Montserrat", sans-serif;
@@ -47,7 +37,7 @@ h3 {
   font-weight: 400;
   font-size: 14px;
   text-transform: uppercase;
-  margin: 9px 18px;
+  margin: 5px 18px;
 }
 hr {
   border: none;
@@ -83,21 +73,10 @@ header .logo {
   font-family: 'Eagle Lake', fantasy, serif;
   font-size: 3.6em;
   display: inline-block;
+  margin: 0;
 }
 header .logo #DOMx {
   color: #ffffff;
-  display: inline-block;
-  left: -2%;
-  letter-spacing: 3px;
-  padding-bottom: 2%;
-  position: relative;
-}
-header .logo #js {
-  font-size: 0.6em;
-  opacity: 0.14;
-  position: relative;
-  left: -3%;
-  top: -2px;
 }
 header .motto {
   font-family: Georgia, fantasy, serif;
@@ -105,14 +84,12 @@ header .motto {
   font-style: italic;
   font-weight: 400;
   letter-spacing: 0.08em;
-  margin: 1% 2%;
   text-transform: none;
   color: #E7875E;
   display: inline-block;
 }
 header h5 {
   float: right;
-  margin: 18px;
 }
 header h5 a {
   color: #fff;
@@ -155,30 +132,30 @@ header img {
 .banner {
   margin: 18px 0;
 }
-.banner textarea {
+.banner #input,
+.banner #elements,
+.banner #output {
   width: 90%;
+  min-width: 36em;
   margin: 0 18px;
-  padding: 12px;
+  padding: 5px;
   background: #847851;
   border: 1px solid #645b3e;
   outline: none;
-  height: 180px;
+  min-height: 6em;
   border-radius: 8px;
   color: #fff;
   font-family: Monaco, monospace;
-  font-size: 0.8em;
+  font-size: 0.65em;
+  overflow-y: scroll;
+}
+.banner #elements {
+  background: #312020;
+  min-width: 26em;
+  min-height: 16em;
 }
 .banner #output {
-  background: #312020;
-  width: 96%;
-  height: 208px;
-  margin: 0 18px;
-  border-radius: 8px;
-  padding: 0 6px;
-}
-.banner #output iframe {
-  width: 100%;
-  height: inherit;
+  max-height: 6em;
 }
 .features h3 {
   font-size: 1.2em;
@@ -287,6 +264,48 @@ footer p {
 footer p a {
   color: #dcb996;
 }
+
+
+/* ==========================================================================
+   Demo
+   ========================================================================== */
+#document {
+  display: none;
+}
+.markup {
+  color: #666666;
+}
+.tag {
+  color: #777777;
+}
+.attr {
+  color: #444444;
+}
+.string {
+  color: #999999;
+}
+p.line {
+  line-height: 110%;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #645b3e;
+  margin: 0;
+}
+[highlight] {
+  border-radius: 6px;
+  padding: 2px 0;
+  -webkit-animation: flash 2s normal;
+  animation: flash 2s normal;
+}
+@-webkit-keyframes flash {
+  from { background: #fff; }
+  to { background: transparent; }
+}
+@keyframes flash {
+  from { background: #fff; }
+  to { background: transparent; }
+}
+
+
 /* ==========================================================================
    Browse Happy prompt
    ========================================================================== */
