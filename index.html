@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>DOMx - Time to Extend the DOM!</title>
+  <meta name="description" content="An intuitive, extensible JavaScript library to work directly with the DOM.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+  <link rel="stylesheet" type="text/css" href="style/domx-docs.css"/>
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+</head>
+<body>
+<!--[if lt IE 10]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+    <header>
+    <div class="wrapper">
+      <h5><a href="https://twitter.com/share" class="twitter-share-button" data-via="nadabu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a id="github-ribbon" target="_blank" href="https://github.com/esha/domx"><img alt="View me on GitHub" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+      <h1 class="logo">
+        <span id="DOMx">DOMx</span>
+      </h1>
+      <h3 class="motto">Extend the DOM!</h3>
+
+    </div>
+  </header>
+  <div class="content">
+    <div class="wrapper">
+      <div class="info">
+        <p>DOMx is an empowering way to traverse, manipulate, and extend the DOM. &nbsp; <a class="download" href="domx.min.js.gz">domx.min.js (~5kb, gzip)</a></p>
+
+      </div>
+      <div class="banner block-group">
+        <div class="half block">
+          <a name="Demo"><h3>Input</h3></a>
+          <textarea id="input" wrap="off" title="Type 'restart' to reset the demo."></textarea>
+          <h3>Output</h3>
+          <div id="output"></div>
+        </div>
+        <div class="half block">
+          <h3>DOM</h3>
+          <div id="elements">
+            <div>
+              <h1>Hello world!</h1>
+              <section id="empty"></section>
+              <section id="full">
+                <ul>
+                  <li>foo</li>
+                  <li>bar</li>
+                  <li>baz</li>
+                </ul>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="features block-group">
+        <div class="third block">
+          <h3>Powerful</h3>
+          <p>DOMx enables use of <em>all</em> native DOM features to traverse and manipulate with ease, clarity, and power.</p>
+        </div><div class="third block">
+          <h3>Consistent</h3>
+          <p>DOMx embraces DOM types rather than create yet-another-API. Our simple utility functions augment native features, <em>without recreating or obscuring</em> them.</p>
+        </div><div class="third block">
+          <h3>Extensible</h3>
+          <p>DOMx empowers developers to carefully and <em>correctly</em> extend the DOM with ease.</p>
+        </div>
+      </div>
+      <div class="info">
+        <p>See our <a href="#FAQ">F.A.Q.</a>!</p>
+      </div>
+      <hr>
+      <a name="API"><h2>API</h2></a>
+      <div class="api">
+        <article>
+          <h4><a name="document">document</a> <span class="returns">document</span></h4>
+          <p>Yeah, nothing is exported. No global variable. We're <em>extending</em> the DOM, not replacing it. If you want a shorter global variable, do this:</p>
+          <pre class="example">
+window.$ = document.queryAll.bind(document);
+</pre>
+          <p>or, you can do what i do and alias <code>document</code> to <code>D</code> in the <a href="http://en.wikipedia.org/wiki/Immediately-invoked_function_expression">IIFE</a> wrapping your code:</p>
+          <pre class="example">
+(function(D) {
+  D.body.classList.append('hooray');
+  ...
+}(document));
+</pre>
+        </article>
+        <article>
+          <h4><a name="queryAll()">queryAll</a>(<span class="variable">selector</span>) <span class="since">0.7.0</span></h4>
+          <p>
+            <code>document.queryAll</code> polyfills the upcoming <a href="http://dom.spec.whatwg.org/#dom-parentnode-queryall"><code>queryAll</code></a> and returns a list of the selected element(s). DOMx enables it not merely for <a href="http://dom.spec.whatwg.org/#parentnode">elements</a> but for lists of elements.
+          </p>
+          <pre class="example">
+document.queryAll(".example"); // list of nodes returned
+
+var parents = document.queryAll(".parents");
+...
+var allkids = parents.queryAll(".children");
+</pre>
+        </article>
+        <article>
+          <h4><a name="query()">query</a>(<span class="variable">selector</span>) <span class="since">0.7.0</span></h4>
+          <p>
+            <code>document.query</code> acts like <code>querySelector</code> and returns only the first selected element.
+            It is exists not merely because it is shorter, but because it is <a href="http://dom.spec.whatwg.org/#dom-parentnode-query">the future</a> and
+            DOMx enables it not merely for <a href="http://dom.spec.whatwg.org/#parentnode">elements</a> but for lists of elements.
+          </p>
+          <pre class="example">
+var parent = document.query(".parent"); // single matching element returned
+
+var allkids = parent.queryAll(".kid"); // queryAll returns list
+...
+var firstGrandkid = kids.query(".grandkid"); // query works across list, returns single element
+</pre>
+        </article>
+<!--
+        <article>
+          <h4><a name="queryAll()">queryAll</a>(<span class="variable">selector</span>, <span class="variable optional">limit</span>) <span class="since">0.7.0</span></h4>
+          <p><code>document.query</code> acts as a proxy for <code>querySelector</code> or <code>querySelectorAll</code> (as appropriate) and returns no more than the specified number of selected element(s).</p>
+          <pre class="example">
+document.queryAll("#example", 1); // single node or empty Array returned
+
+document.body.queryAll(".example", 5); // returns a single node if only one, otherwise an Array of 0-5 nodes
+</pre>
+        </article>
+-->
+        <article>
+          <h4><a name="each()">each</a>(<span class="variable">callback(<em>element</em>,<em>index</em>,<em>array</em>)</span>) <span class="since">0.7.0</span></h4>
+          <p>Use a the selected element(s) within a closure. Returns the element(s) it was called on.</p>
+          <pre class="example">
+document.queryAll('li').each(function(el, i, all) {
+  el.textContent = "Item " + (i+1) + " of " + all.length;
+}); // returns li elements
+</pre>
+        </article>
+        <article>
+          <h4><a name="each(property)">each</a>(<span class="variable">property</span> <span class="variable optional">, arguments...</span>) <span class="since">0.7.0</span></h4>
+          <p>Get, set, or invoke the specified property of the selected element(s). Returns either an array of retrieved/returned values or the element(s) it was called on.</p>
+          <pre class="example">
+var items = document.queryAll('.item');
+var texts = items.each('textContent'); // returns array of strings
+
+items.each('id', 'item${i}');// sets the id of each element (replaces ${i} with index)
+
+items.each('click');// calls 'click()' on each element, returns original items
+
+items.each('classList.add', 'foo');// adds 'foo' class to each item's classList, returns original items
+
+document.body.each('classList.toggle', 'ready');// each works on both single elements and lists
+</pre>
+        </article>
+        <article>
+          <h4><a name="only()">only</a>(<span class="variable">selector|index|filter|slice|property</span> <span class="variable optional">, endSlice|value</span>) <span class="since">0.7.0</span></h4>
+          <p>When you want to narrow down a selection, <code>only</code> allows you to easily filter
+          that list by selector, index, slice, or filtering function.</p>
+          <pre class="example">
+var items = document.queryAll('.item'); // all items
+
+items.only(':nth-child(even)'); // subset that matches selector
+
+items.only(3).textContent = "Fourth item!"; // index (special case, returns single element)
+
+items.only(-1).id = 'last'; // negative index works too
+
+items.only(function(el,i){ return el.id.indexOf(i) > 0; }); // arbitrary filter function
+
+items.only(3, 9);// specific slice of elements
+
+items.only('textContent', 'example');// only items with 'example' as the content
+</pre>
+        </article>
+        <article>
+          <h4><a name="not()">not</a>(<span class="variable">selector|index|filter|slice|property</span> <span class="variable optional">, endSlice|value</span>) <span class="since">0.9.0</span></h4>
+          <p>This exactly reverses the behavior of <a href="#only()">only()</a>.</p>
+          <pre class="example">
+var items = document.queryAll('.item'); // all items
+
+items.not(':nth-child(even)'); // subset that does not match the selector
+
+items.not(3).each('textContent', "Not the fourth!"); // returns all items except the fourth one
+
+items.not(-1).each('setAttribute', 'not-last', 'true'); // negative index works too
+
+items.not(function(el, i){ return el.id.indexOf(i) > 0; }); // all items whose ids do not contain their index
+
+items.not(3, 9);// all items outside the specified slice
+
+items.not('tagName', 'DIV');// all items that are not &lt;div&gt; elements
+</pre>
+        </article>
+        <article>
+          <h4><a name="all()">all</a>(<span class="variable">property</span> <span class="variable optional">, function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.9.0</span></h4>
+          <p>This function accumulates (and optionally acts upon) nodes recursively via the specified property. Beginning with the node(s) this is called upon, <code>all()</code> resolves the property then calls itself upon the result, gather each node or nodes found along the way. You may optionally provide a function to act on the nodes as <code>all()</code> travels the DOM tree. This function could also affect what nodes are gathered by what it returns. Also, you may optionally include the current node(s) as the first, rather than beginning with the resolved property.</p>
+          <p>When using a function:
+           <ul>
+             <li>The context of the function will be the node currently having the property resolved against it.</li>
+             <li>The function will receive as arguments, the resolved value for the current node and the list of accumulated nodes/values.</li>
+             <li>Returning <code>undefined</code> will not affect the accumulated list of nodes</li>
+             <li>Returning <code>null</code> will cause the "next" value (i.e. the current first arg) to be left out of the list</li>
+             <li>Returning anything else will cause the returned value to be put in the list instead of the "next" value</li>
+          </ul></p>
+          <p>This is a very powerful utility for selecting and/or acting upon well-defined, but often unwieldy properties of the DOM tree.</p>
+          <pre class="example">
+var focused = focusEvent.target.all('parentElement', true); // gets list of all elements containing the focus
+
+var active = document.query('td.active');
+active.all('nextElementSibling').each('classList.add', 'next');// mark all subsequent cells in the row
+active.all('previousElementSibling', function(previousElementSibling, all) {
+  this.classList.remove('next');
+}, true);// uses a function instead of each, and includes self
+</pre>
+        </article>
+        <article>
+          <h4><a name="closest()">closest</a>(<span class="variable optional">property</span> <span class="variable optional">, selector|function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.11.0</span></h4>
+          <p>In the absence of arguments, this returns the parent element (or self, if none). If given only a selector (or custom test function), it will follow the <code>parentElement</code> chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will
+          default to <code>false</code>.</p>
+          <pre class="example">
+var container = event.target.closest('.container'); // gets the closest element with 'container' class
+
+var active = document.query('.active');
+active.closest('nextElementSibling', '.action');// retrieves the closest, subsequent sibling with 'action' class
+active.closest('parentNode', function(node) {
+  return node.value && node.value.indexOf('example') >=0;
+}, true);// returns the closest node (self-included) with a value that includes the string 'example'
+</pre>
+        </article>
+        <article>
+          <h4><a name="farthest()">farthest</a>(<span class="variable optional">property</span> <span class="variable optional">, selector|function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.11.0</span></h4>
+          <p>In the absence of arguments, this returns the farthest parent element (or self, if none). If given only a selector (or custom test function), it will follow the <code>parentElement</code> chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will
+          default to <code>false</code>.</p>
+          <pre class="example">
+var container = event.target.farthest('.container'); // gets the farthest element with 'container' class
+
+var active = document.query('.active');
+active.farthest('nextElementSibling', '.action');// retrieves the farthest, subsequent sibling with 'action' class
+active.farthest('parentNode', function(node) {
+  return node.value && node.value.indexOf('example') >=0;
+}, true);// returns the farthest node (self-included) with a value that includes the string 'example'
+</pre>
+        </article>
+        <article>
+          <h4><a name="toArray()">toArray</a>(<span class="variable optional">array</span>) <span class="since">0.7.0</span></h4>
+          <p>Returns an actual <code>Array</code> of elements instead of a list object (e.g. <code>NodeList</code>).
+          Optionally, you can provide an array into which the elements should be pushed.</p>
+          <pre class="example">
+var items = document.queryAll('.items');
+fnThatTakesItemsAsArgs.apply(this, items.toArray());
+
+var output = items.toArray().map(fnThatConvertsElements);
+
+var elArr = [document.body, document.head];
+items.toArray(elArr);// will append all .item elements to the existing array
+</pre>
+        </article>
+        <article>
+          <h4><a name="dot()">dot()</a> and <a name="data-domx-dot">[data-domx-dot]</a> <span class="since">0.9.0</span></h4>
+          <p>Turns on <a href="#dot-traversal">dot traversal</a> properties for the target element (or list) and all descendant elements.</p>
+          <pre class="example">
+document.body.dot(); // activates dot-traversal for all elements in the document body
+</pre>
+          <pre class="example">
+&lt;body data-domx-dot&gt;
+  &lt;!-- a comment --&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    This is the rest of the header.
+  &lt;/header&gt;
+  ...
+&lt;/body&gt;
+</pre>
+        </article>
+        <article>
+          <h4><a name="dot-traversal">element.<span class="variable">tagName...</span></a> <span class="since">0.7.0</span></h4>
+          <p>DOMx allows you <a href="#dot()">to turn on</a> access to child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it searches only immediate children and not all descendant elements. The dot-traversal properties <em>always</em> return a list of matching elements.</p>
+          <p>This should <em>NOT</em> be used for long chains, as that would be fragile design. This is designed to be a powerful convenience feature for
+          stable DOM structures (think <code>ul.li</code>, <code>table.tbody.tr</code>, and such) when dot-traversal is enabled on them either declaratively or programmatically.</p>
+          <pre class="example">
+document.body.header; // returns a list containing only header element that are children of document.body
+document.body.header.h1; // returns a list of h1 elements that are children of header elements that are children of document.body
+document.body.header.h1[0].textContent = "A Better Title!";
+document.body.$text; // returns list of all text nodes that are children of the body
+document.body.$comment; // returns list of all comment nodes that are children of the body
+</pre>
+        </article>
+        <article>
+          <h4><a name="append()">append</a>(<span class="variable">name|Node|list</span>) <span class="since">0.7.0</span></h4>
+          <p>This automatically appends the specified tag or node (or list thereof) to the element(s) on which it was called.</p>
+          <pre class="example">
+document.body.append('div'); // returns a newly added div element
+
+document.body.append('div').append('h1'); // returns the new h1 element (with div parent)
+
+var script = document.createElement('script');
+script.src = '/mylib.js';
+document.head.append(script);
+
+document.body.append([node1, node2, [ul1, ul2]]); // yummy recursive append
+</pre>
+        </article>
+        <article>
+          <h4><a name="append(emmet)">append</a>('<span class="variable">emmet-abbr</span>') <span class="since">0.7.0</span></h4>
+          <p>The standard document.js artifact comes with the "emmet" extension, which lets you use
+          <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> to append elements to the DOM.
+          This extension supports most emmet features, except grouping and numbering. Those may be added later.</p>
+          <pre class="example">
+document.body.append('ul>li{list item text}*10');
+
+//Use in conjuction with only
+document.body.append('ul>li{item}*10')
+  .only(':nth-child(odd)')
+  .each('classList.add','odd');
+</pre>
+        </article>
+        <article>
+          <h4><a name="remove()">remove</a>()</h4>
+          <p>Removes the specified node (or list thereof). Some browsers provide this natively for elements, for the few who don't this polyfills the gap and enables use of it on arrays of elements. When called on a list, it returns the list of deleted items.</p>
+          <pre class="example">
+document.queryAll('.foo').remove();
+</pre>
+        </article>
+        <article>
+          <h4>document.<a name="extend">extend</a>(<span class="variable">name</span>, <span class="variable">function</span>); <span class="since">0.7.0</span></h4>
+          <p>Use this to extend the DOM. It automatically, correctly applies your function to both single elements and lists. Just don't get crazy with shortcuts.
+          DOMx is about exposing, learning, and using the DOM, not obscuring it beneath non-native interfaces.</p>
+          <pre class="example">
+document.extend('hide', function() {
+  this.style.display = 'none';  
+});
+document.queryAll('.foo').hide();
+</pre>
+        </article>
+        <article>
+          <h4>document.<a name="_.resolve">_.resolve</a>[<span class="variable">alias</span>] = <span class="variable">property</span>; <span class="since">0.7.0</span></h4>
+          <p>Nonetheless, the verbosity of the DOM can, like any friend, become tiresome. You may create property aliases for <code>each</code>.</p>
+          <pre class="example">
+document._.resolve['-class'] = 'classList.remove';
+document._.resolve['+class'] = 'classList.add';
+document.queryAll('.foo').each('-class', 'foo').each('+class', 'bar');
+
+document._.resolve.insert = 'insertAdjacentHTML';
+document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;Hello.&amp;lt;/span&amp;gt;');
+</pre>
+        </article>
+      </div>
+      <hr>
+      <h2><a name="FAQ">FAQ</a></h2>
+      <div class="faq">
+        <p class="question">Another jQuery wannabe, eh?</p>
+        <p>Definitely not. jQuery and <a href="zeptojs.com">friends</a> always hide the DOM from you. This used to be partly to protect you from it, but now it's just out of habit. DOMx's intent is to directly expose and enhance the DOM. The DOM of the present is not the anemic mess it was even a few short years ago; protection from it is more pointless with every passing month. In fact, more than being unnecessary, that "protection" is often stunting your education. DOMx is here to lubricate the process of learning what is really happening, and maybe throw in a few original features to sweeten the deal.</p>
+        <p class="question">Why not just use jQuery?</p>
+        <p>Asking this question is kinda like saying that a very large swiss-army knife is the only tool you'll ever want. Some people prefer to <a href="http://component.io">collect specialized tools</a>. Some people don't like jQuery's wrapper obscuring the <a href="https://developer.mozilla.org/en-US/docs/Web/API">riches of</a> <a href="http://docs.webplatform.org/wiki/dom#Index_of_all_DOM_topics">the native DOM</a>. Some <a href="http:/github.com/nbubna">people</a> prefer empowering tools to universal ones. There's <a href="http://youmightnotneedjquery.com">other reasons</a> out there too, but hopefully that's enough to move on to more useful questions.</p>
+        <p class="question">I thought we were supposed to extend the DOM with <a href="http://webcomponents.org/">web components</a>!</p>
+        <p>You are! But let's not pretend that web components will ever mean you don't need to manipulate and traverse the DOM directly. And when you want to do that within some fancy-pants web component, you might find yourself wanting a bit more power than the vanilla DOM gives. Then, instead of importing a big library like jQuery, you'll be glad to have the power of DOMx in just a few kilobytes. And even when web components reign supreme, there will always be a place for page-wide work to be done.
+        </p>
+        <p class="question">Which browsers does DOMx support?</p>
+        <p>Modern ones: Firefox, Chrome, Safari, Opera, IE9+ and the like.</p>
+        <p class="question">Isn't extending the DOM <a href="http://perfectionkills.com/whats-wrong-with-extending-the-dom/">a bad idea</a>?</p>
+        <p>Not at all. Unless you care to prop up the diminishing market share of IE6/7/8, <a href="https://github.com/nbubna/mind-hacking/blob/gh-pages/extending-the-dom.md">DOM extension</a> is no longer to be feared, just employed with discretion.</p>
+        <p class="question">How does the dot-traversal work?</p>
+        <p>By dynamically defining getter functions for the elements you use in the page.</p>
+        <p class="question">Aren't those long dot-traversal chains a bad idea when pages are so dynamic?</p>
+        <p>Yes, of course. Don't do that. Use <code>query()</code> and <code>queryAll()</code> when doing "whole page" work. Dot-traversal is best for small, well-defined node structures, like getting the <code>&lt;li&gt;</code> elements in a <code>&lt;ul&gt;</code>.</p>
+        <p class="question">Hey, this is just like <a href="http://nbubna.github.io/HTML">HTML(.js)</a>...</p>
+        <p>Yep, same author, similar concepts, better implementation. Consider it the official successor, with a better name than "HTML.js 2.0".</p>
+        <p class="question">How is this better than HTML(.js)?</p>
+        <p>
+          <ul>
+          <li>It extends prototypes, rather than instances, making it faster and avoiding the need to use <code>HTML.ify(node)</code></li>
+          <li>It has more and better traversal abilities.</li>
+          <li>Traversal methods always return a list or a node/null, not both. This is a bit less convenient and a lot more self-documenting.</li>
+          <li>Dot traversal is no longer automatic, but must be turned on. This is more robust and more performant.</li>
+          <li>It further reinforces the primacy of the native DOM by lacking any exported/global variable.</li>
+          <li>It adds powerful features for value binding and templating.</li>
+          </ul>
+        </p>
+        <p class="question">I have a suggestion, where do I put it?</p>
+        <p>I do a happy dance when you <a href="http://github.com/esha/domx">create an issue on Github.</a></p>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <div class="wrapper">
+      <p>An open-source project from <a href="http://esha.com">ESHA Research</a></p>
+    </div>
+  </footer>
+</body>
+<script src="script/domx-docs.js" type="text/javascript"></script>
+<script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+    e.src='//www.google-analytics.com/analytics.js';
+    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-42479338-4');ga('send','pageview');
+</script>
+</html>

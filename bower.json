@@ -1,0 +1,30 @@
+{
+  "name": "domx-docs",
+  "version": "0.1.0",
+  "homepage": "https://esha.github.io/domx/",
+  "authors": [
+    "ESHA Research <nathan@esha.com>"
+  ],
+  "description": "Documentation and demo for DOMx",
+  "main": "index.html",
+  "keywords": [
+    "domx",
+    "documentation"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "domx": "*",
+    "vista": "~2.0.1",
+    "normalize-css": "*",
+    "pocketgrid": "*",
+    "eventi": "~1.3.6"
+  }
+}

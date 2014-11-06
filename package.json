@@ -1,0 +1,44 @@
+{
+  "name": "domx-docs",
+  "version": "0.1.0",
+  "description": "Documentation and demo for DOMx",
+  "private": true,
+  "main": "Gruntfile.js",
+  "scripts": {
+    "postinstall": "bower install && bower update"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/esha/domx.git"
+  },
+  "keywords": [
+    "domx",
+    "documentation",
+    "demo"
+  ],
+  "author": "ESHA Research <nathan@esha.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/esha/domx/issues"
+  },
+  "homepage": "https://esha.github.io/domx/",
+  "devDependencies": {
+    "bower": "~1.3.12",
+    "grunt": "~0.4.5",
+    "grunt-autoprefixer": "~1.0.1",
+    "grunt-bake": "~0.3.12",
+    "grunt-bower-concat": "~0.4.0",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-copy": "~0.7.0",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-uglify": "~0.6.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "load-grunt-tasks": "~1.0.0",
+    "time-grunt": "~1.0.0"
+  },
+  "dependencies": {
+    "grunt-concat-sourcemap": "~0.4.3",
+    "grunt-csswring": "~1.1.0"
+  }
+}
