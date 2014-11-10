@@ -89,6 +89,18 @@
         node.remove();
     });
 
+    test('internal text values', function() {
+        var el = D.createElement('div');
+        el.textContent = 'a ${b} c ${d}';
+        deepEqual({ b: '', d: '' }, el.xValue);
+        el.xValue = {b:1, d:true};
+        equal('a 1 c true', el.textContent);
+        var val = el.xValue = {b:2, d:{e:false}};
+        equal('a 2 c {"e":false}', el.textContent);
+        deepEqual(val, el.xValue);
+        ok(val !== el.xValue, 'should be different object');
+    });
+
     test('change event', function() {
         expect(10);
         var el = D.body.append('input[value=old]'),
