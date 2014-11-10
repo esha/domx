@@ -214,15 +214,16 @@ _.define([Element], {
         get: function(){ return this.getAttribute('name'); },
         set: function(name){ this.setAttribute('name', name); }
     },
+    baseProperty: 'value',
     baseValue: {
         get: function() {
             var parser = this.getAttribute('data-values-parse');
             parser = parser && V.resolve(window, parser) || V.parse;
-            return parser.call(this, this.value);
+            return parser.call(this, this[this.baseProperty]);
         },
         set: function(value) {
-            var oldValue = this.value,
-                newValue = this.value = V.stringifyFor(this).call(this, value);
+            var oldValue = this[this.baseProperty],
+                newValue = this[this.baseProperty] = V.stringifyFor(this).call(this, value);
             if (oldValue !== newValue) {
                 V.changeEvent(this);
             }
@@ -395,5 +396,16 @@ _.define([HTMLSelectElement], {
                 this.baseValue = value;
             }
         }
+    }
+}, true);
+
+_.define([HTMLLIElement], {
+    baseProperty: {
+        get: function() {
+            // ordered ones use relative index, unordered ones use text
+            return this.parentNode instanceof HTMLOListElement ?
+                'value' :
+                'textContent';
+        } 
     }
 }, true);

@@ -80,6 +80,7 @@
 
     test("element", function() {
         var node = D.body.append('span[value=attr]{text}');
+        equal(node.baseProperty, 'value');
         equal(node.textContent, 'text');
         testBaseValue(node, 'attr');
         node.removeAttribute('value');
@@ -114,6 +115,21 @@
         el.remove();
 
         D.body.removeEventListener('change', listener);
+    });
+
+    test('ul li base change', function() {
+        var li = D.createElement('li'),
+            ul = D.createElement('ul'),
+            ol = D.createElement('ol');
+        li.textContent = 'true';
+        equal('textContent', li.baseProperty);
+        ol.appendChild(li);
+        equal('value', li.baseProperty);
+        strictEqual(li.properValue, 0);
+        li.remove();
+        ul.appendChild(li);
+        equal('textContent', li.baseProperty);
+        strictEqual(li.properValue, true);
     });
 
 }(document));
