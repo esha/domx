@@ -36,7 +36,7 @@
     });
 
     testMethod([Node,Attr], 'useBaseValue');
-    ['value','baseValue','properValue','nameValue'].forEach(function(prop) {
+    ['value','baseValue','xValue','nameValue'].forEach(function(prop) {
         testProperty(Node, prop);
     });
     ['nameParent','nameGroup'].forEach(function(prop) {
@@ -98,20 +98,20 @@
             };
         D.body.addEventListener('change', listener);
 
-        equal(el.properValue, 'old');
-        el.properValue = 'new';
-        equal(el.properValue, 'new');
+        equal(el.xValue, 'old');
+        el.xValue = 'new';
+        equal(el.xValue, 'new');
         el.remove();
 
         el = D.body.append('input[type=radio][value=value][checked=true]');
-        el.properValue = 'old';
+        el.xValue = 'old';
         el.remove();
 
         el = D.body.append('select[multiple]');
         el.append('option*3').each('textContent', '${i}');
-        deepEqual(el.properValue, []);
-        el.properValue = [0,1,2];
-        deepEqual(el.properValue, [0,1,2]);
+        deepEqual(el.xValue, []);
+        el.xValue = [0,1,2];
+        deepEqual(el.xValue, [0,1,2]);
         el.remove();
 
         D.body.removeEventListener('change', listener);
@@ -125,11 +125,11 @@
         equal('textContent', li.baseProperty);
         ol.appendChild(li);
         equal('value', li.baseProperty);
-        strictEqual(li.properValue, 0);
+        strictEqual(li.xValue, 0);
         li.remove();
         ul.appendChild(li);
         equal('textContent', li.baseProperty);
-        strictEqual(li.properValue, true);
+        strictEqual(li.xValue, true);
     });
 
 }(document));

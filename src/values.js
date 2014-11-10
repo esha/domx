@@ -137,18 +137,6 @@ _.define([Node], {
         var kids = !this.noValues && this.childNodes.length;
         return !kids || (kids === 1 && !!this.childNodes[0].useBaseValue());
     },
-    properValue: {
-        get: function() {
-            return this.useBaseValue() ? this.baseValue : V.getNameValue(this, {});
-        },
-        set: function(value) {
-            if (this.useBaseValue() || typeof value !== "object") {
-                this.baseValue = value;
-            } else {
-                V.setNameValue(this, value);
-            }
-        }
-    },
     nameParent: {
         get: function() {
             var node = this,
@@ -168,7 +156,7 @@ _.define([Node], {
                 name = V.name(el);
             return name ? el.parentNode ?
                 el.nameParent.queryNameAll(name) :
-                new DOMxList(el) :
+                new XList(el) :
                 null;
         }
     },
@@ -177,10 +165,10 @@ _.define([Node], {
             var values;
             if (V.name(this)) {
                 this.nameGroup.each(function(node) {
-                    values = V.combine(values, node.properValue);
+                    values = V.combine(values, node.xValue);
                 });
             }
-            return values || this.properValue;
+            return values || this.xValue;
         },
         set: function(values) {
             if (V.name(this) && Array.isArray(values)) {
@@ -200,7 +188,19 @@ _.define([Node], {
                     group.add(last.repeat(values[group.length]));
                 }
             } else {
-                this.properValue = values;
+                this.xValue = values;
+            }
+        }
+    },
+    xValue: {
+        get: function() {
+            return this.useBaseValue() ? this.baseValue : V.getNameValue(this, {});
+        },
+        set: function(value) {
+            if (this.useBaseValue() || typeof value !== "object") {
+                this.baseValue = value;
+            } else {
+                V.setNameValue(this, value);
             }
         }
     }
@@ -238,7 +238,7 @@ _.define(_.parents, {
         return this.queryNameAll(name, false);
     },
     queryNameAll: function(name, _list) {
-        _list = _list === undefined ? new DOMxList() : _list;
+        _list = _list === undefined ? new XList() : _list;
         for (var i=0; i < this.childNodes.length; i++) {
             var node = this.childNodes[i],
                 nodeName = V.name(node),
@@ -311,7 +311,7 @@ _.define([Text], {
 }, true);
 
 _.define([HTMLInputElement], {
-    properValue:  {
+    xValue:  {
         get: function() {
             var input = this;
             return (input.type !== 'radio' && input.type !== 'checkbox') || input.checked ?
@@ -339,7 +339,7 @@ _.define([HTMLInputElement], {
                 var group = this.nameGroup,
                     value;
                 group.each(function(node) {
-                    value = V.combine(value, node.properValue, true);
+                    value = V.combine(value, node.xValue, true);
                 });
                 return Array.isArray(value) && (this.type === 'radio' || group.length === 1) ?
                     value[0] :
@@ -369,11 +369,11 @@ _.define([HTMLInputElement], {
 }, true);
 
 _.define([HTMLSelectElement], {
-    properValue: {
+    xValue: {
         get: function() {
             if (this.multiple) {
                 var selected = this.children.only('selected', true);
-                return selected.length ? selected.each('properValue') :
+                return selected.length ? selected.each('xValue') :
                     this.children.length > 1 ? [] : null;
             }
             return V.parse(this.baseValue);

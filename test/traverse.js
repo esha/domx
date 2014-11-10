@@ -141,7 +141,7 @@ Test assertions:
     });
 
     test('mixed node types by selector', function() {
-        var list = new DOMxList(),
+        var list = new XList(),
             text = D.createTextNode('hello'),
             el = D.createElement('meta'),
             exclude = D.createElement('test');
@@ -160,7 +160,7 @@ Test assertions:
     module("not()");
 
     test("not is inverse of only", function() {
-        var list = new DOMxList(D.createElement('div'),
+        var list = new XList(D.createElement('div'),
                                 D.createElement('span'),
                                 D.createElement('span'));
         deepEqual(list.not('div'), list.only('span'));
@@ -197,7 +197,7 @@ Test assertions:
             strictEqual(this, D.body);
             strictEqual(parentElement, D.html);
             strictEqual(list.length, 0);
-            ok(list instanceof DOMxList);
+            ok(list instanceof XList);
         });
         equal(list.length, 1);
     });
@@ -220,7 +220,7 @@ Test assertions:
         });
         equal(returnNull.length+1, all.length, "shouldn't collect <html>");
 
-        var allFirstText = new DOMxList(div.all('parentElement')
+        var allFirstText = new XList(div.all('parentElement')
                                             .each('firstChild')
                                             .each('textContent'));
         var returnNode = div.all('parentElement', function(parentElement) {

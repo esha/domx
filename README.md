@@ -20,7 +20,7 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq]
 
 Download: [domx.min.js][full-min] or [domx.js][full]  
 
-Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], [`properValue`][properValue], [`repeat()`][repeat], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
+Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], [`xValue`][xValue], [`repeat()`][repeat], [`toArray()`][toArray], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
 
 [full-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
 [full]: https://raw.github.com/esha/domx/master/dist/domx.js
@@ -43,7 +43,7 @@ Includes [`each()`][each], [`document.extend()`][extend], [`query()`][query], [`
 [value]: http://esha.github.io/domx#value
 [baseValue]: http://esha.github.io/domx#baseValue
 [useBaseValue]: http://esha.github.io/domx#useBaseValue()
-[properValue]: http://esha.github.io/domx#properValue
+[xValue]: http://esha.github.io/domx#xValue
 [nameParent]: http://esha.github.io/domx#nameParent
 [nameGroup]: http://esha.github.io/domx#nameGroup
 [nameValue]: http://esha.github.io/domx#nameValue
@@ -70,7 +70,7 @@ Features stripped out of the "base" version, packaged as plugins for a la carte 
 
 Download:
 * [domx.emmet.js][emmet-plugin] - supports [emmet][emmet] [abbreviations][abbr] for `append()`
-* [domx.values.js][values-plugin] - adds [`properValue`][properValue] getter/setter for `Node`s (and supporting functions/properties)
+* [domx.values.js][values-plugin] - adds [`xValue`][xValue] getter/setter for `Node`s (and supporting functions/properties)
 * [domx.repeat.js][repeat-plugin] - adds [`repeat()`][repeat] function
 * [domx.dot.js][dot-plugin] - supports dot-traversal via [`data-domx-dot`][dot] attribute and [`dot()`][dot] function 
 * [domx.stringify.js][stringify-plugin] - generates a string version of the DOM for the demo (also not in the "full" version)

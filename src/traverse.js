@@ -3,7 +3,7 @@ _.parents = [Element, DocumentFragment, D];
 _.define(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
-            list = new DOMxList(count);
+            list = new XList(count);
         for (var i=0, m=self.length; i<m && (!count || count > list.length); i++) {
             list.add(self[i][
                 count === list.length+1 ? 'querySelector' : 'querySelectorAll'
@@ -32,7 +32,7 @@ _.define(_.lists, {
                             return (n.each ? n.each(b) : n[b]) === e;
                         }
             );
-        return new DOMxList(arr);
+        return new XList(arr);
     },
     not: function not() {
         var exclude = this.only.apply(this, arguments);
@@ -88,7 +88,7 @@ _.closest = function(node, prop, test) {
 
 D.extend('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
-    _list = _list || new DOMxList();
+    _list = _list || new XList();
 
     var value = inclusive ? this : this[_.resolve[prop] || prop];
     if (value) {

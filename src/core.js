@@ -1,5 +1,5 @@
 // core.js
-window.DOMxList = function DOMxList(limit) {
+window.XList = function XList(limit) {
     if (typeof limit === "number") {
         this.limit = limit;
         this.add(_.slice(arguments, 1));
@@ -14,7 +14,7 @@ _ = {
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
-    lists: [NodeList, HTMLCollection, DOMxList],
+    lists: [NodeList, HTMLCollection, XList],
     isList: function(o) {
         return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                o instanceof NodeList ||// phantomjs foolishly calls these functions
@@ -101,7 +101,7 @@ _.define([Node].concat(_.lists), {
         }
         return !results.length ? this : // no results, be fluent
             !_.isList(this) ? results[0] : // single source, single result
-            results[0] && results[0].each ? new DOMxList(results) : // convert to DOMx (combines sub-lists)
+            results[0] && results[0].each ? new XList(results) : // convert to DOMx (combines sub-lists)
             results;
     },
     toArray: function(arr) {
@@ -117,8 +117,8 @@ _.define([Node].concat(_.lists), {
     }
 });
 
-// define DOMxList functions
-_.define([DOMxList], {
+// define XList functions
+_.define([XList], {
     length: 0,
     limit: -1,
     add: function(item) {

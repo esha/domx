@@ -50,7 +50,7 @@ Test assertions:
 
         var fn = function() {
             ok(!_.isList(this));
-            return new DOMxList(this);
+            return new XList(this);
         };
 
         D.extend('core_test', fn);
@@ -89,7 +89,7 @@ Test assertions:
 
     test("_.isList", function() {
         ok(_.isList([]), "array is list");
-        ok(_.isList(new DOMxList()), "DOMxList is list");
+        ok(_.isList(new XList()), "XList is list");
         ok(_.isList(arguments), "arguments is list");
         ok(_.isList(D.querySelectorAll('body')), "NodeList is list");
         ok(_.isList(D.body.children), "HTMLCollection is list");
@@ -104,12 +104,12 @@ Test assertions:
         ok(!_.isList(D.createTextNode('foo')), "text node is not list");
     });
 
-    test('DOMxList', function() {
-        var list = new DOMxList();
+    test('XList', function() {
+        var list = new XList();
         equal(list.length, 0);
-        ok(list instanceof DOMxList);
+        ok(list instanceof XList);
 
-        list = new DOMxList([1,2]);
+        list = new XList([1,2]);
         equal(list.length, 2);
         equal(list[0], 1);
         equal(list[1], 2);
@@ -124,7 +124,7 @@ Test assertions:
         equal(list.indexOf(1), 0);
         equal(list.indexOf(0), -1);
 
-        list = new DOMxList();
+        list = new XList();
         list.limit = 1;
         equal(list.add(1,2), 1, "should add just one");
         equal(list.length, 1);

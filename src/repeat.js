@@ -25,7 +25,7 @@ var R = _.repeat = {
     repeat: function(parent, anchor, source, val) {
         var repeat = source.cloneNode(true);
         if (val !== undefined && val !== null) {
-            repeat.properValue = val;
+            repeat.xValue = val;
         }
         parent.insertBefore(repeat, anchor);
         return repeat;
