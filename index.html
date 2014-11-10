@@ -24,26 +24,50 @@
       <h1 class="logo">
         <span id="DOMx">DOMx</span>
       </h1>
-      <h3 class="motto">Extend the DOM!</h3>
+      <h3 class="motto">Befriend the DOM!</h3>
 
     </div>
   </header>
   <div class="content">
     <div class="wrapper">
       <div class="info">
-        <p>DOMx is an empowering way to traverse, manipulate, and extend the DOM. &nbsp; <a class="download" href="domx.min.js.gz">domx.min.js (~5kb, gzip)</a></p>
+        <p>DOMx is all about powerful, lightweight, native DOM interaction. Try it: &nbsp; <a class="download" href="domx.min.js.gz">domx.min.js (~5kb, gzip)</a></p>
 
       </div>
-      <div class="banner block-group">
+      <demo-x class="block-group">
         <div class="half block">
-          <a name="Demo"><h3>Input</h3></a>
-          <textarea id="input" wrap="off" title="Type 'restart' to reset the demo."></textarea>
-          <h3>Output</h3>
-          <div id="output"></div>
+          <h3>
+            Code &nbsp;
+            <a name="Demo" class="controls">
+              <span title="Pause" stop>&#9612;&#9612;</span>
+              <span title="Play" start>&#9654;</span>
+            </a>
+          </h3>
+          <demo-in wrap="off" contenteditable="true">
+            <pre>document.body.div</pre>
+            <pre>document.body.div.section</pre>
+            <pre>document.body.div.section.only(0)</pre>
+            <pre>document.body.div.section.only('#full')</pre>
+            <pre>document.body.div.section.ul.li.each('id', 'item${i}')</pre>
+            <pre>document.query('#empty')</pre>
+            <pre>document.query('#empty').append('h1')</pre>
+            <pre>document.query('#empty').append('ul>li{item}*5')</pre>
+            <pre>document.queryAll('#empty li').each(function(el, i, all) {
+  el.textContent += ' '+(i+1)+' of '+all.length;
+})</pre>
+            <pre>document.queryAll('#empty li').only(function(el, i) {
+  return i % 3;
+}).each('className','special')</pre>
+            <pre>document.queryAll('#empty li').not('.special').each('textContent')</pre>
+            <pre>document.queryAll('#empty *').remove()</pre>
+            <pre>//Now you try it out for yourself! Edit me.</pre>
+          </demo-in>
+          <h3>Returns</h3>
+          <demo-out></demo-out>
         </div>
         <div class="half block">
           <h3>DOM</h3>
-          <div id="elements">
+          <demo-dom id="elements">
             <div>
               <h1>Hello world!</h1>
               <section id="empty"></section>
@@ -55,19 +79,19 @@
                 </ul>
               </section>
             </div>
-          </div>
+          </demo-dom>
         </div>
-      </div>
+      </demo-x>
       <div class="features block-group">
         <div class="third block">
-          <h3>Powerful</h3>
-          <p>DOMx enables use of <em>all</em> native DOM features to traverse and manipulate with ease, clarity, and power.</p>
+          <h3>Native</h3>
+          <p>DOMx supports native DOM interfaces and features, rather than obscuring them behind wrapper objects with new APIs.</p>
         </div><div class="third block">
-          <h3>Consistent</h3>
-          <p>DOMx embraces DOM types rather than create yet-another-API. Our simple utility functions augment native features, <em>without recreating or obscuring</em> them.</p>
+          <h3>Capable</h3>
+          <p>DOMx provides powerful utility functions for using the native DOM, providing full and flexible DOM library features with minimal overhead.</p>
         </div><div class="third block">
-          <h3>Extensible</h3>
-          <p>DOMx empowers developers to carefully and <em>correctly</em> extend the DOM with ease.</p>
+          <h3>Friendly</h3>
+          <p>DOMx makes the verbose and unwieldy DOM API intuitive and easy to use, extend, and even abbreviate if need be.</p>
         </div>
       </div>
       <div class="info">

@@ -596,12 +596,14 @@ header img {
 .info p {
   margin: 18px 0;
 }
-.banner {
+demo-x {
   margin: 18px 0;
+  display: block;
 }
-.banner #input,
-.banner #elements,
-.banner #output {
+demo-in,
+demo-dom,
+demo-out {
+  display: block;
   width: 90%;
   min-width: 36em;
   margin: 0 18px;
@@ -615,20 +617,42 @@ header img {
   font-family: Monaco, monospace;
   font-size: 0.65em;
   overflow-y: scroll;
+  white-space: pre;
 }
-.banner #elements {
+demo-x h3 {
+  width: 90%;
+}
+demo-x .controls {
+  font-size: 0.8em;
+  cursor: pointer;
+  float: right;
+}
+/* this should probably be added programmatically */
+demo-in * {
+  display: none;
+}
+demo-x [start],
+demo-x.stopped [stop] {
+  display: none;
+}
+demo-x.stopped [start] {
+  font-size: 1.4em;
+  padding-right: 0.7em;
+  display: initial;
+}
+demo-dom {
   background: #312020;
   min-width: 26em;
   min-height: 16em;
 }
-.banner #output {
+demo-out {
   max-height: 6em;
 }
 .features h3 {
-  font-size: 1.2em;
+  font-size: 1em;
   font-family: "Open Sans", Helvetica, Arial;
   text-transform: none;
-  margin-bottom: 9px;
+  margin-bottom: 0.5em;
 }
 .features p {
   margin: 9px 18px;
@@ -639,52 +663,52 @@ header img {
 .api article {
   padding-bottom: 0.8em;
 }
-.api article h4 {
+.api h4 {
   font-family: Monaco, monospace;
   margin: 18px;
   font-size: 1.2em;
   color: #cfd59c;
 }
-.api article h4 .returns {
+.returns {
   font-style: italic;
   font-size: 90%;
   color: #b06646;
 }
-.api article h4 .variable {
+.variable {
   color: #829a1c;
   font-weight: bold;
 }
-.api article h4 .variable em {
+.variable em {
   font-style: italic;
 }
-.api article h4 .variable:before {
+.variable:before {
   content: '<';
 }
-.api article h4 .variable:after {
+.variable:after {
   content: '>';
 }
-.api article h4 .optional:before {
+.optional:before {
   content: '[';
 }
-.api article h4 .optional:after {
+.optional:after {
   content: ']';
 }
-.api article h4 .since {
+.since {
   font-size: 50%;
   background-color: #cfd59c;
   color: #3d2828;
   padding: 0px 2px;
 }
-.api article h4 .since:before {
+.since:before {
   content: 'v';
 }
-.api article h4 .since:after {
+.since:after {
   content: '+';
 }
-.api article p em {
+p em {
   font-style: italic;
 }
-.api article .example {
+.example {
   background: #312020;
   font-family: Monaco, monospace;
   font-size: 14px;
@@ -694,19 +718,19 @@ header img {
   line-height: 130%;
   border-radius: 8px;
 }
-.api article .example .comment {
+.example .comment {
   color: #feecc9;
 }
-.api article .example .comment * {
+.example .comment * {
   color: #feecc9 !important;
 }
-.api article .example .quote {
+.example .quote {
   color: #8c9d34;
 }
-.api article .example .keyword {
+.example .keyword {
   color: #e0e4c0;
 }
-.api article .example .tab {
+.example .tab {
   color: #493030;
 }
 .faq p {
