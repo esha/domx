@@ -120,7 +120,7 @@ _.define([Node].concat(_.lists), {
 // define XList functions
 _.define([XList], {
     length: 0,
-    limit: -1,
+    limit: undefined,
     add: function(item) {
         var l = this.length;
         if (arguments.length > 1 || _.isList(item)) {
@@ -135,6 +135,9 @@ _.define([XList], {
             }
         }
         return this.length - l;
+    },
+    isFull: function() {
+        return this.add === _.zero;
     },
     indexOf: function(item) {
         for (var i=0; i<this.length; i++) {
