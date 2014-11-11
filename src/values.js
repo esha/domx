@@ -233,48 +233,38 @@ _.define([Element], {
     noValues: V.booleanAttr('data-values-none')
 }, true);
 
-_.define(_.parents, {
+_.define(_.parents.concat(_.lists), {
     queryName: function(name) {
-        return this.queryNameAll(name, false);
+        return this.queryNameAll(name, 1)[0];
     },
-    queryNameAll: function(name, _list) {
-        _list = _list === undefined ? new XList() : _list;
-        for (var i=0; i < this.childNodes.length; i++) {
-            var node = this.childNodes[i],
-                nodeName = V.name(node),
-                ret;
-            if (nodeName === name && node.tagName !== 'X-REPEAT') {
-                if (!_list) {
-                    return node;
-                } else {
+    queryNameAll: function(name, count, _list) {
+        _list = _list || new XList(count);
+        var parents = _.isList(this) ? this : [this];
+        for (var s=0; s < parents.length && !_list.isFull(); s++) {
+            var parent = parents[s];
+            for (var i=0; i < parent.childNodes.length && !_list.isFull(); i++) {
+                var node = parent.childNodes[i],
+                    nodeName = V.name(node);
+                if (nodeName === name && node.tagName !== 'X-REPEAT') {
                     _list.add(node);
-                }
-            } else if (node.nodeType === 1) {
-                if (nodeName) {
-                    if (name.indexOf(nodeName+'.') === 0) {
-                        ret = node.queryNameAll(name.substring(nodeName.length+1), _list);
-                        if (_list !== ret) {
-                            return ret;
+                } else if (node.nodeType === 1) {
+                    if (nodeName) {
+                        if (name.indexOf(nodeName+'.') === 0) {
+                            node.queryNameAll(name.substring(nodeName.length+1), count, _list);
                         }
-                    }
-                } else {
-                    ret = node.queryNameAll(name, _list);
-                    if (_list !== ret) {
-                        return ret;
+                    } else {
+                        node.queryNameAll(name, count, _list);
                     }
                 }
             }
-        }
-        if (this.useAttrValues) {
-            var el = this;
-            for (var a=0; a < el.attributes.length; a++) {
-                var attr = el.attributes[a];
-                if (attr.name === name) {
-                    if (!_list) {
-                        return attr;
-                    } else {
+            if (parent.useAttrValues && !_list.isFull()) {
+                var el = this;
+                for (var a=0; a < el.attributes.length; a++) {
+                    var attr = el.attributes[a];
+                    if (attr.name === name) {
                         attr.parentNode = el;
                         _list.add(attr);
+                        break;
                     }
                 }
             }

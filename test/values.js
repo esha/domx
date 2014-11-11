@@ -144,4 +144,27 @@
         strictEqual(li.xValue, true);
     });
 
+    test('queryName', function() {
+        var el = D.queryName('named');
+        strictEqual(el, D.query('[name=named]'));
+        equal(el.getAttribute('name'), 'named');
+        var nested = D.queryName('named.nested');
+        strictEqual(nested, D.query('[name=nested]'));
+        equal(nested.getAttribute('name'), 'nested');
+
+        var named = D.queryAll('[name=named]');
+        nested = named.queryName('nested');
+        strictEqual(nested, D.query('[name=nested]'));
+    });
+
+    test('queryNameAll', function() {
+        var els = D.queryNameAll('named');
+        equal(els.length, 2);
+        equal(els[0].getAttribute('name'), 'named');
+        equal(els[1].getAttribute('name'), 'named');
+
+        els = D.body.children.queryNameAll('named');
+        equal(els.length, 2);
+    });
+
 }(document));
