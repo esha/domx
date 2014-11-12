@@ -115,7 +115,7 @@ window.$ = document.queryAll.bind(document);
 </pre>
         </article>
         <article>
-          <h4><a name="queryAll()">queryAll</a>(<span class="variable">selector</span>) <span class="since">0.7.0</span></h4>
+          <h4><a name="queryAll()">queryAll</a>(<span class="variable string">selector</span>) <span class="since">0.7.0</span></h4>
           <p>
             <code>document.queryAll</code> polyfills the upcoming <a href="http://dom.spec.whatwg.org/#dom-parentnode-queryall"><code>queryAll</code></a> and returns a list of the selected element(s). DOMx enables it not merely for <a href="http://dom.spec.whatwg.org/#parentnode">elements</a> but for lists of elements.
           </p>
@@ -128,7 +128,7 @@ var allkids = parents.queryAll(".children");
 </pre>
         </article>
         <article>
-          <h4><a name="query()">query</a>(<span class="variable">selector</span>) <span class="since">0.7.0</span></h4>
+          <h4><a name="query()">query</a>(<span class="variable string">selector</span>) <span class="since">0.7.0</span></h4>
           <p>
             <code>document.query</code> acts like <code>querySelector</code> and returns only the first selected element.
             It is exists not merely because it is shorter, but because it is <a href="http://dom.spec.whatwg.org/#dom-parentnode-query">the future</a> and
@@ -142,17 +142,6 @@ var allkids = parent.queryAll(".kid"); // queryAll returns list
 var firstGrandkid = kids.query(".grandkid"); // query works across list, returns single element
 </pre>
         </article>
-<!--
-        <article>
-          <h4><a name="queryAll()">queryAll</a>(<span class="variable">selector</span>, <span class="variable optional">limit</span>) <span class="since">0.7.0</span></h4>
-          <p><code>document.query</code> acts as a proxy for <code>querySelector</code> or <code>querySelectorAll</code> (as appropriate) and returns no more than the specified number of selected element(s).</p>
-          <pre class="example">
-document.queryAll("#example", 1); // single node or empty Array returned
-
-document.body.queryAll(".example", 5); // returns a single node if only one, otherwise an Array of 0-5 nodes
-</pre>
-        </article>
--->
         <article>
           <h4><a name="each()">each</a>(<span class="variable">callback(<em>element</em>,<em>index</em>,<em>array</em>)</span>) <span class="since">0.7.0</span></h4>
           <p>Use a the selected element(s) within a closure. Returns the element(s) it was called on.</p>
@@ -163,7 +152,7 @@ document.queryAll('li').each(function(el, i, all) {
 </pre>
         </article>
         <article>
-          <h4><a name="each(property)">each</a>(<span class="variable">property</span> <span class="variable optional">, arguments...</span>) <span class="since">0.7.0</span></h4>
+          <h4><a name="each(property)">each</a>(<span class="variable string">property</span> <span class="variable optional">, arguments...</span>) <span class="since">0.7.0</span></h4>
           <p>Get, set, or invoke the specified property of the selected element(s). Returns either an array of retrieved/returned values or the element(s) it was called on.</p>
           <pre class="example">
 var items = document.queryAll('.item');
@@ -218,7 +207,7 @@ items.not('tagName', 'DIV');// all items that are not &lt;div&gt; elements
 </pre>
         </article>
         <article>
-          <h4><a name="all()">all</a>(<span class="variable">property</span> <span class="variable optional">, function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.9.0</span></h4>
+          <h4><a name="all()">all</a>(<span class="variable string">property</span> <span class="variable optional">, function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.9.0</span></h4>
           <p>This function accumulates (and optionally acts upon) nodes recursively via the specified property. Beginning with the node(s) this is called upon, <code>all()</code> resolves the property then calls itself upon the result, gather each node or nodes found along the way. You may optionally provide a function to act on the nodes as <code>all()</code> travels the DOM tree. This function could also affect what nodes are gathered by what it returns. Also, you may optionally include the current node(s) as the first, rather than beginning with the resolved property.</p>
           <p>When using a function:
            <ul>
@@ -285,21 +274,20 @@ items.toArray(elArr);// will append all .item elements to the existing array
           <h4><a name="dot()">dot()</a> and <a name="data-domx-dot">[data-domx-dot]</a> <span class="since">0.9.0</span></h4>
           <p>Turns on <a href="#dot-traversal">dot traversal</a> properties for the target element (or list) and all descendant elements.</p>
           <pre class="example">
-document.body.dot(); // activates dot-traversal for all elements in the document body
+document.dot(); // activates dot-traversal for all elements in the document
+document.query('div').dot();// enables dot-traversal for the first div and its descendants
 </pre>
-          <pre class="example">
-&lt;body data-domx-dot&gt;
-  &lt;!-- a comment --&gt;
+          <div class="example">&lt;body data-domx-dot&gt;&lt;!-- enable dot-traversal --&gt;
   &lt;header&gt;
     &lt;h1&gt;Title&lt;/h1&gt;
     This is the rest of the header.
   &lt;/header&gt;
   ...
 &lt;/body&gt;
-</pre>
+</div>
         </article>
         <article>
-          <h4><a name="dot-traversal">element.<span class="variable">tagName...</span></a> <span class="since">0.7.0</span></h4>
+          <h4><a name="dot-traversal">element.<span class="variable tag">tagName...</span></a> <span class="since">0.9.0</span></h4>
           <p>DOMx allows you <a href="#dot()">to turn on</a> access to child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it searches only immediate children and not all descendant elements. The dot-traversal properties <em>always</em> return a list of matching elements.</p>
           <p>This should <em>NOT</em> be used for long chains, as that would be fragile design. This is designed to be a powerful convenience feature for
           stable DOM structures (think <code>ul.li</code>, <code>table.tbody.tr</code>, and such) when dot-traversal is enabled on them either declaratively or programmatically.</p>
@@ -327,7 +315,7 @@ document.body.append([node1, node2, [ul1, ul2]]); // yummy recursive append
 </pre>
         </article>
         <article>
-          <h4><a name="append(emmet)">append</a>('<span class="variable">emmet-abbr</span>') <span class="since">0.7.0</span></h4>
+          <h4><a name="append(emmet)">append</a>(<span class="variable string">emmet-abbr</span>) <span class="since">0.7.0</span></h4>
           <p>The standard document.js artifact comes with the "emmet" extension, which lets you use
           <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> to append elements to the DOM.
           This extension supports most emmet features, except grouping and numbering. Those may be added later.</p>
@@ -348,7 +336,62 @@ document.queryAll('.foo').remove();
 </pre>
         </article>
         <article>
-          <h4>document.<a name="extend">extend</a>(<span class="variable">name</span>, <span class="variable">function</span>); <span class="since">0.7.0</span></h4>
+          <h4><a name="xValue">xValue</a> <span class="since">0.13.0</span></h4>
+          <p>Property with dynamic get/set functions that pull/push rich values from/to
+          the DOM structure of the contextual node. This will automatically parse/stringify JSON values, handles nested structures, and supports ${name} syntax for text nodes. Please note that this does not establish any binding between
+          the nodes and values or objects returned. It is a straightforward read/write.</p>
+          <div class="example">&lt;div name="person"&gt;
+  &lt;pre name="address"&gt;${street},
+${city}, ${state} ${zip}&lt;/pre&gt;
+&lt;/div&gt;
+</div>
+          <pre class="example">
+var person = document.queryName('person');// returns div[name=person]
+person.xValue = {
+  address: {
+    street: '1600 Pennsylvania Ave NW',
+    city: 'Washington',
+    state: 'DC',
+    zip: 20400
+  }
+};
+var zip = person.xValue.address.zip;// returns 20400
+document.queryName('person.address.zip').xValue = 20500;// correct just the zip
+zip = person.xValue.address.zip;// returns 20500
+</pre>
+        </article>
+        <article>
+          <h4><a name="queryName">queryName</a>(<span class="variable string">name</span>) <span class="since">0.10.0</span></h4>
+          <p>Finds the first descendent node with the specified name (attribute or property). This respects nested names, attributes, and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon,
+          so far as nesting is concerned.</p>
+          <div class="example">&lt;div name="person"&gt;
+  &lt;pre name="address"&gt;${street}
+${city}, ${state} ${zip}
+  &lt;/pre&gt;
+&lt;/div&gt;
+</div>
+          <pre class="example">
+var address = document.queryName('person.addres');// returns pre[name=address]
+address.xValue = { zip: 97216 };// sets the zip field
+address.queryName('zip').textContent;// returns the text '97216'
+</pre>
+        </article>
+        <article>
+          <h4><a name="queryNameAll">queryNameAll</a>(<span class="variable string">name</span>) <span class="since">0.13.0</span></h4>
+          <p>Finds all descendent nodes with the specified name (attribute or property). This respects nested names, attributes, and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon,
+          so far as nesting is concerned.</p>
+          <div class="example">&lt;form name="person"&gt;
+  &lt;input name="character" type="checkbox" value="P"&gt;Pirate
+  &lt;input name="character" type="checkbox" value="N"&gt;Ninja
+  &lt;input name="character" type="checkbox" value="Z"&gt;Zombie
+&lt;/form&gt;
+</div>
+          <pre class="example">
+var opts = document.queryNameAll('person.character');// list w/3 checkboxes
+</pre>
+        </article>
+        <article>
+          <h4>document.<a name="extend">extend</a>(<span class="variable string">name</span>, <span class="variable">function</span>); <span class="since">0.7.0</span></h4>
           <p>Use this to extend the DOM. It automatically, correctly applies your function to both single elements and lists. Just don't get crazy with shortcuts.
           DOMx is about exposing, learning, and using the DOM, not obscuring it beneath non-native interfaces.</p>
           <pre class="example">
@@ -359,7 +402,7 @@ document.queryAll('.foo').hide();
 </pre>
         </article>
         <article>
-          <h4>document.<a name="_.resolve">_.resolve</a>[<span class="variable">alias</span>] = <span class="variable">property</span>; <span class="since">0.7.0</span></h4>
+          <h4>document.<a name="_.resolve">_.resolve</a>[<span class="variable string">alias</span>] = <span class="variable string">property</span>; <span class="since">0.7.0</span></h4>
           <p>Nonetheless, the verbosity of the DOM can, like any friend, become tiresome. You may create property aliases for <code>each</code>.</p>
           <pre class="example">
 document._.resolve['-class'] = 'classList.remove';
@@ -382,7 +425,7 @@ document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;H
         <p>You are! But let's not pretend that web components will ever mean you don't need to manipulate and traverse the DOM directly. And when you want to do that within some fancy-pants web component, you might find yourself wanting a bit more power than the vanilla DOM gives. Then, instead of importing a big library like jQuery, you'll be glad to have the power of DOMx in just a few kilobytes. And even when web components reign supreme, there will always be a place for page-wide work to be done.
         </p>
         <p class="question">Which browsers does DOMx support?</p>
-        <p>Modern ones: Firefox, Chrome, Safari, Opera, IE9+ and the like.</p>
+        <p>Modern ones: Firefox, Chrome, Safari, Opera, IE10+ and the like.</p>
         <p class="question">Isn't extending the DOM <a href="http://perfectionkills.com/whats-wrong-with-extending-the-dom/">a bad idea</a>?</p>
         <p>Not at all. Unless you care to prop up the diminishing market share of IE6/7/8, <a href="https://github.com/nbubna/mind-hacking/blob/gh-pages/extending-the-dom.md">DOM extension</a> is no longer to be feared, just employed with discretion.</p>
         <p class="question">How does the dot-traversal work?</p>

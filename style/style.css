@@ -214,10 +214,16 @@ demo-out {
 .variable em {
   font-style: italic;
 }
-.variable:before {
+.variable.string:before {
+  content: '"';
+}
+.variable.string:after {
+  content: '"';
+}
+.variable.tag:before {
   content: '<';
 }
-.variable:after {
+.variable.tag:after {
   content: '>';
 }
 .optional:before {
@@ -244,12 +250,13 @@ p em {
 .example {
   background: #312020;
   font-family: Monaco, monospace;
-  font-size: 14px;
+  font-size: 0.7em;
   margin: 18px 36px;
   padding: 12px;
   color: #e8ae3b;
   line-height: 130%;
   border-radius: 8px;
+  white-space: pre;
 }
 .example .comment {
   color: #feecc9;
