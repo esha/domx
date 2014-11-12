@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         src: ['src/core.js',
               'src/traverse.js',
               'src/append.js',
-              'src/values.js',
+              'src/xvalue.js',
               'src/repeat.js',
               'src/emmet.js',
               'src/dot.js'],
@@ -46,8 +46,8 @@ module.exports = function(grunt) {
         options: {
           frame: 'src/plugin-frame.js',
         },
-        src: ['src/values.js'],
-        dest: 'dist/<%= pkg.name %>.values.js'
+        src: ['src/xvalue.js'],
+        dest: 'dist/<%= pkg.name %>.xvalue.js'
       },
       repeat: {
         options: {

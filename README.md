@@ -66,13 +66,13 @@ Features stripped out of the "base" version, packaged as plugins for a la carte 
 
 Download:
 * [domx.emmet.js][emmet-plugin] - supports [emmet][emmet] [abbreviations][abbr] for `append()`
-* [domx.values.js][values-plugin] - adds [`xValue`][xValue] getter/setter, [`queryName`][queryName], and [`queryNameAll`][queryNameAll]
+* [domx.xvalue.js][xvalue-plugin] - adds [`xValue`][xValue] getter/setter, [`queryName`][queryName], and [`queryNameAll`][queryNameAll]
 * [domx.repeat.js][repeat-plugin] - adds [`repeat()`][repeat] function
 * [domx.dot.js][dot-plugin] - supports dot-traversal of elements when [`data-domx-dot`][dot] attribute or [`dot()`][dot] function is applied to a parent
 * [domx.stringify.js][stringify-plugin] - generates a string version of the DOM for the demo (also not in the "full" version)
 
 [emmet-plugin]: http://raw.github.com/esha/domx/master/dist/domx.emmet.js
-[values-plugin]: http://raw.github.com/esha/domx/master/dist/domx.values.js
+[xvalue-plugin]: http://raw.github.com/esha/domx/master/dist/domx.xvalue.js
 [repeat-plugin]: http://raw.github.com/esha/domx/master/dist/domx.repeat.js
 [dot-plugin]: http://raw.github.com/esha/domx/master/dist/domx.dot.js
 [stringify-plugin]: http://raw.github.com/esha/domx/master/dist/domx.stringify.js
@@ -81,7 +81,7 @@ Download:
 * 2014-05-04 [v0.7.0][] (first public release)
 * 2014-05-13 [v0.8.1][] (repeat(), append())
 * 2014-05-30 [v0.9.1][] (not(), all(), dot())
-* 2014-09-08 [v0.10.3][] (utmost(), complete values rewrite)
+* 2014-09-08 [v0.10.3][] (utmost(), complete xvalue rewrite)
 * 2014-09-22 [v0.11.2][] (s/utmost()/farthest(), closest(), value change events)
 * 2014-10-28 [v0.12.0][] (reorganize secondary versions/plugins)
 * 2014-11-10 [v0.13.0][] (s/DOMxList/XList, s/properValue/xValue, list.queryName[All])

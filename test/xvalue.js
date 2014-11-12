@@ -29,10 +29,10 @@
     }
 
     var _ = D._;
-    module("values");
+    module("xValue");
 
     test("_.", function() {
-        equal(typeof _.values, "object", "_.values");
+        equal(typeof _.xValue, "object", "_.xValue");
     });
 
     testMethod([Node,Attr], 'useBaseValue');

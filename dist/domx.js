@@ -1,4 +1,4 @@
-/*! domx - v0.13.0 - 2014-11-11
+/*! domx - v0.13.0 - 2014-11-12
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -329,7 +329,7 @@ D.extend('remove', function() {
 }, _.nodes);
 // /append.js
 
-var V = _.values = {
+var V = _.xValue = {
     /*jshint evil:true */
     resolve: function(context, reference) {
         return eval('context["'+reference+'"]');
@@ -358,7 +358,7 @@ var V = _.values = {
         return value;
     },
     stringifyFor: function(el) {
-        var stringify = el.getAttribute('data-values-stringify');
+        var stringify = el.getAttribute('xvalue-stringify');
         return stringify && V.resolve(window, stringify) || V.string;        
     },
     nameNodes: function(parent, nameFn, possibleParentFn, attrFn) {
@@ -548,7 +548,7 @@ _.define([Element], {
     baseProperty: 'value',
     baseValue: {
         get: function() {
-            var parser = this.getAttribute('data-values-parse');
+            var parser = this.getAttribute('xvalue-parse');
             parser = parser && V.resolve(window, parser) || V.parse;
             return parser.call(this, this[this.baseProperty]);
         },
@@ -560,8 +560,8 @@ _.define([Element], {
             }
         }
     },
-    useAttrValues: V.booleanAttr('data-values-attr'),
-    noValues: V.booleanAttr('data-values-none')
+    useAttrValues: V.booleanAttr('xvalue-attr'),
+    noValues: V.booleanAttr('xvalue-none')
 }, true);
 
 _.define(_.parents.concat(_.lists), {
