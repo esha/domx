@@ -1,4 +1,4 @@
-/*! domx - v0.12.0 - 2014-10-28
+/*! domx - v0.13.0 - 2014-11-11
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -6,7 +6,7 @@
     "use strict";
 
 // core.js
-window.DOMxList = function DOMxList(limit) {
+window.XList = function XList(limit) {
     if (typeof limit === "number") {
         this.limit = limit;
         this.add(_.slice(arguments, 1));
@@ -17,11 +17,11 @@ window.DOMxList = function DOMxList(limit) {
 
 // expose utilities
 _ = {
-    version: "0.12.0",
+    version: "0.13.0",
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
-    lists: [NodeList, HTMLCollection, DOMxList],
+    lists: [NodeList, HTMLCollection, XList],
     isList: function(o) {
         return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                o instanceof NodeList ||// phantomjs foolishly calls these functions
@@ -108,7 +108,7 @@ _.define([Node].concat(_.lists), {
         }
         return !results.length ? this : // no results, be fluent
             !_.isList(this) ? results[0] : // single source, single result
-            results[0] && results[0].each ? new DOMxList(results) : // convert to DOMx (combines sub-lists)
+            results[0] && results[0].each ? new XList(results) : // convert to DOMx (combines sub-lists)
             results;
     },
     toArray: function(arr) {
@@ -124,10 +124,10 @@ _.define([Node].concat(_.lists), {
     }
 });
 
-// define DOMxList functions
-_.define([DOMxList], {
+// define XList functions
+_.define([XList], {
     length: 0,
-    limit: -1,
+    limit: undefined,
     add: function(item) {
         var l = this.length;
         if (arguments.length > 1 || _.isList(item)) {
@@ -142,6 +142,9 @@ _.define([DOMxList], {
             }
         }
         return this.length - l;
+    },
+    isFull: function() {
+        return this.add === _.zero;
     },
     indexOf: function(item) {
         for (var i=0; i<this.length; i++) {
@@ -173,7 +176,7 @@ _.parents = [Element, DocumentFragment, D];
 _.define(_.parents.concat(_.lists), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
-            list = new DOMxList(count);
+            list = new XList(count);
         for (var i=0, m=self.length; i<m && (!count || count > list.length); i++) {
             list.add(self[i][
                 count === list.length+1 ? 'querySelector' : 'querySelectorAll'
@@ -202,7 +205,7 @@ _.define(_.lists, {
                             return (n.each ? n.each(b) : n[b]) === e;
                         }
             );
-        return new DOMxList(arr);
+        return new XList(arr);
     },
     not: function not() {
         var exclude = this.only.apply(this, arguments);
@@ -258,7 +261,7 @@ _.closest = function(node, prop, test) {
 
 D.extend('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
-    _list = _list || new DOMxList();
+    _list = _list || new XList();
 
     var value = inclusive ? this : this[_.resolve[prop] || prop];
     if (value) {
@@ -308,7 +311,7 @@ D.extend('append', function(arg, ref) {
         return A.create(this, arg, ref);
     }
     if (_.isList(arg)) {// list of append-ables
-        var list = new DOMxList();
+        var list = new XList();
         for (var i=0,m=arg.length; i<m; i++) {
             list.add(this.append(arg[i], ref));
         }

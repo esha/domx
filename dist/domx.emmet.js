@@ -1,4 +1,4 @@
-/*! domx - v0.12.0 - 2014-10-28
+/*! domx - v0.13.0 - 2014-11-11
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -52,7 +52,7 @@ AE.emmet = {
     },
     '*': function(count) {
         var parent = this.parentNode,
-            els = new DOMxList(this);
+            els = new XList(this);
         for (var i=1; i<count; i++) {
             els.add(this.cloneNode(true));
             parent.appendChild(els[i]);
