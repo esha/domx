@@ -1,4 +1,4 @@
-/*! domx - v0.13.1 - 2014-11-12
+/*! domx - v0.13.2 - 2014-11-13
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -17,7 +17,7 @@ window.XList = function XList(limit) {
 
 // expose utilities
 _ = {
-    version: "0.13.1",
+    version: "0.13.2",
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
     nodes: [Element, Text, Comment],
