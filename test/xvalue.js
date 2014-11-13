@@ -43,7 +43,7 @@
         testProperty(Node, prop, 'get');
     });
 
-    testProperty(Element, 'noValues');
+    testProperty(Element, 'noSubNames');
     testProperty(Element, 'useAttrValues');
 
     testMethod(_.parents, 'queryName');
@@ -165,6 +165,18 @@
 
         els = D.body.children.queryNameAll('named');
         equal(els.length, 2);
+    });
+
+    test('queryName text node', function() {
+        var text = D.createTextNode('${greeting} world!'),
+            el = D.createElement('div');
+        el.appendChild(text);
+        D.body.appendChild(el);
+        var result = D.body.queryName('greeting');
+        ok(result);
+        strictEqual(text, result);
+        equal(el.childNodes.length, 2);
+        el.remove();
     });
 
 }(document));

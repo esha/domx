@@ -4,6 +4,9 @@ var V = _.xValue = {
         return eval('context["'+reference+'"]');
     },
     name: function(node) {
+        if (node.nodeType === 3 && !node.noSubNames) {
+            node.splitOnName();// ensure this is run before node.name
+        }
         return node.tagName === 'FORM' ? node.getAttribute('name') : node.name;
     },
     parse: function(value) {
@@ -134,7 +137,7 @@ _.define([Node], {
         }
     },
     useBaseValue: function() {
-        var kids = !this.noValues && this.childNodes.length;
+        var kids = !this.noSubNames && this.childNodes.length;
         return !kids || (kids === 1 && !!this.childNodes[0].useBaseValue());
     },
     nameParent: {
@@ -230,7 +233,7 @@ _.define([Element], {
         }
     },
     useAttrValues: V.booleanAttr('xvalue-attr'),
-    noValues: V.booleanAttr('xvalue-none')
+    noSubNames: V.booleanAttr('xvalue-none')
 }, true);
 
 _.define(_.parents.concat(_.lists), {
@@ -275,28 +278,28 @@ _.define(_.parents.concat(_.lists), {
 
 _.define([Text], {
     useBaseValue: function() {
-        return !!this.noValues || !this.splitOnName();
+        return this.noSubNames || !this.splitOnName();
     },
     splitOnName: function() {
         var text = this,
-            match = text.value.match(V.nameRE);
+            match = text.textContent.match(V.nameRE);
         if (match) {
             var start = match.index,
                 name = match[0];
             if (start > 0) {
                 text.splitText(start);
-                text.noValues = true;
+                text.noSubNames = true;
                 text = text.nextSibling;
             }
-            if (text.value.length > name.length) {
+            if (text.textContent.length > name.length) {
                 text.splitText(name.length);
             }
             text.name = match[1];
-            text.value = '';
-            return text;
-        } else {
-            this.noValues = true;
+            text.textContent = '';
         }
+        // all have no sub names after splitting
+        text.noSubNames = true;
+        return !!match;
     }
 }, true);
 
