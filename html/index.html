@@ -362,8 +362,7 @@ zip = person.xValue.address.zip;// returns 20500
         </article>
         <article>
           <h4><a name="queryName">queryName</a>(<span class="variable string">name</span>) <span class="since">0.10.0</span></h4>
-          <p>Finds the first descendent node with the specified name (attribute or property). This respects nested names, attributes, and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon,
-          so far as nesting is concerned.</p>
+          <p>Finds the first descendent node with the specified name (attribute or property). This respects both nested element names and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon.</p>
           <div class="example">&lt;div name="person"&gt;
   &lt;pre name="address"&gt;${street}
 ${city}, ${state} ${zip}
@@ -378,8 +377,7 @@ address.queryName('zip').textContent;// returns the text '97216'
         </article>
         <article>
           <h4><a name="queryNameAll">queryNameAll</a>(<span class="variable string">name</span>) <span class="since">0.13.0</span></h4>
-          <p>Finds all descendent nodes with the specified name (attribute or property). This respects nested names, attributes, and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon,
-          so far as nesting is concerned.</p>
+          <p>Finds all descendent nodes with the specified name (attribute or property). This respects nested element names and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon.</p>
           <div class="example">&lt;form name="person"&gt;
   &lt;input name="character" type="checkbox" value="P"&gt;Pirate
   &lt;input name="character" type="checkbox" value="N"&gt;Ninja
@@ -411,6 +409,20 @@ document.queryAll('.foo').each('-class', 'foo').each('+class', 'bar');
 
 document._.resolve.insert = 'insertAdjacentHTML';
 document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;Hello.&amp;lt;/span&amp;gt;');
+
+// get crazy...
+var abbrs = {
+    '>': 'nextElementSibling',
+    '&lt;': 'previousElementSibling',
+    '^': 'parentElement',
+    ...
+}
+for (var abbr in abbrs) {
+    document._.resolve[abbr] = abbrs[abbr];
+}
+var parents = el.all('^'),
+    nextActiveSib = el.closest('>', '.active'),
+    firstSib = el.furthest('&lt;');
 </pre>
         </article>
       </div>
