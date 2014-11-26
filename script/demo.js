@@ -34,6 +34,10 @@
             }
             if (self.display) {
                 self.doc = Demo.docify(self.display.children);
+                for (var i=0; i<self.display.attributes.length; i++) {
+                    var attr = self.display.attributes[i];
+                    self.doc.body.setAttribute(attr.name, attr.value);
+                }
                 self.initDisplay();
             } else {
                 // a document w/no body content
@@ -176,7 +180,7 @@
     };
 
     Demo.describe = function(el) {
-        if (document._.isList(el) && el.each) {
+        if (D.x._.isList(el) && el.each) {
             return el.each(Demo.describe).join(', ');
         }
         if (el instanceof HTMLElement) {

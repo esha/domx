@@ -67,7 +67,7 @@
         </div>
         <div class="half block">
           <h3>DOM</h3>
-          <demo-dom id="elements">
+          <demo-dom x-dot>
             <div>
               <h1>Hello world!</h1>
               <section id="empty"></section>
@@ -102,11 +102,11 @@
       <div class="api">
         <article>
           <h4><a name="document">document</a> <span class="returns">document</span></h4>
-          <p>Yeah, nothing is exported. No global variable. We're <em>extending</em> the DOM, not replacing it. If you want a shorter global variable, do this:</p>
+          <p>No need for a new global variable. We're <em>extending</em> the DOM, not replacing it. If you want a shorter global variable, do this:</p>
           <pre class="example">
 window.$ = document.queryAll.bind(document);
 </pre>
-          <p>or, you can do what i do and alias <code>document</code> to <code>D</code> in the <a href="http://en.wikipedia.org/wiki/Immediately-invoked_function_expression">IIFE</a> wrapping your code:</p>
+          <p>or, you can do what i do and alias <code>document</code> to <code>D</code> in the <a href="http://en.wikipedia.org/wiki/Immediately-invoked_function_expression">IIFE</a> that should be wrapping your code anyway:</p>
           <pre class="example">
 (function(D) {
   D.body.classList.append('hooray');
@@ -271,13 +271,13 @@ items.toArray(elArr);// will append all .item elements to the existing array
 </pre>
         </article>
         <article>
-          <h4><a name="dot()">dot()</a> and <a name="data-domx-dot">[data-domx-dot]</a> <span class="since">0.9.0</span></h4>
+          <h4><a name="dot()">dot()</a> and <a name="x-dot">[x-dot]</a> <span class="since">0.9.0</span></h4>
           <p>Turns on <a href="#dot-traversal">dot traversal</a> properties for the target element (or list) and all descendant elements.</p>
           <pre class="example">
 document.dot(); // activates dot-traversal for all elements in the document
 document.query('div').dot();// enables dot-traversal for the first div and its descendants
 </pre>
-          <div class="example">&lt;body data-domx-dot&gt;&lt;!-- enable dot-traversal --&gt;
+          <div class="example">&lt;body x-dot&gt;&lt;!-- enable dot-traversal --&gt;
   &lt;header&gt;
     &lt;h1&gt;Title&lt;/h1&gt;
     This is the rest of the header.
@@ -362,8 +362,7 @@ zip = person.xValue.address.zip;// returns 20500
         </article>
         <article>
           <h4><a name="queryName">queryName</a>(<span class="variable string">name</span>) <span class="since">0.10.0</span></h4>
-          <p>Finds the first descendent node with the specified name (attribute or property). This respects nested names, attributes, and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon,
-          so far as nesting is concerned.</p>
+          <p>Finds the first descendent node with the specified name (attribute or property). This respects both nested element names and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon.</p>
           <div class="example">&lt;div name="person"&gt;
   &lt;pre name="address"&gt;${street}
 ${city}, ${state} ${zip}
@@ -378,8 +377,7 @@ address.queryName('zip').textContent;// returns the text '97216'
         </article>
         <article>
           <h4><a name="queryNameAll">queryNameAll</a>(<span class="variable string">name</span>) <span class="since">0.13.0</span></h4>
-          <p>Finds all descendent nodes with the specified name (attribute or property). This respects nested names, attributes, and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon,
-          so far as nesting is concerned.</p>
+          <p>Finds all descendent nodes with the specified name (attribute or property). This respects nested element names and ${name} syntax in text content, though it will ignore the name of the node(s) this is called upon.</p>
           <div class="example">&lt;form name="person"&gt;
   &lt;input name="character" type="checkbox" value="P"&gt;Pirate
   &lt;input name="character" type="checkbox" value="N"&gt;Ninja
@@ -391,26 +389,51 @@ var opts = document.queryNameAll('person.character');// list w/3 checkboxes
 </pre>
         </article>
         <article>
-          <h4>document.<a name="extend">extend</a>(<span class="variable string">name</span>, <span class="variable">function</span>); <span class="since">0.7.0</span></h4>
-          <p>Use this to extend the DOM. It automatically, correctly applies your function to both single elements and lists. Just don't get crazy with shortcuts.
-          DOMx is about exposing, learning, and using the DOM, not obscuring it beneath non-native interfaces.</p>
+          <h4>document.<a name="extend">x.add</a>(<span class="variable string">name</span>, <span class="variable">function|propertyDefinition</span>); <span class="since">0.14.0</span></h4>
+          <p>Use this to extend the DOM. It automatically, correctly applies your function or getter/setters to both single elements and lists. Just don't get crazy with the cute shortcut methods. The DOM already has a lot of native capabilities, and DOMx is about exposing, learning, and using those, not obscuring the DOM beneath non-native interfaces.</p>
           <pre class="example">
-document.extend('hide', function() {
+document.x.add('hide', function() {
   this.style.display = 'none';  
 });
 document.queryAll('.foo').hide();
+
+document.x.add('words', {
+  get: function() {
+    return this.textContent
+      .trim()
+      .match(/\b[^\s]*\b/g)
+      .filter(function(v,i,a) {
+        return a.indexOf(v) === i;
+      });
+  }
+});
+var wordCount = document.query('#essay').words.length;
 </pre>
         </article>
         <article>
-          <h4>document.<a name="_.resolve">_.resolve</a>[<span class="variable string">alias</span>] = <span class="variable string">property</span>; <span class="since">0.7.0</span></h4>
+          <h4>document.<a name="x.alias">x.alias</a>(<span class="variable string">alias</span>, <span class="variable string">property</span>)<span class="since">0.14.0</span></h4>
           <p>Nonetheless, the verbosity of the DOM can, like any friend, become tiresome. You may create property aliases for <code>each</code>.</p>
           <pre class="example">
-document._.resolve['-class'] = 'classList.remove';
-document._.resolve['+class'] = 'classList.add';
+document.x.alias('-class', 'classList.remove');
+document.x.alias('+class', 'classList.add');
 document.queryAll('.foo').each('-class', 'foo').each('+class', 'bar');
 
-document._.resolve.insert = 'insertAdjacentHTML';
+document.x.alias('insert', 'insertAdjacentHTML');
 document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;Hello.&amp;lt;/span&amp;gt;');
+
+// get crazy...
+var abbrs = {
+    '>': 'nextElementSibling',
+    '&lt;': 'previousElementSibling',
+    '^': 'parentElement',
+    ...
+}
+for (var abbr in abbrs) {
+    document.x.alias(abbr, abbrs[abbr]);
+}
+var parents = el.all('^'),
+    nextActiveSib = el.closest('>', '.active'),
+    firstSib = el.furthest('&lt;');
 </pre>
         </article>
       </div>
