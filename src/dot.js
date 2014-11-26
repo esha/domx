@@ -15,7 +15,7 @@ var dot = _.dot = {
         );
     },
     init: function() {
-        D.queryAll('[data-domx-dot]').each(function(el) {
+        D.queryAll('[x-dot]').each(function(el) {
             el.dot(true);
             if (Observer && !el._observer) {
                 (el._observer = new Observer(function(changes) {
