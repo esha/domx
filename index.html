@@ -418,19 +418,13 @@ document.x.alias('-class', 'classList.remove');
 document.x.alias('+class', 'classList.add');
 document.queryAll('.foo').each('-class', 'foo').each('+class', 'bar');
 
-document.x.alias('insert', 'insertAdjacentHTML');
-document.queryAll('.neighbor').each('insert', 'afterend', '&amp;lt;span&amp;gt;Hello.&amp;lt;/span&amp;gt;');
-
 // get crazy...
-var abbrs = {
+document.x.alias({
     '>': 'nextElementSibling',
     '&lt;': 'previousElementSibling',
     '^': 'parentElement',
     ...
-}
-for (var abbr in abbrs) {
-    document.x.alias(abbr, abbrs[abbr]);
-}
+});
 var parents = el.all('^'),
     nextActiveSib = el.closest('>', '.active'),
     firstSib = el.furthest('&lt;');
