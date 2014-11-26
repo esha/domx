@@ -60,19 +60,19 @@ var S = _.stringify = {
     },
     attrs: function(el, markup) {
         return S.map.call(el.attributes, function(attr) {
-            var name = attr.nodeName,
-                value = attr.nodeValue;
+            var name = attr.name,
+                value = attr.value;
             if (!markup || name.indexOf(S.specialPrefix) !== 0) {
-                return markup ? S.mark(name+'=', S.type.attr) + S.mark('"'+value+'"', S.type.string)
-                              : name+'="'+value+'"';
+                return markup ? S.mark(name+(value?'=':''), S.type.attr) + (value ? S.mark('"'+value+'"', S.type.string) : '')
+                              : name+(value ? '="'+value+'"' : '');
             }
         }).filter(S.notEmpty).join(' ');
     },
     special: function(el) {
         return S.map.call(el.attributes, function(attr) {
-            var name = attr.nodeName;
+            var name = attr.name;
             if (name.indexOf(S.specialPrefix) === 0) {
-                return name.substr(1)+'="'+attr.nodeValue+'"';
+                return name.substr(1)+'="'+attr.value+'"';
             }
         }).filter(S.notEmpty);
     },
