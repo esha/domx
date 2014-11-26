@@ -1,6 +1,6 @@
 // elements.js
 var E = _.elements = {
-    protos: [Element, DocumentFragment].concat(X.sets),
+    protos: [Element, DocumentFragment].concat(X.lists),
     read: function(el) {
         for (var i=0; el && i < el.children.length; i++) {
             var child = el.children[i],

@@ -29,7 +29,7 @@ var dot = _.dot = {
 },
 Observer = window.MutationObserver;
 
-_.define(X.parents.concat(X.sets), 'dot', function(force) {
+_.define(X.containers, 'dot', function(force) {
     var self = this;
     if (force || !self._dotted) {
         self.each('childNodes').each(function(node) {

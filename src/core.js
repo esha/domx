@@ -88,7 +88,7 @@ X = {
         }
         _.define(nodes, name, fn, force);
         if (typeof fn === "function") {
-            _.define(X.sets, name, function listFn() {
+            _.define(X.lists, name, function listFn() {
                 var args = arguments;
                 return this.each(function eachFn() {
                     return fn.apply(this, args);
@@ -97,9 +97,9 @@ X = {
         }
     },
 
-    // type lists (sets list is defined after X.List)
+    // type lists (not completed until after X.List is defined)
     nodes: [Element, Text, Comment],
-    parents: [Element, DocumentFragment, D]
+    parentNodes: [Element, DocumentFragment, D]
 };
 
 // define X.List type
@@ -142,14 +142,15 @@ _.define([X.List], {
     }
 });
 
-// add list of set types now that X.List is defined
-X.sets = [NodeList, HTMLCollection, X.List];
+// finish types now that X.List is defined
+X.lists = [NodeList, HTMLCollection, X.List];
+X.containers = X.parentNodes.concat(X.lists);
 
 // expose developer tools
 _.defprop(D, 'x', X);
 
 // define foundational features on Node and sets
-_.define([Node].concat(X.sets), {
+_.define([Node].concat(X.lists), {
     each: function(fn) {
         var self = _.isList(this) ? this : [this],
             results = [],

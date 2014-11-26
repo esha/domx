@@ -236,7 +236,7 @@ _.define([Element], {
     noSubNames: V.booleanAttr('xvalue-none')
 }, true);
 
-_.define(X.parents.concat(X.sets), {
+_.define(X.containers, {
     queryName: function(name) {
         return this.queryNameAll(name, 1)[0];
     },

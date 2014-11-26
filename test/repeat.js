@@ -35,7 +35,7 @@
     });
 
     test("repeat() presence", function() {
-        var set = [Element].concat(X.sets);
+        var set = [Element].concat(X.lists);
         expect(set.length);
         set.forEach(function(_class) {
             equal(typeof _class.prototype.repeat, "function", _class.name+".prototype.repeat");

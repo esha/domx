@@ -1,5 +1,5 @@
 // traverse.js
-_.define(X.parents.concat(X.sets), {
+_.define(X.containers, {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
             list = new X.List(count);
@@ -15,7 +15,7 @@ _.define(X.parents.concat(X.sets), {
     }
 });
 
-_.define(X.sets, {
+_.define(X.lists, {
     only: function only(b, e) {
         var arr = this.toArray();
         arr = b >= 0 || b < 0 ?

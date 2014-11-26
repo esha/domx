@@ -32,8 +32,8 @@ Test assertions:
 
     module('traverse DOM extensions');
 
-    test("X.parents", function() {
-        equal(Array.isArray(X.parents), true, "X.parents");
+    test("X.parentNodes", function() {
+        equal(Array.isArray(X.parentNodes), true, "X.parentNodes");
     });
 
     test("matches", function() {
@@ -41,21 +41,21 @@ Test assertions:
     });
 
     test("only()", function() {
-        expect(X.sets.length);
-        X.sets.forEach(function(_class) {
+        expect(X.lists.length);
+        X.lists.forEach(function(_class) {
             ok(_class.prototype.only, _class.name+'.prototype.only');
         });
     });
 
     test("not()", function() {
-        expect(X.sets.length);
-        X.sets.forEach(function(_class) {
+        expect(X.lists.length);
+        X.lists.forEach(function(_class) {
             ok(_class.prototype.not, _class.name+'.prototype.not');
         });
     });
 
     test("all()", function() {
-        var set = X.sets.concat([Node]);
+        var set = X.lists.concat([Node]);
         expect(set.length);
         set.forEach(function(_class) {
             ok(_class.prototype.all, _class.name+'.prototype.all');
@@ -63,7 +63,7 @@ Test assertions:
     });
 
     test("queryAll()", function() {
-        var set = X.sets.concat(X.parents);
+        var set = X.lists.concat(X.parentNodes);
         expect(set.length);
         set.forEach(function(_class) {
             ok((_class.prototype||_class).queryAll, _class.name+'.prototype.queryAll');
@@ -71,7 +71,7 @@ Test assertions:
     });
 
     test("query()", function() {
-        var set = X.sets.concat(X.parents);
+        var set = X.lists.concat(X.parentNodes);
         expect(set.length);
         set.forEach(function(_class) {
             ok((_class.prototype||_class).query, _class.name+'.prototype.query');

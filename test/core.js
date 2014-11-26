@@ -36,8 +36,8 @@ Test assertions:
     test("x.", function() {
         equal(typeof X.version, "string", "X.version");
         equal(typeof X._, "object", "X._");
-        equal(Array.isArray(X.parents), true, "X.sets");
-        equal(Array.isArray(X.sets), true, "X.sets");
+        equal(Array.isArray(X.parentNodes), true, "X.lists");
+        equal(Array.isArray(X.lists), true, "X.lists");
         equal(Array.isArray(X.nodes), true, "X.nodes");
         equal(typeof X.alias, "function", "X.alias");
         equal(typeof X.add, "function", "X.add");
@@ -54,7 +54,7 @@ Test assertions:
     });
 
     test("document.x.add", function() {
-        expect(X.sets.length*2 + 9);
+        expect(X.lists.length*2 + 9);
         equal(typeof X.add, "function", "document.extend");
 
         var fn = function() {
@@ -64,7 +64,7 @@ Test assertions:
 
         X.add('core_test', fn);
         equal(Element.prototype.core_test, fn);
-        X.sets.forEach(function(_class) {
+        X.lists.forEach(function(_class) {
             equal(typeof _class.prototype.core_test, "function");
             equal(_class.prototype.core_test.name, 'listFn');
         });
@@ -81,7 +81,7 @@ Test assertions:
     });
 
     test("each()", function() {
-        var set = X.sets.concat(X.nodes);
+        var set = X.lists.concat(X.nodes);
         expect(set.length);
         set.forEach(function(_class) {
             ok(_class.prototype.each, _class.name+'.prototype.each');
@@ -89,7 +89,7 @@ Test assertions:
     });
 
     test("toArray()", function() {
-        var set = X.sets.concat(X.nodes);
+        var set = X.lists.concat(X.nodes);
         expect(set.length);
         set.forEach(function(_class) {
             ok(_class.prototype.toArray, _class.name+'.prototype.toArray');
