@@ -42,7 +42,7 @@ _.define(X.lists, {
 });
 
 _.estFnArgs = function(node, prop, test, inclusive) {
-    prop = X.alias(prop);
+    prop = _.alias[prop] || prop;
     if (!(prop in node)) {
         inclusive = test === undefined ?
             typeof prop === "boolean" ? prop : true :
@@ -89,7 +89,7 @@ X.add('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
     _list = _list || new X.List();
 
-    var value = inclusive ? this : this[X.alias(prop)];
+    var value = inclusive ? this : this[_.alias[prop]||prop];
     if (value) {
         var result = fn && fn.call(this, value, _list);
         if (result !== null) {

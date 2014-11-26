@@ -293,10 +293,25 @@ Test assertions:
         D.x.alias('-class', 'classList.remove');
         var divs = D.querySelectorAll('section > div').each('classList.add','bar');
         divs.each(function(el) {
-            ok(el.className.indexOf('bar') >= 0, 'have class bar');// fails in IE9
+            ok(el.className.indexOf('bar') >= 0, 'have class bar');
         });
         var    ret = divs.each('-class', 'bar');
         strictEqual(ret, divs, 'should return self');
+        divs.each(function(el) {
+            ok(el.className.indexOf('bar') < 0, 'don\'t have class bar');
+        });
+    });
+
+    test("alias group", function() {
+        D.x.alias({
+            '+class': 'classList.add',
+            '!class': 'classList.toggle'
+        });
+        var divs = D.querySelectorAll('section > div').each('+class','bar');
+        divs.each(function(el) {
+            ok(el.className.indexOf('bar') >= 0, 'have class bar');
+        });
+        divs.each('!class', 'bar');
         divs.each(function(el) {
             ok(el.className.indexOf('bar') < 0, 'don\'t have class bar');
         });

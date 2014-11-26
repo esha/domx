@@ -76,10 +76,13 @@ X = {
 
     // extension points
     alias: function(short, long) {
-        if (long) {
+        if (typeof short === "object") {
+            for (var s in short) {// short is actually a dict of aliases
+                _.alias[s] = short[s]+'';
+            }
+        } else {
             _.alias[short] = long+'';// only strings allowed
         }
-        return _.alias[short] || short;
     },
     add: function(name, fn, nodes, force) {
         if (!Array.isArray(nodes)) {
@@ -156,7 +159,7 @@ _.define([Node].concat(X.lists), {
             results = [],
             prop, args;
         if (typeof fn === "string") {
-            prop = X.alias(fn);// e.g. D.x.alias('+class', 'classList.add');
+            prop = _.alias[fn] || fn;// e.g. D.x.alias('+class', 'classList.add');
             args = _.slice.call(arguments, 1);
             fn = function(el, i){ return _.resolve(prop, el, args, i); };
         }
