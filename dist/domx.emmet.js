@@ -1,9 +1,13 @@
-/*! domx - v0.13.2 - 2014-11-13
+/*! domx - v0.14.0 - 2014-11-25
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
-(function(D, _) {
+(function(D) {
     "use strict";
+
+    // shortcuts
+    var X = D.x,
+        _ = X._;
 
 // emmet.js
 var AE = _.append;
@@ -52,7 +56,7 @@ AE.emmet = {
     },
     '*': function(count) {
         var parent = this.parentNode,
-            els = new XList(this);
+            els = new X.List(this);
         for (var i=1; i<count; i++) {
             els.add(this.cloneNode(true));
             parent.appendChild(els[i]);
@@ -70,4 +74,4 @@ AE.emmet = {
 // /emmet.js
 
 
-})(document, document._);
+})(document);

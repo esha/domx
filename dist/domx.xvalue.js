@@ -1,9 +1,13 @@
-/*! domx - v0.13.2 - 2014-11-13
+/*! domx - v0.14.0 - 2014-11-25
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
-(function(D, _) {
+(function(D) {
     "use strict";
+
+    // shortcuts
+    var X = D.x,
+        _ = X._;
 
 var V = _.xValue = {
     /*jshint evil:true */
@@ -166,7 +170,7 @@ _.define([Node], {
                 name = V.name(el);
             return name ? el.parentNode ?
                 el.nameParent.queryNameAll(name) :
-                new XList(el) :
+                new X.List(el) :
                 null;
         }
     },
@@ -243,12 +247,12 @@ _.define([Element], {
     noSubNames: V.booleanAttr('xvalue-none')
 }, true);
 
-_.define(_.parents.concat(_.lists), {
+_.define(X.containers, {
     queryName: function(name) {
         return this.queryNameAll(name, 1)[0];
     },
     queryNameAll: function(name, count, _list) {
-        _list = _list || new XList(count);
+        _list = _list || new X.List(count);
         var parents = _.isList(this) ? this : [this];
         for (var s=0; s < parents.length && !_list.isFull(); s++) {
             var parent = parents[s];
@@ -411,4 +415,4 @@ _.define([HTMLLIElement], {
 }, true);
 
 
-})(document, document._);
+})(document);

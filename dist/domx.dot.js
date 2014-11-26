@@ -1,9 +1,13 @@
-/*! domx - v0.13.2 - 2014-11-13
+/*! domx - v0.14.0 - 2014-11-25
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
-(function(D, _) {
+(function(D) {
     "use strict";
+
+    // shortcuts
+    var X = D.x,
+        _ = X._;
 
 // dot.js
 _.defprop(D, 'html', D.documentElement);
@@ -22,7 +26,7 @@ var dot = _.dot = {
         );
     },
     init: function() {
-        D.queryAll('[data-domx-dot]').each(function(el) {
+        D.queryAll('[x-dot]').each(function(el) {
             el.dot(true);
             if (Observer && !el._observer) {
                 (el._observer = new Observer(function(changes) {
@@ -36,7 +40,7 @@ var dot = _.dot = {
 },
 Observer = window.MutationObserver;
 
-_.define(_.parents.concat(_.lists), 'dot', function(force) {
+_.define(X.containers, 'dot', function(force) {
     var self = this;
     if (force || !self._dotted) {
         self.each('childNodes').each(function(node) {
@@ -58,4 +62,4 @@ dot.init();// early availability
 D.addEventListener('DOMContentLoaded', dot.init);// eventual consistency
 // /dot.js
 
-})(document, document._);
+})(document);

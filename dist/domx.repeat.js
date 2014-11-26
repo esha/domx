@@ -1,36 +1,40 @@
-/*! domx - v0.13.2 - 2014-11-13
+/*! domx - v0.14.0 - 2014-11-25
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
-(function(D, _) {
+(function(D) {
     "use strict";
 
+    // shortcuts
+    var X = D.x,
+        _ = X._;
+
 var R = _.repeat = {
-    id: 'data-repeat-id',
+    id: 'x-repeat-id',
     count: 0,
     init: function(el, keep) {
-        var selector = el.getAttribute('data-repeat'),
+        var selector = el.getAttribute('x-repeat'),
             id = R.count++,
-            source = selector && D.query(selector).cloneNode(true) || el,
+            content = selector && D.query(selector).cloneNode(true) || el,
             anchor = D.createElement('x-repeat');
-        source.setAttribute(R.id, id);
+        content.setAttribute(R.id, id);
         anchor.setAttribute(R.id, id);
         for (var i=0,m=el.attributes.length; i<m; i++) {
             var attr = el.attributes[i];
-            if (attr.name === 'data-repeat-none') {
+            if (attr.name === 'x-repeat-none') {
                 anchor.value = attr.value || el.innerHTML;
             }
             anchor.setAttribute(attr.name, attr.value);
         }
         el.parentNode.insertBefore(anchor, el.nextSibling);
-        _.defprop(anchor, 'source', source);
+        _.defprop(anchor, 'content', content);
         if (keep !== true) {
             el.remove();
         }
         return id;
     },
-    repeat: function(parent, anchor, source, val) {
-        var repeat = source.cloneNode(true);
+    repeat: function(parent, anchor, content, val) {
+        var repeat = content.cloneNode(true);
         if (val !== undefined && val !== null) {
             repeat.xValue = val;
         }
@@ -40,7 +44,7 @@ var R = _.repeat = {
     style: D.head.append('style')
 };
 
-D.extend('repeat', function repeat(val) {
+X.add('repeat', function repeat(val) {
     var parent = this.parentNode,
         id = this.getAttribute(R.id) || R.init(this, true),
         selector = '['+R.id+'="'+id+'"]',
@@ -49,24 +53,24 @@ D.extend('repeat', function repeat(val) {
         return parent.queryAll(selectAll).remove();
     }
     var anchor = parent.query('x-repeat'+selector),
-        source = anchor.source;
-    if (anchor.hasAttribute('data-repeat-first')) {
-        anchor = parent.query(selector+'[data-index]') || anchor;
+        content = anchor.content;
+    if (anchor.hasAttribute('x-repeat-first')) {
+        anchor = parent.query(selector+'[x-index]') || anchor;
     }
     var ret = Array.isArray(val) ?
-        val.map(function(v){ return R.repeat(parent, anchor, source, v); }) :
-        R.repeat(parent, anchor, source, val);
-    parent.queryAll(selectAll).each('setAttribute', 'data-index', '${i}');
+        val.map(function(v){ return R.repeat(parent, anchor, content, v); }) :
+        R.repeat(parent, anchor, content, val);
+    parent.queryAll(selectAll).each('setAttribute', 'x-index', '${i}');
     return ret;
-});
+}, [Element]);
 
-R.style.textContent = '[data-repeat] { display: none }';
+R.style.textContent = '[x-repeat] { display: none }';
 D.addEventListener('DOMContentLoaded', function() {
-    D.queryAll('[data-repeat]').each(R.init);
+    D.queryAll('[x-repeat]').each(R.init);
     R.style.textContent = "\nx-repeat { display: none }"+
-                          "\nx-repeat[data-repeat-none] { display: inline-block; }"+
-                          "\n["+R.id+"] + x-repeat[data-repeat-none] { display: none; }";
+                          "\nx-repeat[x-repeat-none] { display: inline-block; }"+
+                          "\n["+R.id+"] + x-repeat[x-repeat-none] { display: none; }";
 });
 
 
-})(document, document._);
+})(document);

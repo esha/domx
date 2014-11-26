@@ -1,9 +1,13 @@
-/*! domx - v0.13.2 - 2014-11-13
+/*! domx - v0.14.0 - 2014-11-25
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
-(function(D, _) {
+(function(D) {
     "use strict";
+
+    // shortcuts
+    var X = D.x,
+        _ = X._;
 
 var S = _.stringify = {
     map: Array.prototype.map,
@@ -94,13 +98,9 @@ var S = _.stringify = {
         return s !== undefined && s !== null && s !== '';
     }
 };
-D.extend('stringify', function(markup, indent) {
-    var s = '';
-    this.each(function(el) {
-        s += S.print(el, markup||false, indent||'');
-    });
-    return s;
+X.add('stringify', function(markup, indent) {
+    return S.print(this, markup||false, indent||'');
 });
 
 
-})(document, document._);
+})(document);
