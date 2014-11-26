@@ -76,7 +76,16 @@ Download:
 [xvalue-plugin]: http://raw.github.com/esha/domx/master/dist/domx.xvalue.js
 [repeat-plugin]: http://raw.github.com/esha/domx/master/dist/domx.repeat.js
 [dot-plugin]: http://raw.github.com/esha/domx/master/dist/domx.dot.js
-[stringify-plugin]: http://raw.github.com/esha/domx/master/dist/domx.stringify.js
+[stringify-plugin]: http://raw.github.com/esha/domx-stringify/master/dist/domx-stringify.js
+
+#### Dependent Projects:
+
+These were created for the [demo][demo] and turned into separate projects.
+
+Download:
+* [domx-stringify.js][stringify] - adds a `stringify()` function that generates a string version of DOM nodes.
+
+[stringify]: http://github.com/esha/domx-stringify/master/dist/domx-stringify.js
 
 ### Release History
 * 2014-05-04 [v0.7.0][] (first public release)

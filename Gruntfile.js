@@ -63,13 +63,6 @@ module.exports = function(grunt) {
         src: ['src/dot.js'],
         dest: 'dist/<%= pkg.name %>.dot.js'
       },
-      stringify: {
-        options: {
-          frame: 'src/plugin-frame.js',
-        },
-        src: ['src/stringify.js'],
-        dest: 'dist/<%= pkg.name %>.stringify.js'
-      },
     },
     uglify: {
       options: {
