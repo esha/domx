@@ -19,7 +19,7 @@ Test assertions:
   notStrictEqual(actual, expected, [message])
   throws(block, [expected], [message])
 */
-    var _ = D._;
+    var _ = D.x._;
     module("DOMx dot traversal");
 
     test('D.html', function() {

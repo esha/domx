@@ -1,7 +1,11 @@
 <%= banner %>
-(function(D, _) {
+(function(D) {
     "use strict";
+
+    // key shortcuts
+    var X = D.x,
+        _ = X._;
 
 <%= content %>
 
-})(document, document._);
+})(document);

@@ -1,9 +1,8 @@
 // traverse.js
-_.parents = [Element, DocumentFragment, D];
-_.define(_.parents.concat(_.lists), {
+_.define(X.parents.concat(X.sets), {
     queryAll: function(selector, count) {
         var self = _.isList(this) ? this : [this],
-            list = new XList(count);
+            list = new X.List(count);
         for (var i=0, m=self.length; i<m && (!count || count > list.length); i++) {
             list.add(self[i][
                 count === list.length+1 ? 'querySelector' : 'querySelectorAll'
@@ -16,7 +15,7 @@ _.define(_.parents.concat(_.lists), {
     }
 });
 
-_.define(_.lists, {
+_.define(X.sets, {
     only: function only(b, e) {
         var arr = this.toArray();
         arr = b >= 0 || b < 0 ?
@@ -32,7 +31,7 @@ _.define(_.lists, {
                             return (n.each ? n.each(b) : n[b]) === e;
                         }
             );
-        return new XList(arr);
+        return new X.List(arr);
     },
     not: function not() {
         var exclude = this.only.apply(this, arguments);
@@ -43,7 +42,7 @@ _.define(_.lists, {
 });
 
 _.estFnArgs = function(node, prop, test, inclusive) {
-    prop = _.resolve[prop] || prop;
+    prop = X.alias(prop);
     if (!(prop in node)) {
         inclusive = test === undefined ?
             typeof prop === "boolean" ? prop : true :
@@ -66,7 +65,7 @@ _.estFnArgs = function(node, prop, test, inclusive) {
     return [prop, test, inclusive||false];
 };
 
-_.define(_.nodes, 'farthest', function(prop, test, inclusive) {
+_.define(X.nodes, 'farthest', function(prop, test, inclusive) {
     var args = _.estFnArgs(this, prop, test, inclusive);
     return _.farthest(this, args[0], args[1], args[2] && args[1](this) ? this : null);
 });
@@ -76,7 +75,7 @@ _.farthest = function(node, prop, test, previous) {
         previous;
 };
 
-_.define(_.nodes, 'closest', function(prop, test, inclusive) {
+_.define(X.nodes, 'closest', function(prop, test, inclusive) {
     var args = _.estFnArgs(this, prop, test, inclusive);
     return args[2] && args[1](this) ? this : _.closest(this, args[0], args[1]);
 });
@@ -86,11 +85,11 @@ _.closest = function(node, prop, test) {
         null;
 };
 
-D.extend('all', function(prop, fn, inclusive, _list) {
+X.add('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
-    _list = _list || new XList();
+    _list = _list || new X.List();
 
-    var value = inclusive ? this : this[_.resolve[prop] || prop];
+    var value = inclusive ? this : this[X.alias(prop)];
     if (value) {
         var result = fn && fn.call(this, value, _list);
         if (result !== null) {

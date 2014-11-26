@@ -27,12 +27,13 @@ Test assertions:
         equal(D.query('body'), document.body, "D.query('body')");
     });
 
-    var _ = D._;
+    var X = D.x,
+        _ = X._;
 
     module('traverse DOM extensions');
 
-    test("_.parents", function() {
-        equal(Array.isArray(_.parents), true, "_.parents");
+    test("X.parents", function() {
+        equal(Array.isArray(X.parents), true, "X.parents");
     });
 
     test("matches", function() {
@@ -40,21 +41,21 @@ Test assertions:
     });
 
     test("only()", function() {
-        expect(_.lists.length);
-        _.lists.forEach(function(_class) {
+        expect(X.sets.length);
+        X.sets.forEach(function(_class) {
             ok(_class.prototype.only, _class.name+'.prototype.only');
         });
     });
 
     test("not()", function() {
-        expect(_.lists.length);
-        _.lists.forEach(function(_class) {
+        expect(X.sets.length);
+        X.sets.forEach(function(_class) {
             ok(_class.prototype.not, _class.name+'.prototype.not');
         });
     });
 
     test("all()", function() {
-        var set = _.lists.concat([Node]);
+        var set = X.sets.concat([Node]);
         expect(set.length);
         set.forEach(function(_class) {
             ok(_class.prototype.all, _class.name+'.prototype.all');
@@ -62,7 +63,7 @@ Test assertions:
     });
 
     test("queryAll()", function() {
-        var set = _.lists.concat(_.parents);
+        var set = X.sets.concat(X.parents);
         expect(set.length);
         set.forEach(function(_class) {
             ok((_class.prototype||_class).queryAll, _class.name+'.prototype.queryAll');
@@ -70,7 +71,7 @@ Test assertions:
     });
 
     test("query()", function() {
-        var set = _.lists.concat(_.parents);
+        var set = X.sets.concat(X.parents);
         expect(set.length);
         set.forEach(function(_class) {
             ok((_class.prototype||_class).query, _class.name+'.prototype.query');
@@ -141,7 +142,7 @@ Test assertions:
     });
 
     test('mixed node types by selector', function() {
-        var list = new XList(),
+        var list = new X.List(),
             text = D.createTextNode('hello'),
             el = D.createElement('meta'),
             exclude = D.createElement('test');
@@ -160,7 +161,7 @@ Test assertions:
     module("not()");
 
     test("not is inverse of only", function() {
-        var list = new XList(D.createElement('div'),
+        var list = new X.List(D.createElement('div'),
                                 D.createElement('span'),
                                 D.createElement('span'));
         deepEqual(list.not('div'), list.only('span'));
@@ -178,10 +179,11 @@ Test assertions:
     });
 
     test("next[ElementSibling], inclusive", function() {
-        _.resolve.next = 'nextElementSibling';
+        _.alias.next = 'nextElementSibling';
         var div = D.query('#first'),
             siblings = div.all('next', true);
         equal(siblings.length, 5);
+        delete _.alias.next;
     });
 
     test("children, on multiple", function() {
@@ -197,7 +199,7 @@ Test assertions:
             strictEqual(this, D.body);
             strictEqual(parentElement, D.html);
             strictEqual(list.length, 0);
-            ok(list instanceof XList);
+            ok(list instanceof X.List);
         });
         equal(list.length, 1);
     });
@@ -220,7 +222,7 @@ Test assertions:
         });
         equal(returnNull.length+1, all.length, "shouldn't collect <html>");
 
-        var allFirstText = new XList(div.all('parentElement')
+        var allFirstText = new X.List(div.all('parentElement')
                                             .each('firstChild')
                                             .each('textContent'));
         var returnNode = div.all('parentElement', function(parentElement) {
@@ -249,12 +251,12 @@ Test assertions:
 
     test("farthest(alias)", function() {
         var div = D.query('#first');
-        _.resolve.previous = 'previousElementSibling';
-        _.resolve.next = 'nextElementSibling';
+        _.alias.previous = 'previousElementSibling';
+        _.alias.next = 'nextElementSibling';
         equal(null, div.farthest('previous'));
         equal(D.query('#last'), div.farthest('next'));
-        delete _.resolve.previous;
-        delete _.resolve.next;
+        delete _.alias.previous;
+        delete _.alias.next;
     });
 
     test("farthest(nomatch)", function() {
@@ -286,12 +288,12 @@ Test assertions:
 
     test("closest(alias)", function() {
         var div = D.query('#first');
-        _.resolve.previous = 'previousElementSibling';
-        _.resolve.next = 'nextElementSibling';
+        _.alias.previous = 'previousElementSibling';
+        _.alias.next = 'nextElementSibling';
         equal(null, div.closest('previous'));
         equal(D.query('#identity'), div.closest('next'));
-        delete _.resolve.previous;
-        delete _.resolve.next;
+        delete _.alias.previous;
+        delete _.alias.next;
     });
 
     test("closest(nomatch)", function() {

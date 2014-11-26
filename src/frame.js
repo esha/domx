@@ -1,5 +1,5 @@
 <%= banner %>
-(function(D, _) {
+(function(D, X, _) {
     "use strict";
 
 <%= content %>

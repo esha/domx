@@ -87,10 +87,6 @@ var S = _.stringify = {
         return s !== undefined && s !== null && s !== '';
     }
 };
-D.extend('stringify', function(markup, indent) {
-    var s = '';
-    this.each(function(el) {
-        s += S.print(el, markup||false, indent||'');
-    });
-    return s;
+X.add('stringify', function(markup, indent) {
+    return S.print(this, markup||false, indent||'');
 });

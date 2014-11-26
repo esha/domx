@@ -22,12 +22,12 @@ var A = _.append = {
     }
 };
 
-D.extend('append', function(arg, ref) {
+X.add('append', function(arg, ref) {
     if (typeof arg === "string") {// turn arg into an appendable
         return A.create(this, arg, ref);
     }
     if (_.isList(arg)) {// list of append-ables
-        var list = new XList();
+        var list = new X.List();
         for (var i=0,m=arg.length; i<m; i++) {
             list.add(this.append(arg[i], ref));
         }
@@ -35,12 +35,12 @@ D.extend('append', function(arg, ref) {
     }
     A.insert(this, arg, ref);// arg is an append-able
     return arg;
-}, _.parents);
+}, X.parents);
 
-D.extend('remove', function() {
+X.add('remove', function() {
     var parent = this.parentNode;
     if (parent) {
         parent.removeChild(this);
     }
-}, _.nodes);
+});
 // /append.js

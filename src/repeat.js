@@ -33,7 +33,7 @@ var R = _.repeat = {
     style: D.head.append('style')
 };
 
-D.extend('repeat', function repeat(val) {
+X.add('repeat', function repeat(val) {
     var parent = this.parentNode,
         id = this.getAttribute(R.id) || R.init(this, true),
         selector = '['+R.id+'="'+id+'"]',
@@ -51,7 +51,7 @@ D.extend('repeat', function repeat(val) {
         R.repeat(parent, anchor, source, val);
     parent.queryAll(selectAll).each('setAttribute', 'data-index', '${i}');
     return ret;
-});
+}, [Element]);
 
 R.style.textContent = '[data-repeat] { display: none }';
 D.addEventListener('DOMContentLoaded', function() {

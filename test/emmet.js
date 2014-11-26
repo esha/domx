@@ -20,7 +20,7 @@
       throws(block, [expected], [message])
   */
 
-    var _ = D._;
+    var _ = D.x._;
 	module("append(emmet)");
 
 	test("nested", function() {

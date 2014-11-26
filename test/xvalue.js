@@ -28,7 +28,8 @@
         });
     }
 
-    var _ = D._;
+    var X = D.x,
+        _ = X._;
     module("xValue");
 
     test("_.", function() {
@@ -46,8 +47,8 @@
     testProperty(Element, 'noSubNames');
     testProperty(Element, 'useAttrValues');
 
-    testMethod(_.parents, 'queryName');
-    testMethod(_.parents, 'queryNameAll');
+    testMethod(X.parents, 'queryName');
+    testMethod(X.parents, 'queryNameAll');
 
     function testBaseValue(node, initial) {
         if (arguments.length !== 2) {

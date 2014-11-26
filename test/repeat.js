@@ -20,7 +20,8 @@
       throws(block, [expected], [message])
   */
 
-    var _ = D._;
+    var X = D.x,
+        _ = X._;
     module("repeat()");
 
     test("_.", function() {
@@ -34,7 +35,7 @@
     });
 
     test("repeat() presence", function() {
-        var set = [Element].concat(_.lists);
+        var set = [Element].concat(X.sets);
         expect(set.length);
         set.forEach(function(_class) {
             equal(typeof _class.prototype.repeat, "function", _class.name+".prototype.repeat");

@@ -159,7 +159,7 @@ _.define([Node], {
                 name = V.name(el);
             return name ? el.parentNode ?
                 el.nameParent.queryNameAll(name) :
-                new XList(el) :
+                new X.List(el) :
                 null;
         }
     },
@@ -236,12 +236,12 @@ _.define([Element], {
     noSubNames: V.booleanAttr('xvalue-none')
 }, true);
 
-_.define(_.parents.concat(_.lists), {
+_.define(X.parents.concat(X.sets), {
     queryName: function(name) {
         return this.queryNameAll(name, 1)[0];
     },
     queryNameAll: function(name, count, _list) {
-        _list = _list || new XList(count);
+        _list = _list || new X.List(count);
         var parents = _.isList(this) ? this : [this];
         for (var s=0; s < parents.length && !_list.isFull(); s++) {
             var parent = parents[s];

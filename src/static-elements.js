@@ -1,7 +1,7 @@
 (function(D) {
     "use strict";
 
-    var _ = D._,
+    var _ = D.x._,
     E = _.elements = {
         define: function(name) {
             _.define(name, {

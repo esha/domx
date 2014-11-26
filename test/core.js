@@ -21,41 +21,50 @@ Test assertions:
 */
     module("D");
 
-    test('D._', function() {
-        ok(D._, "D._ should be present");
+    test('D.x', function() {
+        ok(D.x, "document.x should be present");
     });
 
     test("D is for document", function() {
         strictEqual(D, document, "D is the document node");
     });
 
-    var _ = D._;
+    var X = D.x,
+        _ = X._;
     module("core API");
 
+    test("x.", function() {
+        equal(typeof X.version, "string", "X.version");
+        equal(typeof X._, "object", "X._");
+        equal(Array.isArray(X.parents), true, "X.sets");
+        equal(Array.isArray(X.sets), true, "X.sets");
+        equal(Array.isArray(X.nodes), true, "X.nodes");
+        equal(typeof X.alias, "function", "X.alias");
+        equal(typeof X.add, "function", "X.add");
+    });
+
     test("_.", function() {
-        equal(typeof _.version, "string", "_.version");
         strictEqual(_.slice, Array.prototype.slice, "_.slice");
         equal(typeof _.isList, "function", "_.isList");
-        equal(Array.isArray(_.lists), true, "_.lists");
-        equal(Array.isArray(_.nodes), true, "_.nodes");
         equal(typeof _.define, "function", "_.define");
         equal(typeof _.defprop, "function", "_.defprop");
         equal(typeof _.resolve, "function", "_.resolve");
         equal(typeof _.fill, "function", "_.fill");
+        equal(typeof _.alias, "object", "_.alias");
     });
 
-    test("D.extend", function() {
-        expect(_.lists.length*2 + 9);
-        equal(typeof D.extend, "function", "document.extend");
+    test("document.x.add", function() {
+        expect(X.sets.length*2 + 9);
+        equal(typeof X.add, "function", "document.extend");
 
         var fn = function() {
             ok(!_.isList(this));
-            return new XList(this);
+            return new X.List(this);
         };
 
-        D.extend('core_test', fn);
+        X.add('core_test', fn);
         equal(Element.prototype.core_test, fn);
-        _.lists.forEach(function(_class) {
+        X.sets.forEach(function(_class) {
             equal(typeof _class.prototype.core_test, "function");
             equal(_class.prototype.core_test.name, 'listFn');
         });
@@ -66,13 +75,13 @@ Test assertions:
         ret = D.html.children.core_test();
         equal(ret.length, 2);
 
-        D.extend('core_test', function(){ return true; }, true);
+        X.add('core_test', function(){ return true; }, true);
         strictEqual(D.body.core_test(), true, 'overridden core_test');
         deepEqual(D.html.children.core_test(), [true,true], 'overridden core_test');
     });
 
     test("each()", function() {
-        var set = _.lists.concat(_.nodes);
+        var set = X.sets.concat(X.nodes);
         expect(set.length);
         set.forEach(function(_class) {
             ok(_class.prototype.each, _class.name+'.prototype.each');
@@ -80,7 +89,7 @@ Test assertions:
     });
 
     test("toArray()", function() {
-        var set = _.lists.concat(_.nodes);
+        var set = X.sets.concat(X.nodes);
         expect(set.length);
         set.forEach(function(_class) {
             ok(_class.prototype.toArray, _class.name+'.prototype.toArray');
@@ -89,7 +98,7 @@ Test assertions:
 
     test("_.isList", function() {
         ok(_.isList([]), "array is list");
-        ok(_.isList(new XList()), "XList is list");
+        ok(_.isList(new X.List()), "X.List is list");
         ok(_.isList(arguments), "arguments is list");
         ok(_.isList(D.querySelectorAll('body')), "NodeList is list");
         ok(_.isList(D.body.children), "HTMLCollection is list");
@@ -104,12 +113,12 @@ Test assertions:
         ok(!_.isList(D.createTextNode('foo')), "text node is not list");
     });
 
-    test('XList', function() {
-        var list = new XList();
+    test('X.List', function() {
+        var list = new X.List();
         equal(list.length, 0);
-        ok(list instanceof XList);
+        ok(list instanceof X.List);
 
-        list = new XList([1,2]);
+        list = new X.List([1,2]);
         equal(list.length, 2);
         equal(list[0], 1);
         equal(list[1], 2);
@@ -124,7 +133,7 @@ Test assertions:
         equal(list.indexOf(1), 0);
         equal(list.indexOf(0), -1);
 
-        list = new XList();
+        list = new X.List();
         list.limit = 1;
         equal(list.add(1,2), 1, "should add just one");
         equal(list.length, 1);
@@ -281,7 +290,7 @@ Test assertions:
     });
 
     test("aliased property", function() {
-        D._.resolve['-class'] = 'classList.remove';
+        D.x.alias('-class', 'classList.remove');
         var divs = D.querySelectorAll('section > div').each('classList.add','bar');
         divs.each(function(el) {
             ok(el.className.indexOf('bar') >= 0, 'have class bar');// fails in IE9

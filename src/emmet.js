@@ -45,7 +45,7 @@ AE.emmet = {
     },
     '*': function(count) {
         var parent = this.parentNode,
-            els = new XList(this);
+            els = new X.List(this);
         for (var i=1; i<count; i++) {
             els.add(this.cloneNode(true));
             parent.appendChild(els[i]);

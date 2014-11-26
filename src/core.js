@@ -1,20 +1,7 @@
 // core.js
-window.XList = function XList(limit) {
-    if (typeof limit === "number") {
-        this.limit = limit;
-        this.add(_.slice(arguments, 1));
-    } else {
-        this.add(arguments);
-    }
-};
-
-// expose utilities
 _ = {
-    version: "<%= pkg.version %>",
     slice: Array.prototype.slice,
     zero: function(){ return 0; },
-    nodes: [Element, Text, Comment],
-    lists: [NodeList, HTMLCollection, XList],
     isList: function(o) {
         return (o && typeof o === "object" && 'length' in o && !o.nodeType) ||
                o instanceof NodeList ||// phantomjs foolishly calls these functions
@@ -78,47 +65,53 @@ _ = {
                      arg;
         }
         return ret;
+    },
+    alias: {}
+};
+
+// developer tools
+X = {
+    version: "<%= pkg.version %>",
+    _: _,
+
+    // extension points
+    alias: function(short, long) {
+        if (long) {
+            _.alias[short] = long+'';// only strings allowed
+        }
+        return _.alias[short] || short;
+    },
+    add: function(name, fn, nodes, force) {
+        if (!Array.isArray(nodes)) {
+            force = nodes;
+            nodes = X.nodes;
+        }
+        _.define(nodes, name, fn, force);
+        if (typeof fn === "function") {
+            _.define(X.sets, name, function listFn() {
+                var args = arguments;
+                return this.each(function eachFn() {
+                    return fn.apply(this, args);
+                });
+            }, force);
+        }
+    },
+
+    // type lists (sets list is defined after X.List)
+    nodes: [Element, Text, Comment],
+    parents: [Element, DocumentFragment, D]
+};
+
+// define X.List type
+X.List = function XList(limit) {
+    if (typeof limit === "number") {
+        this.limit = limit;
+        this.add(_.slice(arguments, 1));
+    } else {
+        this.add(arguments);
     }
 };
-_.defprop(D, '_', _);
-
-// define foundation on Node and lists
-_.define([Node].concat(_.lists), {
-    each: function(fn) {
-        var self = _.isList(this) ? this : [this],
-            results = [],
-            prop, args;
-        if (typeof fn === "string") {
-            prop = _.resolve[fn] || fn;// e.g. _.resolve['+class'] = 'classList.add';
-            args = _.slice.call(arguments, 1);
-            fn = function(el, i){ return _.resolve(prop, el, args, i); };
-        }
-        for (var i=0,m=self.length, result; i<m; i++) {
-            result = fn.call(self[i], self[i], i, self);
-            if (result || (prop && result !== undefined)) {
-                results.push(result);
-            }
-        }
-        return !results.length ? this : // no results, be fluent
-            !_.isList(this) ? results[0] : // single source, single result
-            results[0] && results[0].each ? new XList(results) : // convert to DOMx (combines sub-lists)
-            results;
-    },
-    toArray: function(arr) {
-        arr = arr || [];
-        if (_.isList(this)) {
-            for (var i=0,m=this.length; i<m; i++) {
-                arr.push(this[i]);
-            }
-        } else {
-            arr.push(this);
-        }
-        return arr;
-    }
-});
-
-// define XList functions
-_.define([XList], {
+_.define([X.List], {
     length: 0,
     limit: undefined,
     add: function(item) {
@@ -149,17 +142,45 @@ _.define([XList], {
     }
 });
 
-_.defprop(D, 'extend', function(name, fn, singles, force) {
-    if (!Array.isArray(singles)) {
-        force = singles;
-        singles = [Element];
+// add list of set types now that X.List is defined
+X.sets = [NodeList, HTMLCollection, X.List];
+
+// expose developer tools
+_.defprop(D, 'x', X);
+
+// define foundational features on Node and sets
+_.define([Node].concat(X.sets), {
+    each: function(fn) {
+        var self = _.isList(this) ? this : [this],
+            results = [],
+            prop, args;
+        if (typeof fn === "string") {
+            prop = X.alias(fn);// e.g. D.x.alias('+class', 'classList.add');
+            args = _.slice.call(arguments, 1);
+            fn = function(el, i){ return _.resolve(prop, el, args, i); };
+        }
+        for (var i=0,m=self.length, result; i<m; i++) {
+            result = fn.call(self[i], self[i], i, self);
+            if (result || (prop && result !== undefined)) {
+                results.push(result);
+            }
+        }
+        return !results.length ? this : // no results, be fluent
+            !_.isList(this) ? results[0] : // single source, single result
+            results[0] && results[0].each ? new X.List(results) : // convert to DOMx (combines sub-lists)
+            results;
+    },
+    toArray: function(arr) {
+        arr = arr || [];
+        if (_.isList(this)) {
+            for (var i=0,m=this.length; i<m; i++) {
+                arr.push(this[i]);
+            }
+        } else {
+            arr.push(this);
+        }
+        return arr;
     }
-    _.define(singles, name, fn, force);
-    _.define(_.lists, name, function listFn() {
-        var args = arguments;
-        return this.each(function eachFn() {
-            return fn.apply(this, args);
-        });
-    }, force);
 });
+
 // /core.js
