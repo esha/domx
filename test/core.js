@@ -36,7 +36,7 @@ Test assertions:
     test("x.", function() {
         equal(typeof X.version, "string", "X.version");
         equal(typeof X._, "object", "X._");
-        equal(Array.isArray(X.parentNodes), true, "X.lists");
+        equal(Array.isArray(X.parents), true, "X.lists");
         equal(Array.isArray(X.lists), true, "X.lists");
         equal(Array.isArray(X.nodes), true, "X.nodes");
         equal(typeof X.alias, "function", "X.alias");

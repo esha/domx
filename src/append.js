@@ -35,7 +35,7 @@ X.add('append', function(arg, ref) {
     }
     A.insert(this, arg, ref);// arg is an append-able
     return arg;
-}, X.parentNodes);
+}, X.parents);
 
 X.add('remove', function() {
     var parent = this.parentNode;

@@ -32,8 +32,8 @@ Test assertions:
 
     module('traverse DOM extensions');
 
-    test("X.parentNodes", function() {
-        equal(Array.isArray(X.parentNodes), true, "X.parentNodes");
+    test("X.parents", function() {
+        equal(Array.isArray(X.parents), true, "X.parents");
     });
 
     test("matches", function() {
@@ -63,7 +63,7 @@ Test assertions:
     });
 
     test("queryAll()", function() {
-        var set = X.lists.concat(X.parentNodes);
+        var set = X.lists.concat(X.parents);
         expect(set.length);
         set.forEach(function(_class) {
             ok((_class.prototype||_class).queryAll, _class.name+'.prototype.queryAll');
@@ -71,7 +71,7 @@ Test assertions:
     });
 
     test("query()", function() {
-        var set = X.lists.concat(X.parentNodes);
+        var set = X.lists.concat(X.parents);
         expect(set.length);
         set.forEach(function(_class) {
             ok((_class.prototype||_class).query, _class.name+'.prototype.query');

@@ -47,8 +47,8 @@
     testProperty(Element, 'noSubNames');
     testProperty(Element, 'useAttrValues');
 
-    testMethod(X.parentNodes, 'queryName');
-    testMethod(X.parentNodes, 'queryNameAll');
+    testMethod(X.parents, 'queryName');
+    testMethod(X.parents, 'queryNameAll');
 
     function testBaseValue(node, initial) {
         if (arguments.length !== 2) {

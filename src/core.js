@@ -99,7 +99,7 @@ X = {
 
     // type lists (not completed until after X.List is defined)
     nodes: [Element, Text, Comment],
-    parentNodes: [Element, DocumentFragment, D]
+    parents: [Element, DocumentFragment, D]
 };
 
 // define X.List type
@@ -144,7 +144,7 @@ _.define([X.List], {
 
 // finish types now that X.List is defined
 X.lists = [NodeList, HTMLCollection, X.List];
-X.containers = X.parentNodes.concat(X.lists);
+X.containers = X.parents.concat(X.lists);
 
 // expose developer tools
 _.defprop(D, 'x', X);
