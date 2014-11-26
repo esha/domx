@@ -2,7 +2,7 @@
 (function(D) {
     "use strict";
 
-    // key shortcuts
+    // shortcuts
     var X = D.x,
         _ = X._;
 
