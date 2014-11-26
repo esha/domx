@@ -1,4 +1,4 @@
-/*! domx - v0.14.0 - 2014-11-25
+/*! domx - v0.14.1 - 2014-11-25
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -78,15 +78,18 @@ _ = {
 
 // developer tools
 X = {
-    version: "0.14.0",
+    version: "0.14.1",
     _: _,
 
     // extension points
     alias: function(short, long) {
-        if (long) {
+        if (typeof short === "object") {
+            for (var s in short) {// short is actually a dict of aliases
+                _.alias[s] = short[s]+'';
+            }
+        } else {
             _.alias[short] = long+'';// only strings allowed
         }
-        return _.alias[short] || short;
     },
     add: function(name, fn, nodes, force) {
         if (!Array.isArray(nodes)) {
@@ -163,7 +166,7 @@ _.define([Node].concat(X.lists), {
             results = [],
             prop, args;
         if (typeof fn === "string") {
-            prop = X.alias(fn);// e.g. D.x.alias('+class', 'classList.add');
+            prop = _.alias[fn] || fn;// e.g. D.x.alias('+class', 'classList.add');
             args = _.slice.call(arguments, 1);
             fn = function(el, i){ return _.resolve(prop, el, args, i); };
         }
@@ -237,7 +240,7 @@ _.define(X.lists, {
 });
 
 _.estFnArgs = function(node, prop, test, inclusive) {
-    prop = X.alias(prop);
+    prop = _.alias[prop] || prop;
     if (!(prop in node)) {
         inclusive = test === undefined ?
             typeof prop === "boolean" ? prop : true :
@@ -284,7 +287,7 @@ X.add('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
     _list = _list || new X.List();
 
-    var value = inclusive ? this : this[X.alias(prop)];
+    var value = inclusive ? this : this[_.alias[prop]||prop];
     if (value) {
         var result = fn && fn.call(this, value, _list);
         if (result !== null) {

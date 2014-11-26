@@ -86,7 +86,7 @@ Download:
 * 2014-09-22 [v0.11.2][] (s/utmost()/farthest(), closest(), value change events)
 * 2014-10-28 [v0.12.0][] (reorganize secondary versions/plugins)
 * 2014-11-10 [v0.13.2][] (s/DOMxList/XList, s/properValue/xValue, list.queryName[All])
-* 2014-11-10 [v0.14.0][] (document.x, s/D.extend/D.x.add, s/D._.resolve[]/D.x.alias(), 'x-' attributes)
+* 2014-11-10 [v0.14.1][] (document.x, s/D.extend/D.x.add, s/D._.resolve[]/D.x.alias(), 'x-' attributes)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
@@ -95,4 +95,4 @@ Download:
 [v0.11.2]: https://github.com/esha/domx/tree/0.11.2
 [v0.12.0]: https://github.com/esha/domx/tree/0.12.0
 [v0.13.2]: https://github.com/esha/domx/tree/0.13.2
-[v0.14.0]: https://github.com/esha/domx/tree/0.14.0
+[v0.14.1]: https://github.com/esha/domx/tree/0.14.1
