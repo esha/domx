@@ -4,9 +4,9 @@ var R = _.repeat = {
     init: function(el, keep) {
         var selector = el.getAttribute('x-repeat'),
             id = R.count++,
-            source = selector && D.query(selector).cloneNode(true) || el,
+            content = selector && D.query(selector).cloneNode(true) || el,
             anchor = D.createElement('x-repeat');
-        source.setAttribute(R.id, id);
+        content.setAttribute(R.id, id);
         anchor.setAttribute(R.id, id);
         for (var i=0,m=el.attributes.length; i<m; i++) {
             var attr = el.attributes[i];
@@ -16,14 +16,14 @@ var R = _.repeat = {
             anchor.setAttribute(attr.name, attr.value);
         }
         el.parentNode.insertBefore(anchor, el.nextSibling);
-        _.defprop(anchor, 'source', source);
+        _.defprop(anchor, 'content', content);
         if (keep !== true) {
             el.remove();
         }
         return id;
     },
-    repeat: function(parent, anchor, source, val) {
-        var repeat = source.cloneNode(true);
+    repeat: function(parent, anchor, content, val) {
+        var repeat = content.cloneNode(true);
         if (val !== undefined && val !== null) {
             repeat.xValue = val;
         }
@@ -42,13 +42,13 @@ X.add('repeat', function repeat(val) {
         return parent.queryAll(selectAll).remove();
     }
     var anchor = parent.query('x-repeat'+selector),
-        source = anchor.source;
+        content = anchor.content;
     if (anchor.hasAttribute('x-repeat-first')) {
         anchor = parent.query(selector+'[x-index]') || anchor;
     }
     var ret = Array.isArray(val) ?
-        val.map(function(v){ return R.repeat(parent, anchor, source, v); }) :
-        R.repeat(parent, anchor, source, val);
+        val.map(function(v){ return R.repeat(parent, anchor, content, v); }) :
+        R.repeat(parent, anchor, content, val);
     parent.queryAll(selectAll).each('setAttribute', 'x-index', '${i}');
     return ret;
 }, [Element]);
