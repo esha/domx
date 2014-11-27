@@ -54,7 +54,6 @@ module.exports = function(grunt) {
       },
       js: {
         src: ['temp/bower.js',
-              'bower_components/domx/dist/domx.stringify.js',
               'script/Sintax.js',
               'script/demo.js',
               'script/index.js',

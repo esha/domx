@@ -25,6 +25,8 @@
     "vista": "~2.0.1",
     "normalize-css": "*",
     "pocketgrid": "*",
-    "eventi": "~1.3.6"
+    "eventi": "~1.3.6",
+    "domx-stringify": "*",
+    "MutationObserver-shim": "~0.2.8"
   }
 }
