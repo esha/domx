@@ -10,8 +10,8 @@
 body {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-weight: 300;
-  background: #3d2828;
-  color: #ffffff;
+  color: #FFFFFF;
+  background: #006699;
 }
 .wrapper {
   width: 95%;
@@ -49,25 +49,29 @@ hr.blank {
   opacity: 0;
 }
 a {
-  color: #f6ece3;
+    color: #FFFFFF;
+}
+a:hover,
+a:active {
+    color: #CCCCFF;
 }
 p {
   margin: 9px 18px;
   line-height: 140%;
-  color: #c8c0a6;
+  color: #DAD2BD;
 }
 code {
-  background: #312020;
-  border: 1px solid #4f3434;
+  background: #012638;
+  border: 1px solid #0077BB;
   padding: 1px 6px;
   font-family: Monaco, sans-serif;
   font-size: 80%;
   border-radius: 4px;
-  color: #996565;
+  color: #00A0F0;
 }
 header {
-  background: #584221;
-  border-bottom: 4px solid #765139;
+  background: #006699;
+  border-bottom: 2px solid #84B5BD;
 }
 header .logo {
   font-family: 'Eagle Lake', fantasy, serif;
@@ -85,7 +89,7 @@ header .motto {
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: none;
-  color: #E7875E;
+  color: #C7C4BA;
   display: inline-block;
 }
 header h5 {
@@ -141,8 +145,8 @@ demo-out {
   min-width: 36em;
   margin: 0 18px;
   padding: 5px;
-  background: #847851;
-  border: 1px solid #645b3e;
+  background: #00434D;
+  border: 1px solid #235359;
   outline: none;
   min-height: 6em;
   border-radius: 8px;
@@ -174,7 +178,6 @@ demo-x.stopped [start] {
   display: initial;
 }
 demo-dom {
-  background: #312020;
   min-width: 26em;
   min-height: 16em;
 }
@@ -191,7 +194,7 @@ demo-out {
   margin: 9px 18px;
   margin-right: 9px;
   line-height: 140%;
-  color: #d6c1c1;
+  color: #DAD2BD;
 }
 .api article {
   padding-bottom: 0.8em;
@@ -200,15 +203,15 @@ demo-out {
   font-family: Monaco, monospace;
   margin: 18px;
   font-size: 1.2em;
-  color: #cfd59c;
+  color: #FFFFFF;
 }
 .returns {
   font-style: italic;
   font-size: 90%;
-  color: #b06646;
+  color: #55CCFF;
 }
 .variable {
-  color: #829a1c;
+  color: #CCEEFF;
   font-weight: bold;
 }
 .variable em {
@@ -234,8 +237,8 @@ demo-out {
 }
 .since {
   font-size: 50%;
-  background-color: #cfd59c;
-  color: #3d2828;
+  background-color: #0088CC;
+  color: #DDFFFF;
   padding: 0px 2px;
 }
 .since:before {
@@ -248,12 +251,12 @@ p em {
   font-style: italic;
 }
 .example {
-  background: #312020;
+  background: #012638;
   font-family: Monaco, monospace;
   font-size: 0.7em;
   margin: 18px 36px;
   padding: 12px;
-  color: #e8ae3b;
+  color: #FFBB22;
   line-height: 130%;
   border-radius: 8px;
   white-space: pre;
@@ -265,7 +268,7 @@ p em {
   color: #feecc9 !important;
 }
 .example .quote {
-  color: #8c9d34;
+  color: #66CCFF;
 }
 .example .keyword {
   color: #e0e4c0;
@@ -283,8 +286,8 @@ p em {
   font-size: 110%;
 }
 footer {
-  background: #584221;
-  border-top: 4px solid #765139;
+  background: #006699;
+  border-top: 2px solid #765139;
 }
 footer p {
   text-align: center;
@@ -304,16 +307,16 @@ footer p a {
   display: none;
 }
 .markup {
-  color: #666666;
-}
-.tag {
   color: #777777;
 }
+.tag {
+  color: #FFCC44;
+}
 .attr {
-  color: #444444;
+  color: #BBDDFF;
 }
 .string {
-  color: #999999;
+  color: #CCCCCC;
 }
 p.line {
   line-height: 110%;

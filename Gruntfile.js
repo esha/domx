@@ -55,6 +55,7 @@ module.exports = function(grunt) {
       js: {
         src: ['temp/bower.js',
               'script/Sintax.js',
+              'script/random-x.js',
               'script/demo.js',
               'script/index.js',
               /*, 'bower_components/eventi/dist/eventi.debug.min.js'*/],
@@ -125,6 +126,7 @@ module.exports = function(grunt) {
     watch: {
       js: {
         files: ['script/demo.js',
+                'script/random-x.js',
                 'script/Sintax.js',
                 'script/index.js',
                 'style/style.css',

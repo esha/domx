@@ -24,14 +24,19 @@
       <h1 class="logo">
         <span id="DOMx">DOMx</span>
       </h1>
-      <h3 class="motto">Befriend the DOM!</h3>
-
+      <random-x>
+        <h3 class="motto">Befriend the DOM!</h3>
+        <h3 class="motto">Teaching the old DOM new tricks!</h3>
+        <h3 class="motto">Go native!</h3>
+        <h3 class="motto">Native DOM utilities and more!</h3>
+        <h3 class="motto">Time to extend the DOM!</h3>
+      </random-x>
     </div>
   </header>
   <div class="content">
     <div class="wrapper">
       <div class="info">
-        <p>DOMx is all about powerful, lightweight, native DOM interaction. Try it: &nbsp; <a class="download" href="domx.min.js.gz">domx.min.js (~5kb, gzip)</a></p>
+        <p>DOMx empowers the native DOM instead of hiding it. Try it: &nbsp; <a class="download" href="domx.min.js.gz">domx.min.js (~5kb, gzip)</a></p>
 
       </div>
       <demo-x class="block-group">
@@ -101,7 +106,7 @@
       <a name="API"><h2>API</h2></a>
       <div class="api">
         <article>
-          <h4><a name="document">document</a> <span class="returns">document</span></h4>
+          <h4><a name="document">document</a></h4>
           <p>No need for a new global variable. We're <em>extending</em> the DOM, not replacing it. If you want a shorter global variable, do this:</p>
           <pre class="example">
 window.$ = document.queryAll.bind(document);
@@ -144,7 +149,7 @@ var firstGrandkid = kids.query(".grandkid"); // query works across list, returns
         </article>
         <article>
           <h4><a name="each()">each</a>(<span class="variable">callback(<em>element</em>,<em>index</em>,<em>array</em>)</span>) <span class="since">0.7.0</span></h4>
-          <p>Use a the selected element(s) within a closure. Returns the element(s) it was called on.</p>
+          <p>Use the selected element(s) within a closure. Returns the element(s) it was called on.</p>
           <pre class="example">
 document.queryAll('li').each(function(el, i, all) {
   el.textContent = "Item " + (i+1) + " of " + all.length;
@@ -153,7 +158,7 @@ document.queryAll('li').each(function(el, i, all) {
         </article>
         <article>
           <h4><a name="each(property)">each</a>(<span class="variable string">property</span> <span class="variable optional">, arguments...</span>) <span class="since">0.7.0</span></h4>
-          <p>Get, set, or invoke the specified property of the selected element(s). Returns either an array of retrieved/returned values or the element(s) it was called on.</p>
+          <p>Get, set, or invoke the specified property or method of the selected elements. Returns either an array of retrieved/returned values or the elements it was called on.</p>
           <pre class="example">
 var items = document.queryAll('.item');
 var texts = items.each('textContent'); // returns array of strings
@@ -163,8 +168,6 @@ items.each('id', 'item${i}');// sets the id of each element (replaces ${i} with 
 items.each('click');// calls 'click()' on each element, returns original items
 
 items.each('classList.add', 'foo');// adds 'foo' class to each item's classList, returns original items
-
-document.body.each('classList.toggle', 'ready');// each works on both single elements and lists
 </pre>
         </article>
         <article>
@@ -230,16 +233,15 @@ active.all('previousElementSibling', function(previousElementSibling, all) {
         </article>
         <article>
           <h4><a name="closest()">closest</a>(<span class="variable optional">property</span> <span class="variable optional">, selector|function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.11.0</span></h4>
-          <p>In the absence of arguments, this returns the parent element (or self, if none). If given only a selector (or custom test function), it will follow the <code>parentElement</code> chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will
-          default to <code>false</code>.</p>
+          <p>If given only a selector (or custom test function), this will follow the <code>parentElement</code> chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will default to <code>false</code>.</p>
           <pre class="example">
 var container = event.target.closest('.container'); // gets the closest element with 'container' class
 
 var active = document.query('.active');
 active.closest('nextElementSibling', '.action');// retrieves the closest, subsequent sibling with 'action' class
 active.closest('parentNode', function(node) {
-  return node.value && node.value.indexOf('example') >=0;
-}, true);// returns the closest node (self-included) with a value that includes the string 'example'
+  return !!node.getAttribute('name');
+}, true);// returns the closest node (self-included) with a name attribute
 </pre>
         </article>
         <article>
@@ -250,10 +252,10 @@ active.closest('parentNode', function(node) {
 var container = event.target.farthest('.container'); // gets the farthest element with 'container' class
 
 var active = document.query('.active');
-active.farthest('nextElementSibling', '.action');// retrieves the farthest, subsequent sibling with 'action' class
+active.farthest('nextElementSibling', '.action');// gets the farthest subsequent sibling with 'action' class
 active.farthest('parentNode', function(node) {
-  return node.value && node.value.indexOf('example') >=0;
-}, true);// returns the farthest node (self-included) with a value that includes the string 'example'
+  return !!node.getAttribute('id');
+}, true);// returns the farthest node (self-included) with an id
 </pre>
         </article>
         <article>
@@ -274,8 +276,8 @@ items.toArray(elArr);// will append all .item elements to the existing array
           <h4><a name="dot()">dot()</a> and <a name="x-dot">[x-dot]</a> <span class="since">0.9.0</span></h4>
           <p>Turns on <a href="#dot-traversal">dot traversal</a> properties for the target element (or list) and all descendant elements.</p>
           <pre class="example">
+document.query('div').dot();// enables dot-traversal for only the first div and its descendants
 document.dot(); // activates dot-traversal for all elements in the document
-document.query('div').dot();// enables dot-traversal for the first div and its descendants
 </pre>
           <div class="example">&lt;body x-dot&gt;&lt;!-- enable dot-traversal --&gt;
   &lt;header&gt;
@@ -288,7 +290,7 @@ document.query('div').dot();// enables dot-traversal for the first div and its d
         </article>
         <article>
           <h4><a name="dot-traversal">element.<span class="variable tag">tagName...</span></a> <span class="since">0.9.0</span></h4>
-          <p>DOMx allows you <a href="#dot()">to turn on</a> access to child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it searches only immediate children and not all descendant elements. The dot-traversal properties <em>always</em> return a list of matching elements.</p>
+          <p>DOMx allows you <a href="#dot()">to turn on</a> access to child elements via their tag name as a property. It acts a bit like <code>getElementsByTagName</code> except that it returns only immediate children and not all descendant elements. The dot-traversal properties <em>always</em> return a list of matching elements.</p>
           <p>This should <em>NOT</em> be used for long chains, as that would be fragile design. This is designed to be a powerful convenience feature for
           stable DOM structures (think <code>ul.li</code>, <code>table.tbody.tr</code>, and such) when dot-traversal is enabled on them either declaratively or programmatically.</p>
           <pre class="example">
@@ -330,7 +332,7 @@ document.body.append('ul>li{item}*10')
         </article>
         <article>
           <h4><a name="remove()">remove</a>()</h4>
-          <p>Removes the specified node (or list thereof). Some browsers provide this natively for elements, for the few who don't this polyfills the gap and enables use of it on arrays of elements. When called on a list, it returns the list of deleted items.</p>
+          <p>Removes the specified node (or list thereof). Most browsers provide this natively for elements, for IE, this polyfills the gap and enables use of it on lists of elements. When called on a list, it returns the list of deleted items.</p>
           <pre class="example">
 document.queryAll('.foo').remove();
 </pre>
