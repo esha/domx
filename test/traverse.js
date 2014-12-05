@@ -170,6 +170,14 @@ Test assertions:
         deepEqual(list.not('tagName', 'SPAN'), list.only('tagName', 'DIV'));
     });
 
+    test("not(node)", function() {
+        var list = new X.List(D.createTextNode('text'),
+                              D.createElement('span'),
+                              D.createElement('span'));
+        deepEqual(list.not(list[0]), list.only('span'));
+        deepEqual(list.not(list[2]), list.only(0,2));
+    });
+
     module('all()');
 
     test("parents", function() {

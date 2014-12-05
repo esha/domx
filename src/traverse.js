@@ -33,8 +33,8 @@ _.define(X.lists, {
             );
         return new X.List(arr);
     },
-    not: function not() {
-        var exclude = this.only.apply(this, arguments);
+    not: function not(b) {
+        var exclude = b instanceof Node ? [b] : this.only.apply(this, arguments);
         return this.only(function(n) {
             return exclude.indexOf(n) < 0;
         });
