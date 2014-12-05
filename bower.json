@@ -27,6 +27,8 @@
     "pocketgrid": "*",
     "eventi": "~1.3.6",
     "domx-stringify": "*",
-    "MutationObserver-shim": "~0.2.8"
+    "MutationObserver-shim": "~0.2.8",
+    "demo-x": "~0.1.3",
+    "random-x": "~0.1.1"
   }
 }

@@ -23,7 +23,7 @@ module.exports = function(grunt) {
               "style/*.map"]
       },
       temp: {
-        src: ['temp']
+        src: ['script/bower.js']
       },
       artifacts: {
         src: ["<%= uglify.js.dest %>",
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
     },
     bower_concat: {
       js: {
-        dest: 'temp/bower.js',
+        dest: 'script/bower.js',
         exclude: [
           'normalize-css',
           'pocketgrid'
@@ -53,10 +53,8 @@ module.exports = function(grunt) {
         sourceRoot: '../'
       },
       js: {
-        src: ['temp/bower.js',
+        src: ['script/bower.js',
               'script/Sintax.js',
-              'script/random-x.js',
-              'script/demo.js',
               'script/index.js',
               /*, 'bower_components/eventi/dist/eventi.debug.min.js'*/],
         dest: 'script/<%= pkg.name %>.js'
@@ -125,20 +123,19 @@ module.exports = function(grunt) {
     },
     watch: {
       js: {
-        files: ['script/demo.js',
-                'script/random-x.js',
-                'script/Sintax.js',
+        files: ['script/Sintax.js',
                 'script/index.js',
                 'style/style.css',
                 'html/*.ht*',
-                'bower.json'],
+                'bower.json',
+                'Gruntfile.js'],
         tasks: ['build']
       }
     }
   });
 
   // Default task.
-  grunt.registerTask('build', ['clean:artifacts', 'bake', 'jshint', 'bower_concat', 'copy', 'concat_sourcemap', 'autoprefixer', 'clean:temp']);
+  grunt.registerTask('build', ['clean:artifacts', 'bake', 'clean:temp', 'jshint', 'bower_concat', 'copy', 'concat_sourcemap', 'autoprefixer']);
   grunt.registerTask('minify', ['uglify', 'csswring']);
   grunt.registerTask('default', ['build', 'minify']);
 
