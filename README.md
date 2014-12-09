@@ -24,8 +24,8 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq]
 [![Downloads per month](https://img.shields.io/npm/dm/domx.svg)](https://www.npmjs.org/package/domx)
 
 <!-- deps status -->
-[![Dependency Status](https://david-dm.org/kangax/fabric.js.png?theme=shields.io)](https://david-dm.org/esha/domx.js)
-[![devDependency Status](https://david-dm.org/kangax/fabric.js/dev-status.png?theme=shields.io)](https://david-dm.org/esha/domx.js#info=devDependencies)
+[![Dependency Status](https://david-dm.org/esha/domx.png?theme=shields.io)](https://david-dm.org/esha/domx)
+[![devDependency Status](https://david-dm.org/esha/domx/dev-status.png?theme=shields.io)](https://david-dm.org/esha/domx#info=devDependencies)
 
 #### Full Version:
 
