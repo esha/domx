@@ -31,7 +31,7 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq]
 
 Download: [domx.min.js][full-min] or [domx.js][full]  
 
-Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], [`xValue`][xValue], [`queryName()`][queryName], [`queryNameAll()`][queryNameAll], [`repeat()`][repeat], [`toArray()`][toArray], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
+Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`append()`][append], [`remove()`][remove], [`xValue`][xValue], [`queryName()`][queryName], [`queryNameAll()`][queryNameAll], [`repeat()`][repeat], [`toArray()`][toArray], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
 
 [full-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
 [full]: https://raw.github.com/esha/domx/master/dist/domx.js
@@ -47,6 +47,7 @@ Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only(
 [not]: http://esha.github.io/domx#not()
 [all]: http://esha.github.io/domx#all()
 [farthest]: http://esha.github.io/domx#farthest()
+[nearest]: http://esha.github.io/domx#nearest()
 [closest]: http://esha.github.io/domx#closest()
 
 [append]: http://esha.github.io/domx#append()
@@ -67,7 +68,7 @@ Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only(
 
 Download: [domx.base.min.js][base-min]  or  [domx.base.js][base]  
 
-Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`closest()`][closest], [`farthest()`][farthest], [`append()`][append], [`remove()`][remove], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], and [`toArray()`][toArray]:  
+Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`append()`][append], [`remove()`][remove], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], and [`toArray()`][toArray]:  
 
 [base-min]: http://raw.github.com/esha/domx/master/dist/domx.base.min.js
 [base]: http://raw.github.com/esha/domx/master/dist/domx.base.js
@@ -107,6 +108,7 @@ Download:
 * 2014-10-28 [v0.12.0][] (reorganize secondary versions/plugins)
 * 2014-11-10 [v0.13.2][] (s/DOMxList/XList, s/properValue/xValue, list.queryName[All])
 * 2014-11-10 [v0.14.2][] (document.x, s/D.extend/D.x.add, s/D._.resolve[]/D.x.alias(), 'x-' attributes)
+* 2014-12-04 [v0.15.0][] (not(node), s/closest()/nearest(), polyfill version of closest())
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
@@ -116,3 +118,4 @@ Download:
 [v0.12.0]: https://github.com/esha/domx/tree/0.12.0
 [v0.13.2]: https://github.com/esha/domx/tree/0.13.2
 [v0.14.2]: https://github.com/esha/domx/tree/0.14.2
+[v0.15.0]: https://github.com/esha/domx/tree/0.15.0

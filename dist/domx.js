@@ -1,4 +1,4 @@
-/*! domx - v0.14.2 - 2014-11-26
+/*! domx - v0.15.0 - 2014-12-09
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -78,7 +78,7 @@ _ = {
 
 // developer tools
 X = {
-    version: "0.14.2",
+    version: "0.15.0",
     _: _,
 
     // extension points
@@ -231,8 +231,8 @@ _.define(X.lists, {
             );
         return new X.List(arr);
     },
-    not: function not() {
-        var exclude = this.only.apply(this, arguments);
+    not: function not(b) {
+        var exclude = b instanceof Node ? [b] : this.only.apply(this, arguments);
         return this.only(function(n) {
             return exclude.indexOf(n) < 0;
         });
@@ -273,15 +273,20 @@ _.farthest = function(node, prop, test, previous) {
         previous;
 };
 
-_.define(X.nodes, 'closest', function(prop, test, inclusive) {
+_.define(X.nodes, 'nearest', function(prop, test, inclusive) {
     var args = _.estFnArgs(this, prop, test, inclusive);
-    return args[2] && args[1](this) ? this : _.closest(this, args[0], args[1]);
+    return args[2] && args[1](this) ? this : _.nearest(this, args[0], args[1]);
 });
-_.closest = function(node, prop, test) {
+_.nearest = function(node, prop, test) {
     return node && (node = node[prop]) ?
-        test(node) ? node : _.closest(node, prop, test) :
+        test(node) ? node : _.nearest(node, prop, test) :
         null;
 };
+
+// polyfill
+_.define(X.nodes, 'closest', function(selector) {
+    return this.nearest(selector ? selector+'' : '*', true);
+});
 
 X.add('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
