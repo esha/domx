@@ -10,11 +10,22 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq]
 [Bower][bower]: `bower install domx`  
 [NPM][npm]: `npm install domx`   
 [Component][component]: `component install esha/domx`  
-[![Build Status](https://travis-ci.org/esha/domx.png?branch=master)](https://travis-ci.org/esha/domx)  
 
 [npm]: https://npmjs.org/package/domx
 [bower]: http://bower.io/
 [component]: http://component.io/
+
+<!-- build/coverage status, climate -->
+[![Build Status](https://travis-ci.org/esha/domx.png?branch=master)](https://travis-ci.org/esha/domx)  
+
+<!-- npm, bower versions, downloads -->
+[![Bower version](https://badge.fury.io/bo/domx.png)](http://badge.fury.io/bo/domx)
+[![NPM version](https://badge.fury.io/js/domx.png)](http://badge.fury.io/js/domx)
+[![Downloads per month](https://img.shields.io/npm/dm/domx.svg)](https://www.npmjs.org/package/domx)
+
+<!-- deps status -->
+[![Dependency Status](https://david-dm.org/kangax/fabric.js.png?theme=shields.io)](https://david-dm.org/esha/domx.js)
+[![devDependency Status](https://david-dm.org/kangax/fabric.js/dev-status.png?theme=shields.io)](https://david-dm.org/esha/domx.js#info=devDependencies)
 
 #### Full Version:
 
