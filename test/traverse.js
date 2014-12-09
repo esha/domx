@@ -272,41 +272,49 @@ Test assertions:
         strictEqual(null, div.farthest('whatever'));
     });
 
-    module('closest');
+    module('nearest');
 
-    test("closest(parent*)", function() {
+    test("nearest(parent*)", function() {
         var div = D.query('#first');
-        equal(div, div.closest());
-        equal(div.parentElement, div.closest('parentElement'));
-        equal(document, div.closest('parentNode', function(node) {
+        equal(div, div.nearest());
+        equal(div.parentElement, div.nearest('parentElement'));
+        equal(document, div.nearest('parentNode', function(node) {
             return !(node instanceof HTMLElement);
         }));
     });
 
-    test('closest([prop, ]selector[, inclusive])', function() {
+    test('nearest([prop, ]selector[, inclusive])', function() {
         var div = D.query('#first');
-        equal(div, div.closest('#first'));
-        equal(null, div.closest('#first', false));
-        equal(document.body, div.closest('body'));
-        equal(D.query('#identity'), div.closest('nextElementSibling'));
-        equal(div, div.closest('nextSibling', true));
-        equal(div, div.closest('nextSibling', 'div', true));
-        equal(D.query('#identity'), div.closest('nextSibling', 'div'));
+        equal(div, div.nearest('#first'));
+        equal(null, div.nearest('#first', false));
+        equal(document.body, div.nearest('body'));
+        equal(D.query('#identity'), div.nearest('nextElementSibling'));
+        equal(div, div.nearest('nextSibling', true));
+        equal(div, div.nearest('nextSibling', 'div', true));
+        equal(D.query('#identity'), div.nearest('nextSibling', 'div'));
     });
 
-    test("closest(alias)", function() {
+    test("nearest(alias)", function() {
         var div = D.query('#first');
         _.alias.previous = 'previousElementSibling';
         _.alias.next = 'nextElementSibling';
-        equal(null, div.closest('previous'));
-        equal(D.query('#identity'), div.closest('next'));
+        equal(null, div.nearest('previous'));
+        equal(D.query('#identity'), div.nearest('next'));
         delete _.alias.previous;
         delete _.alias.next;
     });
 
-    test("closest(nomatch)", function() {
+    test("nearest(nomatch)", function() {
         var div = D.query('#first');
-        strictEqual(null, div.closest('whatever'));
+        strictEqual(null, div.nearest('whatever'));
+    });
+
+    module('closest');
+
+    test("closest(selector)", function() {
+        var div = D.query('#first');
+        equal(div, div.closest('#first'));
+        equal(document.body, div.closest('body,html'));
     });
 
 }(document));

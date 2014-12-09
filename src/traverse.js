@@ -75,15 +75,20 @@ _.farthest = function(node, prop, test, previous) {
         previous;
 };
 
-_.define(X.nodes, 'closest', function(prop, test, inclusive) {
+_.define(X.nodes, 'nearest', function(prop, test, inclusive) {
     var args = _.estFnArgs(this, prop, test, inclusive);
-    return args[2] && args[1](this) ? this : _.closest(this, args[0], args[1]);
+    return args[2] && args[1](this) ? this : _.nearest(this, args[0], args[1]);
 });
-_.closest = function(node, prop, test) {
+_.nearest = function(node, prop, test) {
     return node && (node = node[prop]) ?
-        test(node) ? node : _.closest(node, prop, test) :
+        test(node) ? node : _.nearest(node, prop, test) :
         null;
 };
+
+// polyfill
+_.define(X.nodes, 'closest', function(selector) {
+    return this.nearest(selector ? selector+'' : '*', true);
+});
 
 X.add('all', function(prop, fn, inclusive, _list) {
     if (fn === true){ inclusive = fn; fn = undefined; }
