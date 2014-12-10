@@ -234,16 +234,23 @@ active.all('previousElementSibling', function(previousElementSibling, all) {
 </pre>
         </article>
         <article>
-          <h4><a name="closest()">closest</a>(<span class="variable optional">property</span> <span class="variable optional">, selector|function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.11.0</span></h4>
-          <p>If given only a selector (or custom test function), this will follow the <code>parentElement</code> chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will default to <code>false</code>.</p>
+          <h4><a name="nearest()">nearest</a>(<span class="variable optional">property</span> <span class="variable optional">, selector|function</span> <span class="variable optional">, includeSelf</span>) <span class="since">0.15.0</span></h4>
+          <p>If given only a selector (or custom test function), this will follow the <code>parentElement</code> property chain until it finds one that matches the selector, returning <code>null</code> if none match. So long as no <span class="variable">property</span> is specified, <span class="variable">includeSelf</span> will default to <code>true</code>. If a property is specified, it will default to <code>false</code>.</p>
           <pre class="example">
-var container = event.target.closest('.container'); // gets the closest element with 'container' class
+var container = event.target.nearest('.container'); // gets the nearest element with 'container' class
 
 var active = document.query('.active');
-active.closest('nextElementSibling', '.action');// retrieves the closest, subsequent sibling with 'action' class
-active.closest('parentNode', function(node) {
+active.nearest('nextElementSibling', '.action');// retrieves the nearest, subsequent sibling with 'action' class
+active.nearest('parentNode', function(node) {
   return !!node.getAttribute('name');
-}, true);// returns the closest node (self-included) with a name attribute
+}, true);// returns the nearest node (self-included) with a name attribute
+</pre>
+        </article>
+        <article>
+          <h4><a name="closest()">closest</a>(<span class="variable string">selector</span>) <span class="since">0.11.0</span></h4>
+          <p>Some <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element.closest">browsers provide this</a> very useful function, for those who don't this serves as a polyfill. It uses the capabilities of <a href="#nearest()">nearest</a> when the faster browser version isn't available.</p>
+          <pre class="example">
+var el = event.target.closest('.group');// gets the closest element (self included) with 'group' class
 </pre>
         </article>
         <article>
@@ -334,7 +341,7 @@ document.body.append('ul>li{item}*10')
         </article>
         <article>
           <h4><a name="remove()">remove</a>()</h4>
-          <p>Removes the specified node (or list thereof). Most browsers provide this natively for elements, for IE, this polyfills the gap and enables use of it on lists of elements. When called on a list, it returns the list of deleted items.</p>
+          <p>Removes the specified node (or list thereof). Most <a href="https://developer.mozilla.org/en-US/docs/Web/API/ChildNode.remove">browsers provide this</a> natively for elements, for IE, this polyfills the gap and enables use of it on lists of elements. When called on a list, it returns the list of deleted items.</p>
           <pre class="example">
 document.queryAll('.foo').remove();
 </pre>
@@ -430,7 +437,7 @@ document.x.alias({
     ...
 });
 var parents = el.all('^'),
-    nextActiveSib = el.closest('>', '.active'),
+    nextActiveSib = el.nearest('>', '.active'),
     firstSib = el.furthest('&lt;');
 </pre>
         </article>
