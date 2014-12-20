@@ -2,7 +2,7 @@
   "name": "domx",
   "title": "DOMx",
   "description": "An intuitive, extensible way to work directly with the DOM.",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "homepage": "http://esha.github.io/domx/",
   "author": {
     "name": "ESHA Research",
@@ -39,7 +39,9 @@
     "grunt-contrib-clean": "~0.6.0",
     "grunt-cli": "^0.1.13",
     "grunt": "~0.4.5",
-    "grunt-contrib-compress": "~0.12.0"
+    "grunt-contrib-compress": "~0.12.0",
+    "load-grunt-tasks": "~1.0.0",
+    "time-grunt": "~1.0.0"
   },
   "keywords": [
     "html",
@@ -52,9 +54,6 @@
     "query",
     "dot",
     "emmet",
-    "repeat",
-    "values",
-    "native",
-    "xValue"
+    "native"
   ]
 }

@@ -1,51 +1,54 @@
 {
-    "name": "domx",
-    "version": "0.15.0",
-    "main": "dist/domx.js",
-    "description": "An intuitive, extensible way to work directly with the DOM.",
-    "keywords": [
-        "HTML",
-        "DOM",
-        "traverse",
-        "append",
-        "emmet",
-        "befriend",
-        "manipulate",
-        "extend",
-        "native",
-        "repeat",
-        "values",
-        "dot",
-        "xValue"
-    ],
-    "author": {
-        "name": "ESHA Research",
-        "email": "nathan@esha.com",
-        "url": "http://www.esha.com/"
+  "name": "domx",
+  "version": "0.16.0",
+  "main": "dist/domx.js",
+  "description": "An intuitive, extensible way to work directly with the DOM.",
+  "keywords": [
+    "HTML",
+    "DOM",
+    "traverse",
+    "append",
+    "emmet",
+    "befriend",
+    "manipulate",
+    "extend",
+    "native",
+    "dot"
+  ],
+  "author": {
+    "name": "ESHA Research",
+    "email": "nathan@esha.com",
+    "url": "http://www.esha.com/"
+  },
+  "homepage": "http://esha.github.io/domx/",
+  "bugs": "https://github.com/esha/domx/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:esha/domx.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/esha/domx/master/LICENSE-MIT"
     },
-    "homepage": "http://esha.github.io/domx/",
-    "bugs": "https://github.com/esha/domx/issues",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com:esha/domx.git"
-    },
-    "licenses": [
-        {
-            "type": "MIT",
-            "url": "https://raw.githubusercontent.com/esha/domx/master/LICENSE-MIT"
-        },
-        {
-            "type": "GPL",
-            "url": "http://www.gnu.org/licenses/gpl.html"
-        }
-    ],
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "components",
-        "libs",
-        "test",
-        "src",
-        "Gruntfile.js"
-    ]
+    {
+      "type": "GPL",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    }
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "libs",
+    "test",
+    "src",
+    "Gruntfile.js"
+  ],
+  "devDependencies": {
+    "qunit": "~1.16.0",
+    "domx-value": "~0.1.0",
+    "domx-repeat": "~0.1.0",
+    "domx-stringify": "~1.0.0"
+  }
 }
