@@ -103,7 +103,7 @@ Download:
 * 2014-11-10 [v0.13.2][] (s/DOMxList/XList, s/properValue/xValue, list.queryName[All])
 * 2014-11-10 [v0.14.2][] (document.x, s/D.extend/D.x.add, s/D._.resolve[]/D.x.alias(), 'x-' attributes)
 * 2014-12-04 [v0.15.0][] (not(node), s/closest()/nearest(), polyfill version of closest())
-* 2014-12-11 [v0.16.0][] (move xValue and repeat() out to [domx-value][xvalue] and [domx-repeat][repeat])
+* 2014-12-11 [v0.16.1][] (move xValue and repeat() out to [domx-value][xvalue] and [domx-repeat][repeat])
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
@@ -114,4 +114,4 @@ Download:
 [v0.13.2]: https://github.com/esha/domx/tree/0.13.2
 [v0.14.2]: https://github.com/esha/domx/tree/0.14.2
 [v0.15.0]: https://github.com/esha/domx/tree/0.15.0
-[v0.16.0]: https://github.com/esha/domx/tree/0.16.0
+[v0.16.1]: https://github.com/esha/domx/tree/0.16.1

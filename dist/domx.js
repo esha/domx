@@ -1,4 +1,4 @@
-/*! domx - v0.16.0 - 2014-12-20
+/*! domx - v0.16.1 - 2014-12-20
 * http://esha.github.io/domx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -78,7 +78,7 @@ _ = {
 
 // developer tools
 X = {
-    version: "0.16.0",
+    version: "0.16.1",
     _: _,
 
     // extension points
