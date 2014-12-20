@@ -27,14 +27,15 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq]
 [![Dependency Status](https://david-dm.org/esha/domx.png?theme=shields.io)](https://david-dm.org/esha/domx)
 [![devDependency Status](https://david-dm.org/esha/domx/dev-status.png?theme=shields.io)](https://david-dm.org/esha/domx#info=devDependencies)
 
-#### Full Version:
+#### Basic Version:
 
-Download: [domx.min.js][full-min] or [domx.js][full]  
+Download: [domx.min.js][main-min], [domx.min.js.gz][domx-gz]  
 
-Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`append()`][append], [`remove()`][remove], [`xValue`][xValue], [`queryName()`][queryName], [`queryNameAll()`][queryNameAll], [`repeat()`][repeat], [`toArray()`][toArray], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
+Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`append()`][append], [`remove()`][remove], [`toArray()`][toArray], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
 
-[full-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
-[full]: https://raw.github.com/esha/domx/master/dist/domx.js
+[main-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
+[main]: https://raw.github.com/esha/domx/master/dist/domx.js
+[main-gz]: https://raw.github.com/esha/domx/master/dist/domx.min.js.gz
 
 [each]: http://esha.github.io/domx#each()
 [toArray]: http://esha.github.io/domx#toArray()
@@ -52,52 +53,45 @@ Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only(
 
 [append]: http://esha.github.io/domx#append()
 [remove]: http://esha.github.io/domx#remove()
-
-[xValue]: http://esha.github.io/domx#xValue
-[queryName]: http://esha.github.io/domx#queryName()
-[queryNameAll]: http://esha.github.io/domx#queryNameAll()
-
-[repeat]: http://esha.github.io/domx#repeat
-
 [emmet]: http://esha.github.io/domx#append(emmet)
 [abbr]: http://docs.emmet.io/abbreviations/syntax/
 
 [dot]: http://esha.github.io/domx#dot
 
-#### Base Version:
+#### Tiny Version:
 
-Download: [domx.base.min.js][base-min]  or  [domx.base.js][base]  
+Download: [domx.tiny.min.js][tiny-min], [domx.tiny.js.gz][tiny-gz]  
 
 Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`append()`][append], [`remove()`][remove], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], and [`toArray()`][toArray]:  
 
-[base-min]: http://raw.github.com/esha/domx/master/dist/domx.base.min.js
-[base]: http://raw.github.com/esha/domx/master/dist/domx.base.js
+[tiny-min]: http://raw.github.com/esha/domx/master/dist/domx.tiny.min.js
+[tiny-gz]: http://raw.github.com/esha/domx/master/dist/domx.tiny.min.js.gz
+[tiny]: http://raw.github.com/esha/domx/master/dist/domx.tiny.js
 
-#### Plugin Versions:
+#### Full Version:
 
-Features stripped out of the "base" version, packaged as plugins for a la carte inclusion.  
+The basic version with the most useful plugins ([domx-value][xvalue] and [domx-repeat][repeat]) appended. Those who used these plugins as part of the primary artifact prior to version 0.16.0 may use this artifact until they add the new projects for the plugins as dependencies.
+Download: [domx.full.min.js][full-min], [domx.full.min.js.gz][full-gz]  
 
-Download:
-* [domx.emmet.js][emmet-plugin] - supports [emmet][emmet] [abbreviations][abbr] for `append()`
-* [domx.xvalue.js][xvalue-plugin] - adds [`xValue`][xValue] getter/setter, [`queryName()`][queryName], and [`queryNameAll`][queryNameAll]
-* [domx.repeat.js][repeat-plugin] - adds [`repeat()`/`[x-repeat]`][repeat] function
-* [domx.dot.js][dot-plugin] - supports dot-traversal of elements when [`x-dot`][dot] attribute or [`dot()`][dot] function is applied to a parent
-* [domx.stringify.js][stringify-plugin] - generates a string version of the DOM for the demo (also not in the "full" version)
-
-[emmet-plugin]: http://raw.github.com/esha/domx/master/dist/domx.emmet.js
-[xvalue-plugin]: http://raw.github.com/esha/domx/master/dist/domx.xvalue.js
-[repeat-plugin]: http://raw.github.com/esha/domx/master/dist/domx.repeat.js
-[dot-plugin]: http://raw.github.com/esha/domx/master/dist/domx.dot.js
-[stringify-plugin]: http://raw.github.com/esha/domx-stringify/master/dist/domx-stringify.js
+[full-min]: http://raw.github.com/esha/domx/master/dist/domx.full.min.js
+[full-gz]: http://raw.github.com/esha/domx/master/dist/domx.full.min.js.gz
 
 #### Dependent Projects:
 
-These were created for the [demo][demo] and turned into separate projects.
+These were originally part of [domx][domx] or its [demo][demo] and have been pulled out into separate projects.
 
 Download:
-* [domx-stringify.js][stringify] - adds a `stringify()` function that generates a string version of DOM nodes.
+* [domx-value.js][xvalue] - Extension that adds a powerful `xValue` getter/setter to nodes and `queryName(name)` and `queryNameAll(name)` functions to nodes and lists. These make it trivial to read/write rich, typed, and even nested model values to/from the DOM.
+* [domx-repeat.js][repeat] - Extension that adds a `repeat([value])` function to nodes and lists for easy duplicating of DOM structures. It takes an optional value parameter that will set xValue for the repeated node(s) if you also are using the [domx-value][xvalue] extension.
+* [domx-stringify.js][stringify] - Extension that adds a `stringify()` function to nodes and lists to generate string versions of DOM nodes.
+* [demo-x][demo-x] - Web component for interactive, scripted code demos.
+* [random-x][random-x] - Simple web component for random display of one of the child elements (mostly used as an example).
 
-[stringify]: http://github.com/esha/domx-stringify/master/dist/domx-stringify.js
+[xvalue]: http://github.com/esha/domx-value
+[repeat]: http://github.com/esha/domx-repeat
+[stringify]: http://github.com/esha/domx-stringify
+[demo-x]: http://github.com/nbubna/demo-x
+[random-x]: http://github.com/nbubna/random-x/
 
 ### Release History
 * 2014-05-04 [v0.7.0][] (first public release)
@@ -109,6 +103,7 @@ Download:
 * 2014-11-10 [v0.13.2][] (s/DOMxList/XList, s/properValue/xValue, list.queryName[All])
 * 2014-11-10 [v0.14.2][] (document.x, s/D.extend/D.x.add, s/D._.resolve[]/D.x.alias(), 'x-' attributes)
 * 2014-12-04 [v0.15.0][] (not(node), s/closest()/nearest(), polyfill version of closest())
+* 2014-12-11 [v0.16.0][] (move xValue and repeat() out to [domx-value][xvalue] and [domx-repeat][repeat])
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
@@ -119,3 +114,4 @@ Download:
 [v0.13.2]: https://github.com/esha/domx/tree/0.13.2
 [v0.14.2]: https://github.com/esha/domx/tree/0.14.2
 [v0.15.0]: https://github.com/esha/domx/tree/0.15.0
+[v0.16.0]: https://github.com/esha/domx/tree/0.16.0

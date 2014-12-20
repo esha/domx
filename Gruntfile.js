@@ -2,6 +2,12 @@
 
 module.exports = function(grunt) {
 
+  // Load grunt tasks automatically
+  require('load-grunt-tasks')(grunt);
+
+  // Time how long tasks take. Can help when optimizing build times
+  require('time-grunt')(grunt);
+
   // Project configuration.
   grunt.initConfig({
     // Metadata.
@@ -23,17 +29,15 @@ module.exports = function(grunt) {
         src: ['src/core.js',
               'src/traverse.js',
               'src/append.js',
-              'src/xvalue.js',
-              'src/repeat.js',
               'src/emmet.js',
               'src/dot.js'],
         dest: 'dist/<%= pkg.name %>.js'
       },
-      base: {
+      tiny: {
         src: ['src/core.js',
               'src/traverse.js',
               'src/append.js'],
-        dest: 'dist/<%= pkg.name %>.base.js'
+        dest: 'dist/<%= pkg.name %>.tiny.js'
       },
       emmet: {
         options: {
@@ -41,20 +45,6 @@ module.exports = function(grunt) {
         },
         src: ['src/emmet.js'],
         dest: 'dist/<%= pkg.name %>.emmet.js'
-      },
-      values: {
-        options: {
-          frame: 'src/plugin-frame.js',
-        },
-        src: ['src/xvalue.js'],
-        dest: 'dist/<%= pkg.name %>.xvalue.js'
-      },
-      repeat: {
-        options: {
-          frame: 'src/plugin-frame.js',
-        },
-        src: ['src/repeat.js'],
-        dest: 'dist/<%= pkg.name %>.repeat.js'
       },
       dot: {
         options: {
@@ -73,10 +63,16 @@ module.exports = function(grunt) {
         src: ['dist/<%= pkg.name %>.js'],
         dest: 'dist/<%= pkg.name %>.min.js'
       },
-      base: {
-        src: ['dist/<%= pkg.name %>.base.js'],
-        dest: 'dist/<%= pkg.name %>.base.min.js'
+      tiny: {
+        src: ['dist/<%= pkg.name %>.tiny.js'],
+        dest: 'dist/<%= pkg.name %>.tiny.min.js'
       },
+      full: {
+        src: ['dist/<%= pkg.name %>.js',
+              'bower_components/domx-value/dist/domx-value.js',
+              'bower_components/domx-repeat/dist/domx-repeat.js'],
+        dest: 'dist/<%= pkg.name %>.full.min.js'
+      }
     },
     compress: {
       options: {
@@ -84,7 +80,15 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['dist/<%= pkg.name %>.min.js'],
-        dest: 'dist/<%= pkg.name %>.min.js'
+        dest: 'dist/<%= pkg.name %>.min.js.gz'
+      },
+      tiny: {
+        src: ['dist/<%= pkg.name %>.tiny.min.js'],
+        dest: 'dist/<%= pkg.name %>.tiny.min.js.gz'
+      },
+      full: {
+        src: ['dist/<%= pkg.name %>.full.min.js'],
+        dest: 'dist/<%= pkg.name %>.full.min.js.gz'
       },
     },
     qunit: {
@@ -133,14 +137,8 @@ module.exports = function(grunt) {
     },
   });
 
-  // These plugins provide necessary tasks.
+  // load frame task
   grunt.loadTasks('tasks');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-compress');
 
   // Default task.
   grunt.registerTask('default', ['clean', 'frame', 'jshint', 'uglify', 'compress', 'qunit']);
