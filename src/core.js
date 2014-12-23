@@ -31,9 +31,12 @@ _ = {
         if (key.indexOf('.') > 0) {
             var keys = key.split('.');
             while (keys.length > 1 && (el = el[key = keys.shift()])){}
-            // if lookup failed, reset to originals
-            el = el || _el;
-            key = el ? keys[0] : _key;
+            if (el === undefined) {// lookup failed, reset to originals
+                el = _el;
+                key = _key;
+            } else {
+                key = keys[0];// set key to remaining key
+            }
         }
         var val = el[key];
         if (val !== undefined) {
