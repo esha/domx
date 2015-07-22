@@ -116,7 +116,7 @@ window.$ = document.queryAll.bind(document);
           <p>or, you can do what i do and alias <code>document</code> to <code>D</code> in the <a href="http://en.wikipedia.org/wiki/Immediately-invoked_function_expression">IIFE</a> that should be wrapping your code anyway:</p>
           <pre class="example">
 (function(D) {
-  D.body.classList.append('hooray');
+  D.body.classList.add('hooray');
   ...
 }(document));
 </pre>
