@@ -1,6 +1,6 @@
-/*! domx - v0.16.1 - 2014-12-20
+/*! domx - v0.17.0 - 2016-09-22
 * http://esha.github.io/domx/
-* Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
+* Copyright (c) 2016 ESHA Research; Licensed MIT, GPL */
 
 (function(D, X, _) {
     "use strict";
@@ -38,9 +38,12 @@ _ = {
         if (key.indexOf('.') > 0) {
             var keys = key.split('.');
             while (keys.length > 1 && (el = el[key = keys.shift()])){}
-            // if lookup failed, reset to originals
-            el = el || _el;
-            key = el ? keys[0] : _key;
+            if (el === undefined) {// lookup failed, reset to originals
+                el = _el;
+                key = _key;
+            } else {
+                key = keys[0];// set key to remaining key
+            }
         }
         var val = el[key];
         if (val !== undefined) {
@@ -78,7 +81,7 @@ _ = {
 
 // developer tools
 X = {
-    version: "0.16.1",
+    version: "0.17.0",
     _: _,
 
     // extension points
@@ -311,8 +314,8 @@ var Ep = Element.prototype,
 _.defprop(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
 // /traverse.js
 
-// append.js
-var A = _.append = {
+// insert.js
+var A = _.insert = {
     create: function(node, tag, ref) {
         return A.insert(node, D.createElement(tag), ref);
     },
@@ -335,18 +338,18 @@ var A = _.append = {
     }
 };
 
-X.add('append', function(arg, ref) {
-    if (typeof arg === "string") {// turn arg into an appendable
+X.add('insert', function(arg, ref) {
+    if (typeof arg === "string") {// turn arg into an insertable
         return A.create(this, arg, ref);
     }
-    if (_.isList(arg)) {// list of append-ables
+    if (_.isList(arg)) {// list of insert-ables
         var list = new X.List();
         for (var i=0,m=arg.length; i<m; i++) {
-            list.add(this.append(arg[i], ref));
+            list.add(this.insert(arg[i], ref));
         }
         return list;
     }
-    A.insert(this, arg, ref);// arg is an append-able
+    A.insert(this, arg, ref);// arg is an insert-able
     return arg;
 }, X.parents);
 
@@ -356,7 +359,7 @@ X.add('remove', function() {
         parent.removeChild(this);
     }
 });
-// /append.js
+// /insert.js
 
 
 })(document);

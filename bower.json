@@ -1,6 +1,6 @@
 {
   "name": "domx",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "main": "dist/domx.js",
   "description": "An intuitive, extensible way to work directly with the DOM.",
   "keywords": [
@@ -47,8 +47,8 @@
   ],
   "devDependencies": {
     "qunit": "~1.16.0",
-    "domx-value": "~0.1.0",
-    "domx-repeat": "~0.1.0",
+    "domx-value": "^0.2.4",
+    "domx-repeat": "^0.3.2",
     "domx-stringify": "~1.0.0"
   }
 }

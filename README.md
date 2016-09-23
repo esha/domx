@@ -31,7 +31,7 @@ Please check out the [demo][demo], the [API][api] and the [F.A.Q.][faq]
 
 Download: [domx.min.js][main-min], [domx.min.js.gz][domx-gz]  
 
-Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`append()`][append], [`remove()`][remove], [`toArray()`][toArray], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], [emmet abbreviations][abbr] in [`append()`][emmet], and [dot()][dot]:  
+Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`insert()`][insert], [`remove()`][remove], [`toArray()`][toArray], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], [emmet abbreviations][abbr] in [`insert()`][emmet], and [dot()][dot]:  
 
 [main-min]: https://raw.github.com/esha/domx/master/dist/domx.min.js
 [main]: https://raw.github.com/esha/domx/master/dist/domx.js
@@ -51,9 +51,9 @@ Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only(
 [nearest]: http://esha.github.io/domx#nearest()
 [closest]: http://esha.github.io/domx#closest()
 
-[append]: http://esha.github.io/domx#append()
+[insert]: http://esha.github.io/domx#insert()
 [remove]: http://esha.github.io/domx#remove()
-[emmet]: http://esha.github.io/domx#append(emmet)
+[emmet]: http://esha.github.io/domx#insert(emmet)
 [abbr]: http://docs.emmet.io/abbreviations/syntax/
 
 [dot]: http://esha.github.io/domx#dot
@@ -62,7 +62,7 @@ Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only(
 
 Download: [domx.tiny.min.js][tiny-min], [domx.tiny.js.gz][tiny-gz]  
 
-Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`append()`][append], [`remove()`][remove], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], and [`toArray()`][toArray]:  
+Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only()`][only], [`not()`][not], [`all()`][all], [`nearest()`][nearest], [`farthest()`][farthest], [`closest()`][closest], [`insert()`][insert], [`remove()`][remove], [`document.x.add()`][x.add], [`document.x.alias()`][x.alias], and [`toArray()`][toArray]:  
 
 [tiny-min]: http://raw.github.com/esha/domx/master/dist/domx.tiny.min.js
 [tiny-gz]: http://raw.github.com/esha/domx/master/dist/domx.tiny.min.js.gz
@@ -70,7 +70,7 @@ Includes [`each()`][each], [`query()`][query], [`queryAll()`][queryAll], [`only(
 
 #### Full Version:
 
-The basic version with the most useful plugins ([domx-value][xvalue] and [domx-repeat][repeat]) appended. Those who used these plugins as part of the primary artifact prior to version 0.16.0 may use this artifact until they add the new projects for the plugins as dependencies.
+The basic version with the most useful plugins ([domx-value][xvalue] and [domx-repeat][repeat]) inserted. Those who used these plugins as part of the primary artifact prior to version 0.16.0 may use this artifact until they add the new projects for the plugins as dependencies.
 Download: [domx.full.min.js][full-min], [domx.full.min.js.gz][full-gz]  
 
 [full-min]: http://raw.github.com/esha/domx/master/dist/domx.full.min.js
@@ -104,6 +104,7 @@ Download:
 * 2014-11-10 [v0.14.2][] (document.x, s/D.extend/D.x.add, s/D._.resolve[]/D.x.alias(), 'x-' attributes)
 * 2014-12-04 [v0.15.0][] (not(node), s/closest()/nearest(), polyfill version of closest())
 * 2014-12-11 [v0.16.1][] (move xValue and repeat() out to [domx-value][xvalue] and [domx-repeat][repeat])
+* 2016-09-22 [v0.17.0][] (s/append/insert to avoid conflict with Safari 10's unadvertised and undocumented HTMLElement.prototype.append)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
@@ -115,3 +116,4 @@ Download:
 [v0.14.2]: https://github.com/esha/domx/tree/0.14.2
 [v0.15.0]: https://github.com/esha/domx/tree/0.15.0
 [v0.16.1]: https://github.com/esha/domx/tree/0.16.1
+[v0.17.0]: https://github.com/esha/domx/tree/0.17.0
