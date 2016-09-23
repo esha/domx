@@ -28,7 +28,7 @@ module.exports = function(grunt) {
       dist: {
         src: ['src/core.js',
               'src/traverse.js',
-              'src/append.js',
+              'src/insert.js',
               'src/emmet.js',
               'src/dot.js'],
         dest: 'dist/<%= pkg.name %>.js'
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
       tiny: {
         src: ['src/core.js',
               'src/traverse.js',
-              'src/append.js'],
+              'src/insert.js'],
         dest: 'dist/<%= pkg.name %>.tiny.js'
       },
       emmet: {

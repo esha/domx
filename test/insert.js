@@ -21,41 +21,41 @@
   */
 
   var _ = D.x._;
-	module("append()");
+	module("insert()");
 
 	test("basic", function() {
 		ok(!D.query('body > a'), "no A to begin with");
-		equal(D.body.append('a').tagName, "A", "Tag created.");
+		equal(D.body.insert('a').tagName, "A", "Tag created.");
 		ok(D.query('body > a'), 'Tag found.');
 		D.query('body > a').remove();
 	});
 
-	test("append node", function() {
+	test("insert node", function() {
 		var node = D.createElement('article');
-		equal(D.body.append(node), node, "appended node and got it back");
-		ok(D.body.query('article') && 'each' in node, 'appended node has been assimilated');
+		equal(D.body.insert(node), node, "inserted node and got it back");
+		ok(D.body.query('article') && 'each' in node, 'inserted node has been assimilated');
 		node.remove();
 	});
 
-	test("append list", function() {
+	test("insert list", function() {
 		var list = ['nav', D.createElement('nav'), ['nav']];
-		equal(D.body.append(list).length, 3, 'appended three nav elements');
+		equal(D.body.insert(list).length, 3, 'inserted three nav elements');
 		D.queryAll('nav').remove();
 	});
 
-    test("append to list", function() {
+    test("insert to list", function() {
         var list = D.queryAll('section.foo > div');
-        list.append('test');
+        list.insert('test');
         var tests = D.queryAll('.foo > div > test');
-        equal(tests.length, list.length, 'appended a test element to each div');
+        equal(tests.length, list.length, 'inserted a test element to each div');
     });
 
-  //TODO: test append(el, ref);
+  //TODO: test insert(el, ref);
 
   module("remove()");
 
   test("single", 3, function() {
-    var el = D.body.append('doomed');
+    var el = D.body.insert('doomed');
     ok(el, 'have element');
     el.remove();
     ok(!el.parentNode, 'no parent after removal');
@@ -63,7 +63,7 @@
   });
 
   test("list", 8, function() {
-    var list = D.body.append('doa*5');
+    var list = D.body.insert('doa*5');
     ok(_.isList(list), 'have list');
     strictEqual(list.remove(), list, 'remove returns self');
     list.each(function(doa) {

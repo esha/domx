@@ -1,5 +1,5 @@
-// append.js
-var A = _.append = {
+// insert.js
+var A = _.insert = {
     create: function(node, tag, ref) {
         return A.insert(node, D.createElement(tag), ref);
     },
@@ -22,18 +22,18 @@ var A = _.append = {
     }
 };
 
-X.add('append', function(arg, ref) {
-    if (typeof arg === "string") {// turn arg into an appendable
+X.add('insert', function(arg, ref) {
+    if (typeof arg === "string") {// turn arg into an insertable
         return A.create(this, arg, ref);
     }
-    if (_.isList(arg)) {// list of append-ables
+    if (_.isList(arg)) {// list of insert-ables
         var list = new X.List();
         for (var i=0,m=arg.length; i<m; i++) {
-            list.add(this.append(arg[i], ref));
+            list.add(this.insert(arg[i], ref));
         }
         return list;
     }
-    A.insert(this, arg, ref);// arg is an append-able
+    A.insert(this, arg, ref);// arg is an insert-able
     return arg;
 }, X.parents);
 
@@ -43,4 +43,4 @@ X.add('remove', function() {
         parent.removeChild(this);
     }
 });
-// /append.js
+// /insert.js

@@ -1,22 +1,22 @@
 // emmet.js
-var AE = _.append;
-AE.create = function(node, code, ref) {
-    var parts = code.split(AE.emmetRE()),
+var I = _.insert;
+I.create = function(node, code, ref) {
+    var parts = code.split(I.emmetRE()),
         root = D.createDocumentFragment(),
         el = D.createElement(parts[0]);
     root.appendChild(el);
     for (var i=1,m=parts.length; i<m; i++) {
         var part = parts[i];
-        el = AE.emmet[part.charAt(0)].call(el, part.substr(1), root) || el;
+        el = I.emmet[part.charAt(0)].call(el, part.substr(1), root) || el;
     }
-    AE.insert(node, root, ref);
+    I.insert(node, root, ref);
     return el;
 };
-AE.emmetRE = function() {
-    var chars = '\\'+Object.keys(AE.emmet).join('|\\');
+I.emmetRE = function() {
+    var chars = '\\'+Object.keys(I.emmet).join('|\\');
     return new RegExp('(?='+chars+')','g');
 };
-AE.emmet = {
+I.emmet = {
     '#': function(id) {
         this.id = id;
     },
@@ -41,7 +41,7 @@ AE.emmet = {
         return this;
     },
     '+': function(tag, root) {
-        return AE.emmet['>'].call(this.parentNode || root, tag);
+        return I.emmet['>'].call(this.parentNode || root, tag);
     },
     '*': function(count) {
         var parent = this.parentNode,
@@ -54,7 +54,7 @@ AE.emmet = {
         return els;
     },
     '^': function(tag, root) {
-        return AE.emmet['+'].call(this.parentNode || root, tag, root);
+        return I.emmet['+'].call(this.parentNode || root, tag, root);
     },
     '{': function(text) {
         this.appendChild(D.createTextNode(text.substr(0, text.length-1)));
