@@ -571,9 +571,9 @@ this.MutationObserver = this.MutationObserver || this.WebKitMutationObserver || 
     return MutationObserver;
 })(void 0);
 
-/*! domx - v0.15.0 - 2014-12-09
+/*! domx - v0.17.1 - 2017-03-29
 * http://esha.github.io/domx/
-* Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
+* Copyright (c) 2017 ESHA Research; Licensed ,  */
 
 (function(D, X, _) {
     "use strict";
@@ -611,9 +611,12 @@ _ = {
         if (key.indexOf('.') > 0) {
             var keys = key.split('.');
             while (keys.length > 1 && (el = el[key = keys.shift()])){}
-            // if lookup failed, reset to originals
-            el = el || _el;
-            key = el ? keys[0] : _key;
+            if (el === undefined) {// lookup failed, reset to originals
+                el = _el;
+                key = _key;
+            } else {
+                key = keys[0];// set key to remaining key
+            }
         }
         var val = el[key];
         if (val !== undefined) {
@@ -651,7 +654,7 @@ _ = {
 
 // developer tools
 X = {
-    version: "0.15.0",
+    version: "0.17.1",
     _: _,
 
     // extension points
@@ -884,8 +887,8 @@ var Ep = Element.prototype,
 _.defprop(Ep, 'matches', Ep['m'] || Ep['webkitM'+aS] || Ep['mozM'+aS] || Ep['msM'+aS]);
 // /traverse.js
 
-// append.js
-var A = _.append = {
+// insert.js
+var A = _.insert = {
     create: function(node, tag, ref) {
         return A.insert(node, D.createElement(tag), ref);
     },
@@ -908,18 +911,18 @@ var A = _.append = {
     }
 };
 
-X.add('append', function(arg, ref) {
-    if (typeof arg === "string") {// turn arg into an appendable
+X.add('insert', function(arg, ref) {
+    if (typeof arg === "string") {// turn arg into an insertable
         return A.create(this, arg, ref);
     }
-    if (_.isList(arg)) {// list of append-ables
+    if (_.isList(arg)) {// list of insert-ables
         var list = new X.List();
         for (var i=0,m=arg.length; i<m; i++) {
-            list.add(this.append(arg[i], ref));
+            list.add(this.insert(arg[i], ref));
         }
         return list;
     }
-    A.insert(this, arg, ref);// arg is an append-able
+    A.insert(this, arg, ref);// arg is an insert-able
     return arg;
 }, X.parents);
 
@@ -929,495 +932,37 @@ X.add('remove', function() {
         parent.removeChild(this);
     }
 });
-// /append.js
-
-var V = _.xValue = {
-    /*jshint evil:true */
-    resolve: function(context, reference) {
-        return eval('context["'+reference+'"]');
-    },
-    name: function(node) {
-        if (node.nodeType === 3 && !node.noSubNames) {
-            node.splitOnName();// ensure this is run before node.name
-        }
-        return node.tagName === 'FORM' ? node.getAttribute('name') : node.name;
-    },
-    parse: function(value) {
-        if (typeof value === "string") {
-            try {
-                value = JSON.parse(value);
-            } catch (e) {}
-        } else if (Array.isArray(value)) {
-            value = value.map(V.parse);
-        }
-        return value;
-    },
-    string: function(value) {
-        if (value !== undefined && typeof value !== "string") {
-            try {
-                value = JSON.stringify(value);
-            } catch (e) {
-                value = value+'';
-            }
-        }
-        return value;
-    },
-    stringifyFor: function(el) {
-        var stringify = el.getAttribute('xvalue-stringify');
-        return stringify && V.resolve(window, stringify) || V.string;        
-    },
-    nameNodes: function(parent, nameFn, possibleParentFn, attrFn) {
-        var done = [];
-        for (var i=0; i<parent.childNodes.length; i++) {
-            var node = parent.childNodes[i],
-                name = V.name(node),
-                nodeValue = null;
-            if (name && done.indexOf(node) < 0) {
-                done.push(node);
-                nodeValue = nameFn(name, node);
-            } else if (possibleParentFn && !node.useBaseValue()) {
-                possibleParentFn(node);
-            }
-            if (node.useAttrValues) {
-                for (var a=0; a < node.attributes.length; a++) {
-                    attrFn(node.attributes[a], nodeValue);
-                }
-            }
-        }
-    },
-    combine: function(oldValue, newValue, rejectNull) {
-        if (oldValue === undefined || oldValue === newValue ||
-            (rejectNull && oldValue === null)) {
-            return newValue;
-        }
-        if (Array.isArray(oldValue)) {
-            if (oldValue.indexOf(newValue) < 0) {
-                oldValue.push(newValue);
-            }
-            return oldValue;
-        }
-        return [oldValue, newValue];
-    },
-    getNameValue: function(parent, value) {
-        V.nameNodes(parent, function(name, node) {
-            return value[name] = V.combine(value[name], node.nameValue);
-        }, function(possibleParent) {
-            V.getNameValue(possibleParent, value);
-        }, function(attr, nodeValue) {
-            var val = nodeValue || value;
-            val[attr.name] = attr.baseValue;
-        });
-        return value;
-    },
-    setNameValue: function(parent, values) {
-        V.nameNodes(parent, function(name, node) {
-            var value = V.resolve(values, name);
-            if (value !== undefined) {
-                return node.nameValue = value;
-            }
-        }, function(possibleParent) {
-            V.setNameValue(possibleParent, values);
-        }, function(attr, node, elValues) {
-            var value = V.resolve(elValues || values, attr.name);
-            if (value !== undefined) {
-                attr.baseValue = value;
-            }
-        });
-    },
-    booleanAttr: function(attr) {
-        return {
-            get: function() {
-                return this.hasAttribute(attr);
-            },
-            set: function(value) {
-                this[value ? 'setAttribute' : 'removeAttribute'](attr, true);
-            }
-        };
-    },
-    nameRE: /\$\{([^}]+)\}/,
-    changeEvent: window.CustomEvent ? function(node) {
-        node.dispatchEvent(new CustomEvent('change', { bubbles:true }));
-    } : function(node) {
-        var e = D.createEvent('CustomEvent');
-        e.initCustomEvent('change', true);
-        node.dispatchEvent(e);
-    }
-};
-
-_.define([Node], {
-    value: {
-        get: function() {
-            return this.hasAttribute && this.hasAttribute('value') ?
-                this.getAttribute('value') :
-                this.textContent;
-        },
-        set: function(value) {
-            if (this.hasAttribute && this.hasAttribute('value')) {
-                this.setAttribute('value', value);
-            } else {
-                this.textContent = value;
-            }
-        }
-    },
-    baseValue:  {
-        get: function(){ return V.parse(this.value); },
-        set: function(value) {
-            var oldValue = this.value,
-                newValue = this.value = V.string(value);
-            if (oldValue !== newValue) {
-                V.changeEvent(this);
-            }
-        }
-    },
-    useBaseValue: function() {
-        var kids = !this.noSubNames && this.childNodes.length;
-        return !kids || (kids === 1 && !!this.childNodes[0].useBaseValue());
-    },
-    nameParent: {
-        get: function() {
-            var node = this,
-                parent;
-            while ((parent = node.parentNode)) {
-                if (V.name(parent)) {
-                    return parent;
-                }
-                node = parent;
-            }
-            return node === this ? null : node;
-        }
-    },
-    nameGroup: {
-        get: function() {
-            var el = this,
-                name = V.name(el);
-            return name ? el.parentNode ?
-                el.nameParent.queryNameAll(name) :
-                new X.List(el) :
-                null;
-        }
-    },
-    nameValue: {
-        get: function() {
-            var values;
-            if (V.name(this)) {
-                this.nameGroup.each(function(node) {
-                    values = V.combine(values, node.xValue);
-                });
-            }
-            return values || this.xValue;
-        },
-        set: function(values) {
-            if (V.name(this) && Array.isArray(values)) {
-                var group = this.nameGroup;
-                if (_.repeat && !values.length && group.length && !group[0].hasAttribute(_.repeat.id)) {
-                    _.repeat.init(group[0], true);
-                }
-                group.each(function(node, i) {
-                    if (i < values.length) {
-                        node.nameValue = values[i];
-                    } else {
-                        node.remove();
-                    }
-                });
-                while (group.length < values.length) {
-                    var last = group[group.length - 1];
-                    group.add(last.repeat(values[group.length]));
-                }
-            } else {
-                this.xValue = values;
-            }
-        }
-    },
-    xValue: {
-        get: function() {
-            return this.useBaseValue() ? this.baseValue : V.getNameValue(this, {});
-        },
-        set: function(value) {
-            if (this.useBaseValue() || typeof value !== "object") {
-                this.baseValue = value;
-            } else {
-                V.setNameValue(this, value);
-            }
-        }
-    }
-});
-_.define([Attr], {
-    useBaseValue: function(){ return true; },
-}, true);
-
-_.define([Element], {
-    name: {
-        get: function(){ return this.getAttribute('name'); },
-        set: function(name){ this.setAttribute('name', name); }
-    },
-    baseProperty: 'value',
-    baseValue: {
-        get: function() {
-            var parser = this.getAttribute('xvalue-parse');
-            parser = parser && V.resolve(window, parser) || V.parse;
-            return parser.call(this, this[this.baseProperty]);
-        },
-        set: function(value) {
-            var oldValue = this[this.baseProperty],
-                newValue = this[this.baseProperty] = V.stringifyFor(this).call(this, value);
-            if (oldValue !== newValue) {
-                V.changeEvent(this);
-            }
-        }
-    },
-    useAttrValues: V.booleanAttr('xvalue-attr'),
-    noSubNames: V.booleanAttr('xvalue-none')
-}, true);
-
-_.define(X.containers, {
-    queryName: function(name) {
-        return this.queryNameAll(name, 1)[0];
-    },
-    queryNameAll: function(name, count, _list) {
-        _list = _list || new X.List(count);
-        var parents = _.isList(this) ? this : [this];
-        for (var s=0; s < parents.length && !_list.isFull(); s++) {
-            var parent = parents[s];
-            for (var i=0; i < parent.childNodes.length && !_list.isFull(); i++) {
-                var node = parent.childNodes[i],
-                    nodeName = V.name(node);
-                if (nodeName === name && node.tagName !== 'X-REPEAT') {
-                    _list.add(node);
-                } else if (node.nodeType === 1) {
-                    if (nodeName) {
-                        if (name.indexOf(nodeName+'.') === 0) {
-                            node.queryNameAll(name.substring(nodeName.length+1), count, _list);
-                        }
-                    } else {
-                        node.queryNameAll(name, count, _list);
-                    }
-                }
-            }
-            if (parent.useAttrValues && !_list.isFull()) {
-                var el = this;
-                for (var a=0; a < el.attributes.length; a++) {
-                    var attr = el.attributes[a];
-                    if (attr.name === name) {
-                        attr.parentNode = el;
-                        _list.add(attr);
-                        break;
-                    }
-                }
-            }
-        }
-        return _list;
-    }
-});
-
-_.define([Text], {
-    useBaseValue: function() {
-        return this.noSubNames || !this.splitOnName();
-    },
-    splitOnName: function() {
-        var text = this,
-            match = text.textContent.match(V.nameRE);
-        if (match) {
-            var start = match.index,
-                name = match[0];
-            if (start > 0) {
-                text.splitText(start);
-                text.noSubNames = true;
-                text = text.nextSibling;
-            }
-            if (text.textContent.length > name.length) {
-                text.splitText(name.length);
-            }
-            text.name = match[1];
-            text.textContent = '';
-        }
-        // all have no sub names after splitting
-        text.noSubNames = true;
-        return !!match;
-    }
-}, true);
-
-_.define([HTMLInputElement], {
-    xValue:  {
-        get: function() {
-            var input = this;
-            return (input.type !== 'radio' && input.type !== 'checkbox') || input.checked ?
-                input.baseValue :
-                null;
-        },
-        set: function(value) {
-            var input = this;
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
-                var was = input.checked;
-                input.checked = value.indexOf(input.value) >= 0;
-                if (was !== input.checked) {
-                    V.changeEvent(input);
-                }
-            } else {
-                this.baseValue = value;
-            }
-        }
-    },
-    nameValue: {
-        get: function() {
-            var type = this.type;
-            if (type === 'radio' || type === 'checkbox') {
-                var group = this.nameGroup,
-                    value;
-                group.each(function(node) {
-                    value = V.combine(value, node.xValue, true);
-                });
-                return Array.isArray(value) && (this.type === 'radio' || group.length === 1) ?
-                    value[0] :
-                    value;
-            }
-            return this.baseValue;
-        },
-        set: function(value) {
-            if (this.type === 'checkbox' || this.type === 'radio') {
-                value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
-                var changed = false;
-                this.nameGroup.each(function(input) {
-                    var was = input.checked;
-                    input.checked = value.indexOf(input.value) >= 0;
-                    if (was !== input.checked) {
-                        changed = true;
-                    }
-                });
-                if (changed) {
-                    V.changeEvent(this);
-                }
-            } else {
-                this.baseValue = value;
-            }
-        }
-    }
-}, true);
-
-_.define([HTMLSelectElement], {
-    xValue: {
-        get: function() {
-            if (this.multiple) {
-                var selected = this.children.only('selected', true);
-                return selected.length ? selected.each('xValue') :
-                    this.children.length > 1 ? [] : null;
-            }
-            return V.parse(this.baseValue);
-        },
-        set: function(value) {
-            if (this.multiple) {
-                value = (Array.isArray(value) ? value : [value]).map(V.string);
-                var changed = false;
-                this.children.each(function(option) {
-                    var was = option.selected;
-                    option.selected = value.indexOf(option.value) >= 0;
-                    if (option.select !== was) {
-                        changed = true;
-                    }
-                });
-                if (changed) {
-                    V.changeEvent(this);
-                }
-            } else {
-                this.baseValue = value;
-            }
-        }
-    }
-}, true);
-
-_.define([HTMLLIElement], {
-    baseProperty: {
-        get: function() {
-            // ordered ones use relative index, unordered ones use text
-            return this.parentNode instanceof HTMLOListElement ?
-                'value' :
-                'textContent';
-        } 
-    }
-}, true);
-
-var R = _.repeat = {
-    id: 'x-repeat-id',
-    count: 0,
-    init: function(el, keep) {
-        var selector = el.getAttribute('x-repeat'),
-            id = R.count++,
-            content = selector && D.query(selector).cloneNode(true) || el,
-            anchor = D.createElement('x-repeat');
-        content.setAttribute(R.id, id);
-        anchor.setAttribute(R.id, id);
-        for (var i=0,m=el.attributes.length; i<m; i++) {
-            var attr = el.attributes[i];
-            if (attr.name === 'x-repeat-none') {
-                anchor.value = attr.value || el.innerHTML;
-            }
-            anchor.setAttribute(attr.name, attr.value);
-        }
-        el.parentNode.insertBefore(anchor, el.nextSibling);
-        _.defprop(anchor, 'content', content);
-        if (keep !== true) {
-            el.remove();
-        }
-        return id;
-    },
-    repeat: function(parent, anchor, content, val) {
-        var repeat = content.cloneNode(true);
-        if (val !== undefined && val !== null) {
-            repeat.xValue = val;
-        }
-        parent.insertBefore(repeat, anchor);
-        return repeat;
-    },
-    style: D.head.append('style')
-};
-
-X.add('repeat', function repeat(val) {
-    var parent = this.parentNode,
-        id = this.getAttribute(R.id) || R.init(this, true),
-        selector = '['+R.id+'="'+id+'"]',
-        selectAll = selector+':not(x-repeat)';
-    if (val === false) {
-        return parent.queryAll(selectAll).remove();
-    }
-    var anchor = parent.query('x-repeat'+selector),
-        content = anchor.content;
-    if (anchor.hasAttribute('x-repeat-first')) {
-        anchor = parent.query(selector+'[x-index]') || anchor;
-    }
-    var ret = Array.isArray(val) ?
-        val.map(function(v){ return R.repeat(parent, anchor, content, v); }) :
-        R.repeat(parent, anchor, content, val);
-    parent.queryAll(selectAll).each('setAttribute', 'x-index', '${i}');
-    return ret;
-}, [Element]);
-
-R.style.textContent = '[x-repeat] { display: none }';
-D.addEventListener('DOMContentLoaded', function() {
-    D.queryAll('[x-repeat]').each(R.init);
-    R.style.textContent = "\nx-repeat { display: none }"+
-                          "\nx-repeat[x-repeat-none] { display: inline-block; }"+
-                          "\n["+R.id+"] + x-repeat[x-repeat-none] { display: none; }";
-});
+// /insert.js
 
 // emmet.js
-var AE = _.append;
-AE.create = function(node, code, ref) {
-    var parts = code.split(AE.emmetRE()),
+var I = _.insert;
+I.create = function(node, code, ref) {
+    var parts = code.split(I.emmetRE()),
         root = D.createDocumentFragment(),
         el = D.createElement(parts[0]);
     root.appendChild(el);
     for (var i=1,m=parts.length; i<m; i++) {
-        var part = parts[i];
-        el = AE.emmet[part.charAt(0)].call(el, part.substr(1), root) || el;
+        var part = parts[i],
+            first = part.charAt(0),
+            end = I.emmet.groups[first];
+        if (end) {
+            // for group part, gobble subsequent parts until we find an unescaped end
+            while (end !== part[part.length-1] || '\\' === part[part.length-2]) {
+                part += parts[++i] || end;
+            }
+            // remove escapes from escaped ends
+            part = part.replace(new RegExp('\\\\'+end, 'g'), end);
+        }
+        el = I.emmet[first].call(el, part.substr(1), root) || el;
     }
-    AE.insert(node, root, ref);
+    I.insert(node, root, ref);
     return el;
 };
-AE.emmetRE = function() {
-    var chars = '\\'+Object.keys(AE.emmet).join('|\\');
+I.emmetRE = function() {
+    var chars = '\\'+Object.keys(I.emmet).join('|\\');
     return new RegExp('(?='+chars+')','g');
 };
-AE.emmet = {
+I.emmet = {
     '#': function(id) {
         this.id = id;
     },
@@ -1427,7 +972,7 @@ AE.emmet = {
         this.setAttribute('class', list);
     },
     '[': function(attrs) {
-        attrs = attrs.substr(0, attrs.length-1).match(/(?:[^\s"]+|"[^"]*")+/g);
+        attrs = attrs.substr(0, attrs.length-1).match(/(?:[^\s"]+|("[^"]+"))+/g);
         for (var i=0,m=attrs.length; i<m; i++) {
             var attr = attrs[i].split('=');
             this.setAttribute(attr[0], (attr[1] || '').replace(/"/g, ''));
@@ -1442,7 +987,7 @@ AE.emmet = {
         return this;
     },
     '+': function(tag, root) {
-        return AE.emmet['>'].call(this.parentNode || root, tag);
+        return I.emmet['>'].call(this.parentNode || root, tag);
     },
     '*': function(count) {
         var parent = this.parentNode,
@@ -1455,11 +1000,15 @@ AE.emmet = {
         return els;
     },
     '^': function(tag, root) {
-        return AE.emmet['+'].call(this.parentNode || root, tag, root);
+        return I.emmet['+'].call(this.parentNode || root, tag, root);
     },
     '{': function(text) {
         this.appendChild(D.createTextNode(text.substr(0, text.length-1)));
     }
+};
+I.emmet.groups = {
+    '[':']',
+    '{':'}'
 };
 // /emmet.js
 
@@ -1911,7 +1460,7 @@ if (D.registerElement) {
 
 })(window, document);
 
-/*! domx-value - v0.2.10 - 2015-02-27
+/*! domx-value - v0.2.13 - 2015-04-15
 * http://esha.github.io/domx-value/
 * Copyright (c) 2015 ESHA Research; Licensed MIT, GPL */
 
@@ -2223,7 +1772,9 @@ _.define(X.containers, {
                     for (var a=0; a < el.attributes.length; a++) {
                         var attr = el.attributes[a];
                         if (attr.name === name) {
-                            attr.parentNode = el;
+                            if (!attr.parentNode) {
+                                attr.parentNode = el;
+                            }
                             _list.add(attr);
                             break;
                         }
@@ -2263,32 +1814,23 @@ _.define([Text], {
 }, true);
 
 _.define([HTMLInputElement], {
+    checkable: {
+        get: function() {
+            return this.type === 'radio' || this.type === 'checkbox';
+        }
+    },
     xValue:  {
         get: function() {
-            var input = this;
-            return (input.type !== 'radio' && input.type !== 'checkbox') || input.checked ?
-                input.baseValue :
-                null;
+            return !this.checkable || this.checked ? this.baseValue : null;
         },
         set: function(value) {
-            var input = this;
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
-                var was = input.checked;
-                input.checked = value.indexOf(input.value) >= 0;
-                if (was !== input.checked) {
-                    V.changeEvent(input);
-                }
-            } else {
-                this.baseValue = value;
-            }
+            this.nameValue = value;
         }
     },
     nameValue: {
         get: function() {
-            var type = this.type;
-            if (type === 'radio' || type === 'checkbox') {
-                var group = this.nameGroup,
+            if (this.checkable) {
+                var group = this.nameGroup || new X.List(this),
                     value;
                 group.each(function(node) {
                     value = V.combine(value, node.xValue, true);
@@ -2300,21 +1842,25 @@ _.define([HTMLInputElement], {
             return this.baseValue;
         },
         set: function(value) {
-            if (this.type === 'checkbox' || this.type === 'radio') {
-                value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(this));
-                var changed = false;
-                this.nameGroup.each(function(input) {
-                    var was = input.checked;
-                    input.checked = value.indexOf(input.value) >= 0;
-                    if (was !== input.checked) {
+            var input = this;
+            if (input.checkable &&
+                ((input.value !== 'on' && input.value !== '') ||
+                  input.hasAttribute('value'))) {
+                value = (Array.isArray(value) ? value : [value]).map(V.stringifyFor(input));
+                var changed = false,
+                    group = input.nameGroup || new X.List(input);
+                group.each(function(el) {
+                    var was = el.checked;
+                    el.checked = value.indexOf(el.value) >= 0;
+                    if (was !== el.checked) {
                         changed = true;
                     }
                 });
                 if (changed) {
-                    V.changeEvent(this);
+                    V.changeEvent(input);
                 }
             } else {
-                this.baseValue = value;
+                input.baseValue = value;
             }
         }
     }
@@ -2362,12 +1908,22 @@ _.define([HTMLLIElement], {
     }
 }, true);
 
+_.define([HTMLOptionElement], {
+    baseProperty: {
+        get: function() {
+            return this.hasAttribute('value') ?
+                'value' :
+                'textContent';
+        }
+    }
+}, true);
+
 
 })(document);
 
-/*! domx-repeat - v0.3.1 - 2015-03-17
+/*! domx-repeat - v0.3.2 - 2016-09-22
 * http://esha.github.io/domx-repeat/
-* Copyright (c) 2015 ESHA Research; Licensed MIT, GPL */
+* Copyright (c) 2016 ESHA Research; Licensed MIT, GPL */
 
 (function(D) {
     "use strict";
@@ -2438,7 +1994,7 @@ var R = _.repeat = {
         }
         return repeat;
     },
-    style: D.head.append('style')
+    style: D.createElement('style')
 };
 
 X.add('repeat', function repeat(val) {
@@ -2462,6 +2018,7 @@ X.add('repeat', function repeat(val) {
 }, [Element]);
 
 R.style.textContent = '[x-repeat] { display: none }';
+D.head.appendChild(R.style);
 R.initAll();//early availability
 D.addEventListener('DOMContentLoaded', function() {
     R.initAll();//eventual consistency
@@ -2473,9 +2030,9 @@ D.addEventListener('DOMContentLoaded', function() {
 
 })(document);
 
-/*! Eventi - v1.3.6 - 2014-10-21
+/*! Eventi - v1.3.8 - 2017-03-28
 * https://github.com/esha/Eventi
-* Copyright (c) 2014 ESHA Research; Licensed MIT */
+* Copyright (c) 2017 ESHA Research; Licensed  */
 
 (function(global, document) {
     "use strict";
@@ -2492,6 +2049,8 @@ D.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+var _;
+
 function Eventi(text){
     if (typeof text === "string") {
         return _.create.apply(_, arguments);
@@ -2506,8 +2065,8 @@ Eventi.fy = function fy(o) {
     return o;
 };
 
-var _ = Eventi._ = {
-    version: "1.3.6",
+_ = Eventi._ = {
+    version: "1.3.8",
     global: new Function('return this')(),
     noop: function(){},
     slice: function(a, i){ return Array.prototype.slice.call(a, i); },
@@ -2662,6 +2221,7 @@ _.fireAll = function(target, events, props) {
     }
     return event;
 };
+var _key;// set in on.js
 _.dispatch = function(target, event, objectBubbling) {
     if (event.global){ target = _.global; }
     (target.dispatchEvent || target[_key] || _.noop).call(target, event);
@@ -2722,7 +2282,8 @@ _.handlers = function(target, type) {
 };
 _.capture = ['focus','blur'];
 
-var _key = _._key = '_eventi'+Date.now();
+// declared in fire.js
+_key = _._key = '_eventi'+Date.now();
 _.listener = function(target) {
     var listener = target[_key];
     if (!listener) {

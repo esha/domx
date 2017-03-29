@@ -119,7 +119,8 @@ module.exports = function(grunt) {
         eqnull: true,
         browser: true,
         globals: {}
-      }
+      },
+      src: ['script/index.js']
     },
     watch: {
       js: {

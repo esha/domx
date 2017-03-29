@@ -57,8 +57,8 @@
             <pre>document.body.div.section.only('#full')</pre>
             <pre>document.body.div.section.ul.li.each('id', 'item${i}')</pre>
             <pre>document.query('#empty')</pre>
-            <pre>document.query('#empty').append('h1')</pre>
-            <pre>document.query('#empty').append('ul>li{item}*5')</pre>
+            <pre>document.query('#empty').insert('h1')</pre>
+            <pre>document.query('#empty').insert('ul>li{item}*5')</pre>
             <pre>document.queryAll('#empty li').each(function(el, i, all) {
   el.textContent += ' '+(i+1)+' of '+all.length;
 })</pre>
@@ -311,30 +311,30 @@ document.body.$comment; // returns list of all comment nodes that are children o
 </pre>
         </article>
         <article>
-          <h4><a name="append()">append</a>(<span class="variable">name|Node|list</span>) <span class="since">0.7.0</span></h4>
-          <p>This automatically appends the specified tag or node (or list thereof) to the element(s) on which it was called.</p>
+          <h4><a name="insert()">insert</a>(<span class="variable">name|Node|list</span>) <span class="since">0.17.0</span></h4>
+          <p>This automatically inserts the specified tag or node (or list thereof) to the element(s) on which it was called.</p>
           <pre class="example">
-document.body.append('div'); // returns a newly added div element
+document.body.insert('div'); // returns a newly added div element
 
-document.body.append('div').append('h1'); // returns the new h1 element (with div parent)
+document.body.insert('div').insert('h1'); // returns the new h1 element (with div parent)
 
 var script = document.createElement('script');
 script.src = '/mylib.js';
-document.head.append(script);
+document.head.insert(script);
 
-document.body.append([node1, node2, [ul1, ul2]]); // yummy recursive append
+document.body.insert([node1, node2, [ul1, ul2]]); // yummy recursive insert
 </pre>
         </article>
         <article>
-          <h4><a name="append(emmet)">append</a>(<span class="variable string">emmet-abbr</span>) <span class="since">0.7.0</span></h4>
+          <h4><a name="insert(emmet)">insert</a>(<span class="variable string">emmet-abbr</span>) <span class="since">0.17.0</span></h4>
           <p>The standard domx.js artifact comes with the "emmet" extension, which lets you use
-          <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> to append elements to the DOM.
+          <a href="http://docs.emmet.io/abbreviations/syntax/">emmet abbreviations</a> to insert elements to the DOM.
           This extension supports most emmet features, except grouping and numbering. Those may be added later.</p>
           <pre class="example">
-document.body.append('ul>li{list item text}*10');
+document.body.insert('ul>li{list item text}*10');
 
 //Use in conjuction with only
-document.body.append('ul>li{item}*10')
+document.body.insert('ul>li{item}*10')
   .only(':nth-child(odd)')
   .each('classList.add','odd');
 </pre>
