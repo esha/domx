@@ -60,6 +60,20 @@
 		el.remove();
 	});
 
+    test("escaped bracket in element attr", 2, function() {
+        ok(D.body.insert('div#attrs[test=[\]]'), 'have element');
+        var el = D.query('#attrs');
+        equal(el.getAttribute('test'), '[]', 'has right test attr');
+        el.remove();
+    });
+
+    test("unclosed element attr", 2, function() {
+        ok(D.body.insert('div#attrs[test'), 'have element');
+        var el = D.query('#attrs');
+        equal(el.getAttribute('test'), '', 'has empty test attr');
+        el.remove();
+    });
+
 	test("climb up context", 4, function() {
 		equal(D.body.insert('p>div>div>span^h2^^h1').tagName, 'H1', 'right element');
 		ok(D.query('p > div > div > span'), 'have initial tree');
@@ -79,15 +93,45 @@
 		spans.remove();
 	});
 
-	test("text", function() {
-		var text = D.body.insert('p#text{hello world!}');
+	test("text", 4, function() {
+		var text = D.body.insert('p#text{hello. cruel. world!}');
 		ok(text, 'have element');
-		equal(D.query('#text').textContent, 'hello world!', 'has right text');
+		equal(D.query('#text').textContent, 'hello. cruel. world!', 'has right text');
 		text.remove();
 		var mixed = D.body.insert('p#mixed{a}>span+{ b}');
 		equal(mixed.textContent, 'a b', 'both text parts');
 		ok(mixed.query('span'), 'and child node');
 		mixed.remove();
 	});
+
+    test("unclosed text", 2, function() {
+        var text = D.body.insert('p#text{hello. cruel. world!');
+        ok(text, 'have element');
+        equal(D.query('#text').textContent, 'hello. cruel. world!', 'has right text');
+        text.remove();
+    });
+
+    test("escaped } in text", 2, function() {
+        var text = D.body.insert('p#text{braces are {\\}. Cool, eh?}');
+        ok(text, 'have element');
+        equal(D.query('#text').textContent, 'braces are {}. Cool, eh?', 'has right text');
+        text.remove();
+    });
+
+    test("#3 attribute vs class", 3, function() {
+        var img = D.body.insert('div>img[src=text.png]');
+        ok(img, 'have img');
+        equal(img.getAttribute('src'), 'text.png', 'has right src');
+        ok(!img.hasAttribute('class'), 'does not have class');
+        img.remove();
+    });
+
+    test("quoted attribute", 3, function() {
+        var quoted = D.body.insert('span[mustache="{{text.png}}"]');
+        ok(quoted, 'have element');
+        equal(quoted.getAttribute('mustache'), '{{text.png}}', 'has right attr');
+        ok(!quoted.hasAttribute('class'), 'does not have class');
+        quoted.remove();
+    });
 
 }(document));
