@@ -1,6 +1,6 @@
-/*! domx - v0.17.0 - 2016-09-22
+/*! domx - v0.17.1 - 2017-03-29
 * http://esha.github.io/domx/
-* Copyright (c) 2016 ESHA Research; Licensed MIT, GPL */
+* Copyright (c) 2017 ESHA Research; Licensed ,  */
 
 (function(D) {
     "use strict";
@@ -17,8 +17,18 @@ I.create = function(node, code, ref) {
         el = D.createElement(parts[0]);
     root.appendChild(el);
     for (var i=1,m=parts.length; i<m; i++) {
-        var part = parts[i];
-        el = I.emmet[part.charAt(0)].call(el, part.substr(1), root) || el;
+        var part = parts[i],
+            first = part.charAt(0),
+            end = I.emmet.groups[first];
+        if (end) {
+            // for group part, gobble subsequent parts until we find an unescaped end
+            while (end !== part[part.length-1] || '\\' === part[part.length-2]) {
+                part += parts[++i] || end;
+            }
+            // remove escapes from escaped ends
+            part = part.replace(new RegExp('\\\\'+end, 'g'), end);
+        }
+        el = I.emmet[first].call(el, part.substr(1), root) || el;
     }
     I.insert(node, root, ref);
     return el;
@@ -37,7 +47,7 @@ I.emmet = {
         this.setAttribute('class', list);
     },
     '[': function(attrs) {
-        attrs = attrs.substr(0, attrs.length-1).match(/(?:[^\s"]+|"[^"]*")+/g);
+        attrs = attrs.substr(0, attrs.length-1).match(/(?:[^\s"]+|("[^"]+"))+/g);
         for (var i=0,m=attrs.length; i<m; i++) {
             var attr = attrs[i].split('=');
             this.setAttribute(attr[0], (attr[1] || '').replace(/"/g, ''));
@@ -70,6 +80,10 @@ I.emmet = {
     '{': function(text) {
         this.appendChild(D.createTextNode(text.substr(0, text.length-1)));
     }
+};
+I.emmet.groups = {
+    '[':']',
+    '{':'}'
 };
 // /emmet.js
 
