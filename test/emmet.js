@@ -75,13 +75,20 @@
     });
 
 	test("climb up context", 4, function() {
-		equal(D.body.insert('p>div>div>span^h2^^h1').tagName, 'H1', 'right element');
+		equal(D.body.insert('p>div>div>span^h2^+h1').tagName, 'H1', 'right element');
 		ok(D.query('p > div > div > span'), 'have initial tree');
 		ok(D.query('p > div > h2'), 'h2 went in right place');
 		ok(D.query('body > h1'), 'h1 went in right place');
-		D.query('body > p').remove();
-		D.query('body > h1').remove();
+		D.queryAll('body > p, body > h1').remove();
 	});
+
+    test("commas mean back to root", 4, function() {
+        equal(D.body.insert('p#a>a>b,div.b>span,table[c=d]>tr>td').tagName, 'TD', 'right returned element');
+        ok(D.query('body > p#a > a > b'), 'p>a>b went right');
+        ok(D.query('body > div.b > span'), 'div>span went right');
+        ok(D.query('body > table[c=d] tr > td'), 'table[c=d]>tr>td went right');
+        D.queryAll('p#a,div.b,table[c=d]').remove();
+    });
 
 	test("multiplier", 4, function() {
 		var spans = D.body.insert('span*5');
@@ -93,6 +100,21 @@
 		spans.remove();
 	});
 
+    test("mid expression multiplier", function() {
+        D.body.insert('p#root>div.foo*2>span#id.class[attr=val]');
+        equal(D.queryAll('span#id.class[attr=val]').length, 2);
+        D.body.query('#root').remove();
+    });
+
+    test("group", 3, function() {
+        D.body.insert('div#parent>(header.group>ul>li*2>a)*2+footer>p');
+        var parents = D.queryAll('#parent');
+        equal(parents.length, 1, "only one parent");
+        equal(parents.queryAll('header.group').length, 2, "got two headers");
+        equal(parents.queryAll('footer').length, 1, "got one footer");
+        parents.remove();
+    });
+
 	test("text", 4, function() {
 		var text = D.body.insert('p#text{hello. cruel. world!}');
 		ok(text, 'have element');
@@ -103,6 +125,13 @@
 		ok(mixed.query('span'), 'and child node');
 		mixed.remove();
 	});
+
+    test("double text", 2, function() {
+        var a = D.body.insert('a{foo}{bar}');
+        equal(a.tagName, 'A', 'got anchor');
+        equal(a.textContent, 'foobar', 'has right text');
+        a.remove();
+    });
 
     test("unclosed text", 2, function() {
         var text = D.body.insert('p#text{hello. cruel. world!');
@@ -119,11 +148,10 @@
     });
 
     test("#3 attribute vs class", 3, function() {
-        var img = D.body.insert('div>img[src=text.png]');
+        var img = D.x._.emmet(D.createElement('div'), 'div>img[src=text.png]');
         ok(img, 'have img');
         equal(img.getAttribute('src'), 'text.png', 'has right src');
         ok(!img.hasAttribute('class'), 'does not have class');
-        img.remove();
     });
 
     test("quoted attribute", 3, function() {
