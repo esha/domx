@@ -104,7 +104,8 @@ Download:
 * 2014-11-10 [v0.14.2][] (document.x, s/D.extend/D.x.add, s/D._.resolve[]/D.x.alias(), 'x-' attributes)
 * 2014-12-04 [v0.15.0][] (not(node), s/closest()/nearest(), polyfill version of closest())
 * 2014-12-11 [v0.16.1][] (move xValue and repeat() out to [domx-value][xvalue] and [domx-repeat][repeat])
-* 2016-09-22 [v0.17.0][] (s/append/insert to avoid conflict with Safari 10's unadvertised and undocumented HTMLElement.prototype.append)
+* 2016-09-22 [v0.17.0][] (s/append/insert to avoid conflict with Safari 10's unadvertised, unspecified, and undocumented HTMLElement.prototype.append)
+* 2017-04-06 [v0.17.2][] (emmet updates, including minimal (non-nested) group support)
 
 [v0.7.0]: https://github.com/esha/domx/tree/0.7.0
 [v0.8.1]: https://github.com/esha/domx/tree/0.8.1
@@ -117,3 +118,4 @@ Download:
 [v0.15.0]: https://github.com/esha/domx/tree/0.15.0
 [v0.16.1]: https://github.com/esha/domx/tree/0.16.1
 [v0.17.0]: https://github.com/esha/domx/tree/0.17.0
+[v0.17.2]: https://github.com/esha/domx/tree/0.17.2

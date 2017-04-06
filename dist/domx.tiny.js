@@ -1,4 +1,4 @@
-/*! domx - v0.17.1 - 2017-03-29
+/*! domx - v0.17.2 - 2017-04-06
 * http://esha.github.io/domx/
 * Copyright (c) 2017 ESHA Research; Licensed ,  */
 
@@ -81,7 +81,7 @@ _ = {
 
 // developer tools
 X = {
-    version: "0.17.1",
+    version: "0.17.2",
     _: _,
 
     // extension points
