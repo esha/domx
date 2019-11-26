@@ -1,29 +1,29 @@
-(function(D) {
+(function(D, module, test) {
  
     function testProperty(set, prop, getOnly) {
         if (!Array.isArray(set)){ set = [set]; }
-        test("."+prop+" presence", function() {
+        test("."+prop+" presence", function(assert) {
             set.forEach(function(_class) {
                 var desc = Object.getOwnPropertyDescriptor(_class.prototype, prop);
-                ok(desc, 'should have descriptor for '+prop+' in '+_class.name);
+                assert.ok(desc, 'should have descriptor for '+prop+' in '+_class.name);
                 if (desc) {
-                    ok(desc.get, 'should have getter for '+prop+' in '+_class.name);
+                    assert.ok(desc.get, 'should have getter for '+prop+' in '+_class.name);
                     if (!getOnly) {
-                        ok(desc.set, 'should have setter for '+prop+' in '+_class.name);
+                        assert.ok(desc.set, 'should have setter for '+prop+' in '+_class.name);
                     }
-                    ok(!desc.enumerable, prop+' should not be enumerable in '+_class.name);
-                    ok(!desc.writable, prop+' should not be writable in '+_class.name);
-                    ok(desc.configurable, prop+' should stay configurable in '+_class.name);
+                    assert.ok(!desc.enumerable, prop+' should not be enumerable in '+_class.name);
+                    assert.ok(!desc.writable, prop+' should not be writable in '+_class.name);
+                    assert.ok(desc.configurable, prop+' should stay configurable in '+_class.name);
                 }
             });
         });
     }
 
     function testMethod(set, method) {
-        test(method+"() presence", function() {
+        test(method+"() presence", function(assert) {
             set.forEach(function(_class) {
                 var parent = _class.prototype || _class;
-                equal(typeof parent[method], "function", _class.name+'.prototype.'+method);
+                assert.equal(typeof parent[method], "function", _class.name+'.prototype.'+method);
             });
         });
     }
@@ -32,8 +32,8 @@
         _ = X._;
     module("xValue");
 
-    test("_.", function() {
-        equal(typeof _.xValue, "object", "_.xValue");
+    test("_.", function(assert) {
+        assert.equal(typeof _.xValue, "object", "_.xValue");
     });
 
     testMethod([Node,Attr], 'useBaseValue');
@@ -50,70 +50,70 @@
     testMethod(X.parents, 'queryName');
     testMethod(X.parents, 'queryNameAll');
 
-    function testBaseValue(node, initial) {
+    function testBaseValue(node, initial, assert) {
         if (arguments.length !== 2) {
             initial = node.baseValue;
         }
         if (node.nodeType !== 1) {
-            equal(node.baseValue, node.nodeValue);
+            assert.equal(node.baseValue, node.nodeValue);
         }
-        equal(node.baseValue, initial);
+        assert.equal(node.baseValue, initial);
         node.baseValue = true;
-        strictEqual(node.baseValue, true);
+        assert.strictEqual(node.baseValue, true);
         node.baseValue = 42;
-        strictEqual(node.baseValue, 42);
+        assert.strictEqual(node.baseValue, 42);
         node.baseValue = ['an','array'];
-        deepEqual(node.baseValue, ['an','array']);
+        assert.deepEqual(node.baseValue, ['an','array']);
         node.baseValue = {key:'value'};
-        deepEqual(node.baseValue, {key:"value"});
+        assert.deepEqual(node.baseValue, {key:"value"});
         node.baseValue = 'string';
-        equal(node.baseValue, 'string');
+        assert.equal(node.baseValue, 'string');
         node.baseValue = initial;
     }
 
-    test("text node", function() {
-        testBaseValue(D.createTextNode('text'), 'text');
+    test("text node", function(assert) {
+        testBaseValue(D.createTextNode('text'), 'text', assert);
     });
 
-    test("comment", function() {
-        testBaseValue(D.createComment('<content>'), '<content>');
+    test("comment", function(assert) {
+        testBaseValue(D.createComment('<content>'), '<content>', assert);
     });
 
-    test("element", function() {
+    test("element", function(assert) {
         var node = D.body.insert('span[value=attr]{text}');
-        equal(node.baseProperty, 'value');
-        equal(node.textContent, 'text');
-        testBaseValue(node, 'attr');
-        node.removeAttribute('value');
-        testBaseValue(node, 'text');
-        equal(node.children.length, 0);
+        assert.equal(node.baseProperty, 'value');
+        assert.equal(node.textContent, 'text');
+        testBaseValue(node, 'attr', assert);
+        node.removeAttribute('value', assert);
+        testBaseValue(node, 'text', assert);
+        assert.equal(node.children.length, 0);
         node.remove();
     });
 
-    test('internal text values', function() {
+    test('internal text values', function(assert) {
         var el = D.createElement('div');
         el.textContent = 'a ${b} c ${d}';
-        deepEqual({ b: '', d: '' }, el.xValue);
+        assert.deepEqual({ b: '', d: '' }, el.xValue);
         el.xValue = {b:1, d:true};
-        equal('a 1 c true', el.textContent);
+        assert.equal('a 1 c true', el.textContent);
         var val = el.xValue = {b:2, d:{e:false}};
-        equal('a 2 c {"e":false}', el.textContent);
-        deepEqual(val, el.xValue);
-        ok(val !== el.xValue, 'should be different object');
+        assert.equal('a 2 c {"e":false}', el.textContent);
+        assert.deepEqual(val, el.xValue);
+        assert.ok(val !== el.xValue, 'should be different object');
     });
 
-    test('change event', function() {
-        expect(10);
+    test('change event', function(assert) {
+        assert.expect(10);
         var el = D.body.insert('input[value=old]'),
             listener = function(e) {
-                ok(e instanceof window.Event);
-                equal(e.target, el);
+                assert.ok(e instanceof window.Event);
+                assert.equal(e.target, el);
             };
         D.body.addEventListener('change', listener);
 
-        equal(el.xValue, 'old');
+        assert.equal(el.xValue, 'old');
         el.xValue = 'new';
-        equal(el.xValue, 'new');
+        assert.equal(el.xValue, 'new');
         el.remove();
 
         el = D.body.insert('input[type=radio][value=value][checked=true]');
@@ -122,62 +122,62 @@
 
         el = D.body.insert('select[multiple]');
         el.insert('option*3').each('textContent', '${i}');
-        deepEqual(el.xValue, []);
+        assert.deepEqual(el.xValue, []);
         el.xValue = [0,1,2];
-        deepEqual(el.xValue, [0,1,2]);
+        assert.deepEqual(el.xValue, [0,1,2]);
         el.remove();
 
         D.body.removeEventListener('change', listener);
     });
 
-    test('ul li base change', function() {
+    test('ul li base change', function(assert) {
         var li = D.createElement('li'),
             ul = D.createElement('ul'),
             ol = D.createElement('ol');
         li.textContent = 'true';
-        equal('textContent', li.baseProperty);
+        assert.equal('textContent', li.baseProperty);
         ol.appendChild(li);
-        equal('value', li.baseProperty);
-        strictEqual(li.xValue, 0);
+        assert.equal('value', li.baseProperty);
+        assert.strictEqual(li.xValue, 0);
         li.remove();
         ul.appendChild(li);
-        equal('textContent', li.baseProperty);
-        strictEqual(li.xValue, true);
+        assert.equal('textContent', li.baseProperty);
+        assert.strictEqual(li.xValue, true);
     });
 
-    test('queryName', function() {
+    test('queryName', function(assert) {
         var el = D.queryName('named');
-        strictEqual(el, D.query('[name=named]'));
-        equal(el.getAttribute('name'), 'named');
+        assert.strictEqual(el, D.query('[name=named]'));
+        assert.equal(el.getAttribute('name'), 'named');
         var nested = D.queryName('named.nested');
-        strictEqual(nested, D.query('[name=nested]'));
-        equal(nested.getAttribute('name'), 'nested');
+        assert.strictEqual(nested, D.query('[name=nested]'));
+        assert.equal(nested.getAttribute('name'), 'nested');
 
         var named = D.queryAll('[name=named]');
         nested = named.queryName('nested');
-        strictEqual(nested, D.query('[name=nested]'));
+        assert.strictEqual(nested, D.query('[name=nested]'));
     });
 
-    test('queryNameAll', function() {
+    test('queryNameAll', function(assert) {
         var els = D.queryNameAll('named');
-        equal(els.length, 2);
-        equal(els[0].getAttribute('name'), 'named');
-        equal(els[1].getAttribute('name'), 'named');
+        assert.equal(els.length, 2);
+        assert.equal(els[0].getAttribute('name'), 'named');
+        assert.equal(els[1].getAttribute('name'), 'named');
 
         els = D.body.children.queryNameAll('named');
-        equal(els.length, 2);
+        assert.equal(els.length, 2);
     });
 
-    test('queryName text node', function() {
+    test('queryName text node', function(assert) {
         var text = D.createTextNode('${greeting} world!'),
             el = D.createElement('div');
         el.appendChild(text);
         D.body.appendChild(el);
         var result = D.body.queryName('greeting');
-        ok(result);
-        strictEqual(text, result);
-        equal(el.childNodes.length, 2);
+        assert.ok(result);
+        assert.strictEqual(text, result);
+        assert.equal(el.childNodes.length, 2);
         el.remove();
     });
 
-}(document));
+}(document, QUnit.module, QUnit.test));

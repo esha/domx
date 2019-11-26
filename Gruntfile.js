@@ -91,8 +91,20 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name %>.full.min.js.gz'
       },
     },
+    connect: {
+      test: {
+        options: {
+          base: '.',
+          port: 9000
+        }
+      }
+    },
     qunit: {
-      files: ['test/**/*.html']
+      options: {
+        timeout: 5000,
+        httpBase: 'http://localhost:9000'
+      },
+      src: ['test/*.html']
     },
     jshint: {
       gruntfile: {
@@ -139,8 +151,13 @@ module.exports = function(grunt) {
 
   // load frame task
   grunt.loadTasks('tasks');
-
-  // Default task.
-  grunt.registerTask('default', ['clean', 'frame', 'jshint', 'uglify', 'compress', 'qunit']);
-
+  grunt.registerTask('default', [
+    'clean',
+    'frame',
+    'jshint',
+    'uglify',
+    'compress',
+    'connect:test',
+    'qunit'
+  ]);
 };

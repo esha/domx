@@ -1,30 +1,30 @@
-(function(D) {
-/*
+(function(D, module, test) {
+    /*
 ======== A Handy Little QUnit Reference ========
 http://api.qunitjs.com/
 
 Test methods:
   module(name, {[setup][ ,teardown]})
   test(name, callback)
-  expect(numberOfAssertions)
+  assert.expect(numberOfAssertions)
   stop(increment)
   start(decrement)
 Test assertions:
-  ok(value, [message])
-  equal(actual, expected, [message])
-  notEqual(actual, expected, [message])
-  deepEqual(actual, expected, [message])
-  notDeepEqual(actual, expected, [message])
-  strictEqual(actual, expected, [message])
-  notStrictEqual(actual, expected, [message])
+  assert.ok(value, [message])
+  assert.equal(actual, expected, [message])
+  assert.notEqual(actual, expected, [message])
+  assert.deepEqual(actual, expected, [message])
+  notassert.deepEqual(actual, expected, [message])
+  assert.strictEqual(actual, expected, [message])
+  notassert.strictEqual(actual, expected, [message])
   throws(block, [expected], [message])
 */
     module("D");
 
-    test("D.queryAll", function() {
-        equal(typeof D.queryAll, "function", "D.queryAll");
-        equal(D.queryAll('body')[0], document.body, "D.queryAll('body')");
-        equal(D.query('body'), document.body, "D.query('body')");
+    test("D.queryAll", function(assert) {
+        assert.equal(typeof D.queryAll, "function", "D.queryAll");
+        assert.equal(D.queryAll('body')[0], document.body, "D.queryAll('body')");
+        assert.equal(D.query('body'), document.body, "D.query('body')");
     });
 
     var X = D.x,
@@ -32,116 +32,116 @@ Test assertions:
 
     module('traverse DOM extensions');
 
-    test("X.parents", function() {
-        equal(Array.isArray(X.parents), true, "X.parents");
+    test("X.parents", function(assert) {
+        assert.equal(Array.isArray(X.parents), true, "X.parents");
     });
 
-    test("matches", function() {
-        equal(typeof Element.prototype.matches, "function", "Element.prototype.matches");
+    test("matches", function(assert) {
+        assert.equal(typeof Element.prototype.matches, "function", "Element.prototype.matches");
     });
 
-    test("only()", function() {
-        expect(X.lists.length);
+    test("only()", function(assert) {
+        assert.expect(X.lists.length);
         X.lists.forEach(function(_class) {
-            ok(_class.prototype.only, _class.name+'.prototype.only');
+            assert.ok(_class.prototype.only, _class.name+'.prototype.only');
         });
     });
 
-    test("not()", function() {
-        expect(X.lists.length);
+    test("not()", function(assert) {
+        assert.expect(X.lists.length);
         X.lists.forEach(function(_class) {
-            ok(_class.prototype.not, _class.name+'.prototype.not');
+            assert.ok(_class.prototype.not, _class.name+'.prototype.not');
         });
     });
 
-    test("all()", function() {
+    test("all()", function(assert) {
         var set = X.lists.concat([Node]);
-        expect(set.length);
+        assert.expect(set.length);
         set.forEach(function(_class) {
-            ok(_class.prototype.all, _class.name+'.prototype.all');
+            assert.ok(_class.prototype.all, _class.name+'.prototype.all');
         });
     });
 
-    test("queryAll()", function() {
+    test("queryAll()", function(assert) {
         var set = X.lists.concat(X.parents);
-        expect(set.length);
+        assert.expect(set.length);
         set.forEach(function(_class) {
-            ok((_class.prototype||_class).queryAll, _class.name+'.prototype.queryAll');
+            assert.ok((_class.prototype||_class).queryAll, _class.name+'.prototype.queryAll');
         });
     });
 
-    test("query()", function() {
+    test("query()", function(assert) {
         var set = X.lists.concat(X.parents);
-        expect(set.length);
+        assert.expect(set.length);
         set.forEach(function(_class) {
-            ok((_class.prototype||_class).query, _class.name+'.prototype.query');
+            assert.ok((_class.prototype||_class).query, _class.name+'.prototype.query');
         });
     });
 
     module("queryAll");
 
-    test("queryAll multiple, get array", function() {
-        ok(_.isList(D.queryAll("div")), "should be a list");
+    test("queryAll multiple, get array", function(assert) {
+        assert.ok(_.isList(D.queryAll("div")), "should be a list");
     });
 
-    test("queryAll one, get HTMLElement", function() {
-        ok(D.query("#identity") instanceof HTMLElement, "should be an element");
+    test("queryAll one, get HTMLElement", function(assert) {
+        assert.ok(D.query("#identity") instanceof HTMLElement, "should be an element");
     });
 
-    test("queryAll until count", function() {
-        ok(D.query('section div[id]') instanceof HTMLElement, "should be a single element");
+    test("queryAll until count", function(assert) {
+        assert.ok(D.query('section div[id]') instanceof HTMLElement, "should be a single element");
 
         var lessThanAvailable = D.queryAll('section div[id]', 2);
-        ok(_.isList(lessThanAvailable), 'should be a list');
-        equal(lessThanAvailable.length, 2, 'should have only two');
+        assert.ok(_.isList(lessThanAvailable), 'should be a list');
+        assert.equal(lessThanAvailable.length, 2, 'should have only two');
 
         var moreThanAvailable = D.queryAll('section div[id]', 5);
-        ok(_.isList(moreThanAvailable), 'should be a list');
-        equal(moreThanAvailable.length, 3, 'should only queryAll three');
+        assert.ok(_.isList(moreThanAvailable), 'should be a list');
+        assert.equal(moreThanAvailable.length, 3, 'should only queryAll three');
     });
 
-    test("queryAll nonexistent, get empty array", function() {
-        ok(!D.queryAll("#idontexist").length, "empty array");
+    test("queryAll nonexistent, get empty array", function(assert) {
+        assert.ok(!D.queryAll("#idontexist").length, "empty array");
     });
 
-    test("element queryAll", function() {
-        strictEqual(D.queryAll('section').queryAll("div").length, 5, "should be five divs, not seven");
+    test("element queryAll", function(assert) {
+        assert.strictEqual(D.queryAll('section').queryAll("div").length, 5, "should be five divs, not seven");
     });
 
-    test("list queryAll", function() {
-        strictEqual(D.queryAll('section div').queryAll('span').length, 1, "should get one span");
+    test("list queryAll", function(assert) {
+        assert.strictEqual(D.queryAll('section div').queryAll('span').length, 1, "should get one span");
     });
 
     module("only()");
 
-    test("by index", function() {
+    test("by index", function(assert) {
         var divs = D.queryAll('section > div');
-        strictEqual(divs.only(2)[0], divs[2], 'get 3rd one');
-        strictEqual(divs.only(-1)[0], divs[divs.length-1], 'get last one');
+        assert.strictEqual(divs.only(2)[0], divs[2], 'get 3rd one');
+        assert.strictEqual(divs.only(-1)[0], divs[divs.length-1], 'get last one');
     });
 
-    test("by slice", function() {
+    test("by slice", function(assert) {
         var divs = D.queryAll('section > div');
-        strictEqual(divs.only(1,4).length, 3, "got sublist of proper length");
+        assert.strictEqual(divs.only(1,4).length, 3, "got sublist of proper length");
     });
 
-    test("by selector", function() {
+    test("by selector", function(assert) {
         var divs = D.queryAll('section > div');
-        strictEqual(divs.only('#first')[0], D.queryAll('#first')[0], 'got #first');
+        assert.strictEqual(divs.only('#first')[0], D.queryAll('#first')[0], 'got #first');
     });
 
-    test("by each=value", function() {
+    test("by each=value", function(assert) {
         var divs = D.queryAll('section > div');
-        strictEqual(divs.only('id','last')[0], D.getElementById('last'), 'got #last');
+        assert.strictEqual(divs.only('id','last')[0], D.getElementById('last'), 'got #last');
     });
 
-    test("by function", function() {
+    test("by function", function(assert) {
         var divs = D.queryAll('section > div'),
             odds = function(n,i){ return i%2; };
-        deepEqual(divs.only(odds).each('tagName'), ['DIV','DIV'], "got two odd divs");
+        assert.deepEqual(divs.only(odds).each('tagName'), ['DIV','DIV'], "got two odd divs");
     });
 
-    test('mixed node types by selector', function() {
+    test('mixed node types by selector', function(assert) {
         var list = new X.List(),
             text = D.createTextNode('hello'),
             el = D.createElement('meta'),
@@ -149,86 +149,86 @@ Test assertions:
         el.textContent = 'hello';
         text.meta = true;
         list.add(el, text, exclude);
-        equal(list.length, 3);
+        assert.equal(list.length, 3);
         if (!('meta' in exclude)) {
             exclude.meta = true;
         }
-        ok(exclude.meta, 'should have some meta property');
+        assert.ok(exclude.meta, 'should have some meta property');
         list = list.only('meta');
-        equal(list.length, 2);
+        assert.equal(list.length, 2);
     });
 
     module("not()");
 
-    test("not is inverse of only", function() {
+    test("not is inverse of only", function(assert) {
         var list = new X.List(D.createElement('div'),
                                 D.createElement('span'),
                                 D.createElement('span'));
-        deepEqual(list.not('div'), list.only('span'));
-        deepEqual(list.not(-1), list.only(0,2));
-        deepEqual(list.not(0,2), list.only(2));
-        deepEqual(list.not('tagName', 'SPAN'), list.only('tagName', 'DIV'));
+        assert.deepEqual(list.not('div'), list.only('span'));
+        assert.deepEqual(list.not(-1), list.only(0,2));
+        assert.deepEqual(list.not(0,2), list.only(2));
+        assert.deepEqual(list.not('tagName', 'SPAN'), list.only('tagName', 'DIV'));
     });
 
-    test("not(node)", function() {
+    test("not(node)", function(assert) {
         var list = new X.List(D.createTextNode('text'),
                               D.createElement('span'),
                               D.createElement('span'));
-        deepEqual(list.not(list[0]), list.only('span'));
-        deepEqual(list.not(list[2]), list.only(0,2));
+        assert.deepEqual(list.not(list[0]), list.only('span'));
+        assert.deepEqual(list.not(list[2]), list.only(0,2));
     });
 
     module('all()');
 
-    test("parents", function() {
+    test("parents", function(assert) {
         var divs = D.queryAll('section > div'),
             parents = divs.all('parentElement');
-        equal(parents.length, 4);
+        assert.equal(parents.length, 4);
     });
 
-    test("next[ElementSibling], inclusive", function() {
+    test("next[ElementSibling], inclusive", function(assert) {
         _.alias.next = 'nextElementSibling';
         var div = D.query('#first'),
             siblings = div.all('next', true);
-        equal(siblings.length, 5);
+        assert.equal(siblings.length, 5);
         delete _.alias.next;
     });
 
-    test("children, on multiple", function() {
+    test("children, on multiple", function(assert) {
         var gps = D.getElementById('qunit-fixture').queryAll('aside,section');
-        equal(gps.length, 2);
+        assert.equal(gps.length, 2);
         var desc = gps.all('children');
-        equal(desc.length, gps.queryAll('*').length);
+        assert.equal(desc.length, gps.queryAll('*').length);
     });
 
-    test("function ctx/args", function() {
-        expect(5);
+    test("function ctx/args", function(assert) {
+        assert.expect(5);
         var list = D.body.all('parentElement', function(parentElement, list) {
-            strictEqual(this, D.body);
-            strictEqual(parentElement, D.html);
-            strictEqual(list.length, 0);
-            ok(list instanceof X.List);
+            assert.strictEqual(this, D.body);
+            assert.strictEqual(parentElement, D.html);
+            assert.strictEqual(list.length, 0);
+            assert.ok(list instanceof X.List);
         });
-        equal(list.length, 1);
+        assert.equal(list.length, 1);
     });
 
-    test("function return values", function() {
+    test("function return values", function(assert) {
         var div = D.query('#first');
         var all = div.all('parentElement');
 
-        expect(all.length*2 + 3);
+        assert.expect(all.length*2 + 3);
         var returnUndefined = div.all('parentElement', function(parentElement) {
-            ok(parentElement instanceof Node);
+            assert.ok(parentElement instanceof Node);
         });
-        deepEqual(returnUndefined, all, "undefined should not change collection");
+        assert.deepEqual(returnUndefined, all, "undefined should not change collection");
 
         var returnNull = div.all('parentElement', function(parentElement) {
-            ok(parentElement);
+            assert.ok(parentElement);
             if (parentElement.tagName === 'HTML') {
                 return null;
             }
         });
-        equal(returnNull.length+1, all.length, "shouldn't collect <html>");
+        assert.equal(returnNull.length+1, all.length, "shouldn't collect <html>");
 
         var allFirstText = new X.List(div.all('parentElement')
                                             .each('firstChild')
@@ -236,86 +236,86 @@ Test assertions:
         var returnNode = div.all('parentElement', function(parentElement) {
             return parentElement.firstChild.textContent;
         });
-        deepEqual(returnNode, allFirstText);
+        assert.deepEqual(returnNode, allFirstText);
     });
 
     module('farthest');
 
-    test("farthest(parent*)", function() {
+    test("farthest(parent*)", function(assert) {
         var div = D.query('#first');
-        equal(document.documentElement, div.farthest());
-        equal(document.documentElement, div.farthest('parentElement'));
-        equal(document, div.farthest('parentNode'));
+        assert.equal(document.documentElement, div.farthest());
+        assert.equal(document.documentElement, div.farthest('parentElement'));
+        assert.equal(document, div.farthest('parentNode'));
     });
 
-    test('farthest([prop, ]selector[, inclusive])', function() {
+    test('farthest([prop, ]selector[, inclusive])', function(assert) {
         var div = D.query('#first');
-        equal(div, div.farthest('#first'));
-        equal(null, div.farthest('#first', false));
-        equal(document.body, div.farthest('body'));
-        equal(D.query('#last'), div.farthest('nextElementSibling'));
-        equal(D.query('#last'), div.farthest('nextSibling', 'div'));
+        assert.equal(div, div.farthest('#first'));
+        assert.equal(null, div.farthest('#first', false));
+        assert.equal(document.body, div.farthest('body'));
+        assert.equal(D.query('#last'), div.farthest('nextElementSibling'));
+        assert.equal(D.query('#last'), div.farthest('nextSibling', 'div'));
     });
 
-    test("farthest(alias)", function() {
+    test("farthest(alias)", function(assert) {
         var div = D.query('#first');
         _.alias.previous = 'previousElementSibling';
         _.alias.next = 'nextElementSibling';
-        equal(null, div.farthest('previous'));
-        equal(D.query('#last'), div.farthest('next'));
+        assert.equal(null, div.farthest('previous'));
+        assert.equal(D.query('#last'), div.farthest('next'));
         delete _.alias.previous;
         delete _.alias.next;
     });
 
-    test("farthest(nomatch)", function() {
+    test("farthest(nomatch)", function(assert) {
         var div = D.query('#first');
-        strictEqual(null, div.farthest('whatever'));
+        assert.strictEqual(null, div.farthest('whatever'));
     });
 
     module('nearest');
 
-    test("nearest(parent*)", function() {
+    test("nearest(parent*)", function(assert) {
         var div = D.query('#first');
-        equal(div, div.nearest());
-        equal(div.parentElement, div.nearest('parentElement'));
-        equal(document, div.nearest('parentNode', function(node) {
+        assert.equal(div, div.nearest());
+        assert.equal(div.parentElement, div.nearest('parentElement'));
+        assert.equal(document, div.nearest('parentNode', function(node) {
             return !(node instanceof HTMLElement);
         }));
     });
 
-    test('nearest([prop, ]selector[, inclusive])', function() {
+    test('nearest([prop, ]selector[, inclusive])', function(assert) {
         var div = D.query('#first');
-        equal(div, div.nearest('#first'));
-        equal(null, div.nearest('#first', false));
-        equal(document.body, div.nearest('body'));
-        equal(D.query('#identity'), div.nearest('nextElementSibling'));
-        equal(div, div.nearest('nextSibling', true));
-        equal(div, div.nearest('nextSibling', 'div', true));
-        equal(D.query('#identity'), div.nearest('nextSibling', 'div'));
+        assert.equal(div, div.nearest('#first'));
+        assert.equal(null, div.nearest('#first', false));
+        assert.equal(document.body, div.nearest('body'));
+        assert.equal(D.query('#identity'), div.nearest('nextElementSibling'));
+        assert.equal(div, div.nearest('nextSibling', true));
+        assert.equal(div, div.nearest('nextSibling', 'div', true));
+        assert.equal(D.query('#identity'), div.nearest('nextSibling', 'div'));
     });
 
-    test("nearest(alias)", function() {
+    test("nearest(alias)", function(assert) {
         var div = D.query('#first');
         _.alias.previous = 'previousElementSibling';
         _.alias.next = 'nextElementSibling';
-        equal(null, div.nearest('previous'));
-        equal(D.query('#identity'), div.nearest('next'));
+        assert.equal(null, div.nearest('previous'));
+        assert.equal(D.query('#identity'), div.nearest('next'));
         delete _.alias.previous;
         delete _.alias.next;
     });
 
-    test("nearest(nomatch)", function() {
+    test("nearest(nomatch)", function(assert) {
         var div = D.query('#first');
-        strictEqual(null, div.nearest('whatever'));
+        assert.strictEqual(null, div.nearest('whatever'));
     });
 
     module('closest');
 
-    test("closest(selector)", function() {
+    test("closest(selector)", function(assert) {
         var div = D.query('#first');
-        equal(div, div.closest('#first'));
-        equal(document.body, div.closest('body,html'));
+        assert.equal(div, div.closest('#first'));
+        assert.equal(document.body, div.closest('body,html'));
     });
 
-}(document));
+}(document, QUnit.module, QUnit.test));
 
